@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import {
   CustomInput as Input,
   CustomPasswordInput as PasswordInput,
-  CustomSelect as Select,
 } from "@/lib/AntdComponents";
 
 import Image from "next/image";

@@ -3,11 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-  CustomInput as Input,
-  CustomPasswordInput as PasswordInput,
-  CustomSelect as Select,
-} from "@/lib/AntdComponents";
+import { CustomInput as Input } from "@/lib/AntdComponents";
 
 import Image from "next/image";
 import GradientBg from "../../../assets/png/side-left.png";
