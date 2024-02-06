@@ -91,7 +91,7 @@ const ForgotPassword = () => {
               <form className="mt-12 grid grid-cols-6 gap-5">
                 <div className="col-span-6">
                   <label
-                    htmlFor="FirstName"
+                    htmlFor="email"
                     className="block text-sm font-semibold text-gray-700"
                   >
                     Work Email

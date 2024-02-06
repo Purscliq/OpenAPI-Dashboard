@@ -129,16 +129,16 @@ const Signup = () => {
 
                 <div className="col-span-6 sm:col-span-3">
                   <label
-                    htmlFor="FirstName"
+                    htmlFor="email"
                     className="block text-sm font-semibold text-gray-700"
                   >
                     Work Email
                   </label>
 
                   <Input
-                    type="text"
-                    id="FirstName"
-                    name="first_name"
+                    type="email"
+                    id="email"
+                    name="email"
                     placeholder="john@doe.mail"
                     required
                     className="mt-1 p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
@@ -147,7 +147,7 @@ const Signup = () => {
 
                 <div className="col-span-6 sm:col-span-3">
                   <label
-                    htmlFor="LastName"
+                    htmlFor="RegCountry"
                     className="block text-sm font-semibold text-gray-700"
                   >
                     Registration Country
@@ -167,16 +167,16 @@ const Signup = () => {
 
                 <div className="col-span-6">
                   <label
-                    htmlFor="Email"
+                    htmlFor="BusinessName"
                     className="block text-sm font-semibold text-gray-700"
                   >
                     Business Name
                   </label>
 
                   <Input
-                    type="email"
-                    id="Email"
-                    name="email"
+                    type="text"
+                    id="BusinessName"
+                    name="BusinessName"
                     required
                     className="mt-1 p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
                   />
@@ -184,13 +184,13 @@ const Signup = () => {
 
                 <div className="col-span-6 sm:col-span-3">
                   <label
-                    htmlFor="Password"
+                    htmlFor="password"
                     className="block text-sm font-semibold text-gray-700"
                   >
                     Enter Password
                   </label>
 
-                  <PasswordInput className="mt-1" />
+                  <PasswordInput id="password" className="mt-1" />
                 </div>
 
                 <div className="col-span-6 sm:col-span-3">
@@ -201,19 +201,19 @@ const Signup = () => {
                     Confirm Password
                   </label>
 
-                  <PasswordInput className="mt-1" />
+                  <PasswordInput id="PasswordConfirmation" className="mt-1" />
                 </div>
 
                 <div className="col-span-6">
                   <label
-                    htmlFor="Email"
+                    htmlFor="APIusage"
                     className="block text-sm font-semibold text-gray-700"
                   >
                     How do you want to use Pursfi Open API
                   </label>
 
                   <Select
-                    id="Usage"
+                    id="APIusage"
                     defaultValue=""
                     options={[
                       { value: "", label: "Select an option" },

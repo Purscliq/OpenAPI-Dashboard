@@ -92,7 +92,7 @@ const Login = () => {
               <form className="mt-12 grid grid-cols-6 gap-5">
                 <div className="col-span-6">
                   <label
-                    htmlFor="FirstName"
+                    htmlFor="email"
                     className="block text-sm font-semibold text-gray-700"
                   >
                     Work Email
@@ -110,13 +110,14 @@ const Login = () => {
 
                 <div className="col-span-6">
                   <label
-                    htmlFor="Password"
+                    htmlFor="password"
                     className="block text-sm font-semibold text-gray-700"
                   >
                     Password
                   </label>
 
                   <PasswordInput
+                    id="password"
                     className="mt-1"
                     placeholder="Enter Password"
                   />
