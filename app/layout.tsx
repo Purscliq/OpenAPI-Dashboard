@@ -1,9 +1,9 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Archivo } from "next/font/google";
+import { Zen_Kaku_Gothic_Antique } from "next/font/google";
 import AntdConfig from "@/lib/AntdConfig";
 
-const archivo = Archivo({ subsets: ["latin"] });
+const zen = Zen_Kaku_Gothic_Antique({ subsets: ["latin"], weight: "400" });
 
 export const metadata: Metadata = {
   title: "Pursfi Open API ",
@@ -17,10 +17,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" data-theme="light">
-      <body className={`${archivo.className} !bg-[#FAFAFA]`}>
-        <AntdConfig>
-         {children}
-        </AntdConfig>
+      <body className={`${zen.className} !bg-[#FAFAFA]`}>
+        <AntdConfig>{children}</AntdConfig>
       </body>
     </html>
   );
