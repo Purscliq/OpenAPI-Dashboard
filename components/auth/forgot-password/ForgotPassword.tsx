@@ -16,7 +16,7 @@ import { BiChevronLeft } from "react-icons/bi";
 import InfoIcon from "@/assets/svg/InfoIcon";
 import { BsArrowRight } from "react-icons/bs";
 
-const Login = () => {
+const ForgotPassword = () => {
   const route = useRouter();
 
   return (
@@ -86,9 +86,11 @@ const Login = () => {
 
               <div className="text-center mt-10 lg:mt-0 space-y-2">
                 <h2 className="text-3xl uppercase font-semibold">
-                  WELCOME BACK EXCLUSIVE MEMBER
+                  PASSWORD RESET
                 </h2>
-                <p className="text-2xl uppercase">LOG IN TO CONTINUE</p>
+                <p className="text-2xl uppercase">
+                  KINDLY PROVIDE YOUR REGISTERED EMAIL ADDRESS
+                </p>
               </div>
               <form className="mt-12 grid grid-cols-6 gap-5">
                 <div className="col-span-6">
@@ -109,26 +111,12 @@ const Login = () => {
                   />
                 </div>
 
-                <div className="col-span-6">
-                  <label
-                    htmlFor="Password"
-                    className="block text-sm font-semibold text-gray-700"
-                  >
-                    Password
-                  </label>
-
-                  <PasswordInput
-                    className="mt-1"
-                    placeholder="Enter Password"
-                  />
-                </div>
-
                 <div className="col-span-6 space-y-2 sm:items-center sm:gap-4">
                   <button
-                    onClick={() => route.push("/dashboard")}
+                    onClick={() => route.push("/")}
                     className="flex justify-between  w-full  border border-black bg-black px-12 text-left py-6 text-md font-medium text-white transition hover:bg-transparent hover:text-black focus:outline-none focus:ring active:text-black"
                   >
-                    Proceed to my Account
+                    Continue
                     <span>
                       {" "}
                       <BsArrowRight className="h-5 w-5" />
@@ -138,8 +126,9 @@ const Login = () => {
               </form>
 
               <div className="text-center mt-10">
-                <Link href="/forgot-password" className="hover:underline">
-                  Having Issues with your Password?
+                Remember your password? {""}
+                <Link href="/" className="hover:underline">
+                  Login
                 </Link>
               </div>
             </div>
@@ -164,4 +153,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgotPassword;
