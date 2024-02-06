@@ -1,8 +1,9 @@
 import React from "react";
 
-const Home = () => {
+const Home = ({...className}) => {
   return (
     <svg
+    {...className}
       width="19"
       height="20"
       viewBox="0 0 19 20"

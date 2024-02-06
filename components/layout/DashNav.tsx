@@ -1,8 +1,8 @@
 import React from "react";
 import { CgMenuRightAlt } from "react-icons/cg";
 import { CiSearch } from "react-icons/ci";
-// import logo from "@/assets/logo.svg";
-// import Image from "next/image";
+import logo from "@/assets/png/People@2x.png";
+import Image from "next/image";
 const DashNav = () => {
   return (
     <>
@@ -30,9 +30,7 @@ const DashNav = () => {
             <span>Notifications</span>
           </div>
           <div className="avatar">
-            <div className="w-12 rounded-full">
-              {/* <Profile /> */}
-            </div>
+            <Image alt="" src={logo} />
           </div>
         </div>
       </nav>

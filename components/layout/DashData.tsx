@@ -17,74 +17,74 @@ import Link from "next/link";
 export const sidebarData1: MenuProps["items"] = [
   {
     label: <Link href="/get-started">Getting Started</Link>,
-    icon: <Home />,
+    icon: <Home className="mr-1" />,
     key: "get-started",
   },
   {
     label: <Link href="/compliance">Compliance</Link>,
-    icon: <Compliance />,
+    icon: <Compliance className="mr-1" />,
     key: "compliance",
   },
 ];
 export const sidebarData2: MenuProps["items"] = [
   {
     label: <Link href="/dashboard">Dashboard</Link>,
-    icon: <DashIcon />,
+    icon: <DashIcon className="mr-1" />,
     key: "dashboard",
   },
   {
     label: <Link href="/account">Account</Link>,
-    icon: <Account />,
+    icon: <Account className="mr-1" />,
     key: "account",
   },
   {
     label: <Link href="/customer">Customer</Link>,
-    icon: <Customer />,
+    icon: <Customer className="mr-1" />,
     key: "customer",
   },
   {
     label: <Link href="/auth">Authorization</Link>,
-    icon: <Auth />,
+    icon: <Auth className="mr-1" />,
     key: "auth",
   },
   {
     label: <Link href="/transaction">Transaction</Link>,
-    icon: <Transac />,
+    icon: <Transac className="mr-1" />,
     key: "transaction",
   },
 
   {
     label: <Link href="/dispute">Dispute</Link>,
-    icon: <DisputeIcon />,
+    icon: <DisputeIcon className="mr-1" />,
     key: "dispute",
   },
   {
     label: <Link href="/developer">Developers</Link>,
-    icon: <DeveloperIcon />,
+    icon: <DeveloperIcon className="mr-1" />,
     key: "developer",
   },
 
   {
     label: <Link href="/stimulator">Stimulator</Link>,
-    icon: <StimulatorIcon />,
+    icon: <StimulatorIcon className="mr-1" />,
     key: "stimulator",
   },
 
   {
     label: <Link href="/setting">Settings</Link>,
-    icon: <SettingIcon />,
+    icon: <SettingIcon className="mr-1" />,
     key: "setting",
   },
 ];
 export const sidebarData3: MenuProps["items"] = [
   {
     label: <Link href="/sandbox">SandBox</Link>,
-    icon: <SandIcon />,
+    icon: <SandIcon className="mr-1" />,
     key: "sandbox",
   },
   {
     label: <Link href="/logout">Log Out</Link>,
-    icon: <LogoutIcon />,
+    icon: <LogoutIcon className="mr-1" />,
     key: "logout",
   },
 ];

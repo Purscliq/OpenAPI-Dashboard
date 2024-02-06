@@ -1,8 +1,9 @@
 import React from "react";
 
-const InfoIcon = () => {
+const InfoIcon = ({...className}) => {
   return (
     <svg
+    {...className}
       width="10"
       height="18"
       viewBox="0 0 10 18"
