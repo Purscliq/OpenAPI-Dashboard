@@ -162,7 +162,7 @@ const Signup = () => {
                         { value: "Nigeria", label: "Nigeria" },
                         { value: "Ghana", label: "Ghana" },
                       ]}
-                      className="mt-1 p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-none"
+                      className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-none"
                     />
                   </div>
 
@@ -191,7 +191,7 @@ const Signup = () => {
                       Enter Password
                     </label>
 
-                    <PasswordInput id="password" className="mt-1" />
+                    <PasswordInput id="password" />
                   </div>
 
                   <div className="col-span-6 sm:col-span-3 flex flex-col items-start justify-start gap-[0.3rem]">
@@ -202,7 +202,7 @@ const Signup = () => {
                       Confirm Password
                     </label>
 
-                    <PasswordInput id="PasswordConfirmation" className="mt-1" />
+                    <PasswordInput id="PasswordConfirmation" />
                   </div>
 
                   <div className="col-span-6  flex flex-col items-start justify-start gap-[0.3rem]">
@@ -221,7 +221,7 @@ const Signup = () => {
                         { value: "Business", label: "Business" },
                         { value: "Personal", label: "Personal" },
                       ]}
-                      className="mt-1 p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-none"
+                      className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-none"
                     />
                   </div>
 
