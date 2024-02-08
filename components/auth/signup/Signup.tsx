@@ -10,8 +10,8 @@ import {
   CustomSelect as Select,
 } from "@/lib/AntdComponents";
 
-import GradientBg from "../../../assets/png/side-left.png";
-import Hands from "./../../../assets/png/handshake-img.png";
+import GradientBg from "@/assets/png/side-left.png";
+import Hands from "@/assets/png/handshake-img.png";
 import { BiChevronLeft } from "react-icons/bi";
 import InfoIcon from "@/assets/svg/InfoIcon";
 import { BsArrowRight } from "react-icons/bs";

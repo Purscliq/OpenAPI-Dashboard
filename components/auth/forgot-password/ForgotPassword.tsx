@@ -6,8 +6,8 @@ import { useRouter } from "next/navigation";
 import { CustomInput as Input } from "@/lib/AntdComponents";
 
 import Image from "next/image";
-import GradientBg from "../../../assets/png/side-left.png";
-import Hands from "../../../assets/png/handshake-img.png";
+import GradientBg from "@/assets/png/side-left.png";
+import Hands from "@/assets/png/handshake-img.png";
 import { BiChevronLeft } from "react-icons/bi";
 import InfoIcon from "@/assets/svg/InfoIcon";
 import { BsArrowRight } from "react-icons/bs";
