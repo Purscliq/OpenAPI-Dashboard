@@ -89,7 +89,7 @@ const ForgotPassword = () => {
                 </p>
               </div>
               <form className="mt-12 grid grid-cols-6 gap-5">
-                <div className="col-span-6">
+                <div className="col-span-6 flex flex-col items-start justify-start gap-[0.3rem]">
                   <label
                     htmlFor="email"
                     className="block text-sm font-semibold text-gray-700"
@@ -103,14 +103,14 @@ const ForgotPassword = () => {
                     name="email"
                     placeholder="john@doe.mail"
                     required
-                    className="mt-1 p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
+                    className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
                   />
                 </div>
 
                 <div className="col-span-6 space-y-2 sm:items-center sm:gap-4">
                   <button
                     onClick={() => route.push("/")}
-                    className="flex justify-between  w-full  border border-black bg-black px-12 text-left py-6 text-md font-medium text-white transition hover:bg-transparent hover:text-black focus:outline-none focus:ring active:text-black"
+                    className="flex justify-between  w-full  bg-black px-12 text-left py-6 text-md font-medium text-white focus:outline-none"
                   >
                     Continue
                     <span>

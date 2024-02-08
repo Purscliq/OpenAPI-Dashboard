@@ -50,7 +50,7 @@ const Signup = () => {
         </section>
 
         <main className="w-full max-h-screen px-8 py-6 lg:px-4 lg:py-2  lg:col-span-7 xl:col-span-8">
-          <div className="w-full flex flex-col justify-between gap-10 md:h-[calc(100%-.5rem)]">
+          <div className="w-full flex flex-col justify-between h-full lg:max-h-screen">
             <div className="md:flex justify-between gap-8">
               <Link href="/" className="hover:underline">
                 <span>
@@ -82,149 +82,150 @@ const Signup = () => {
                 </p>
               </div>
 
-              <div className="text-center mt-10 lg:mt-0 space-y-2">
-                <h2 className="text-3xl uppercase font-semibold">
-                  CREATE YOUR PURSFI API ACCOUNT
-                </h2>
-                <p className="text-2xl uppercase">
-                  SIGN UP and join the partnership{" "}
-                </p>
-              </div>
-              <form className="mt-12 grid grid-cols-6 gap-5">
-                <div className="col-span-6 sm:col-span-3">
-                  <label
-                    htmlFor="FirstName"
-                    className="block text-sm font-semibold text-gray-700"
-                  >
-                    First Name
-                  </label>
-
-                  <Input
-                    type="text"
-                    id="FirstName"
-                    name="first_name"
-                    placeholder="John"
-                    required
-                    className="mt-1 p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
-                  />
+              <div>
+                <div className="text-center mt-10 lg:mt-0 space-y-2">
+                  <h2 className="text-3xl uppercase font-semibold">
+                    CREATE YOUR PURSFI API ACCOUNT
+                  </h2>
+                  <p className="text-2xl uppercase">
+                    SIGN UP and join the partnership{" "}
+                  </p>
                 </div>
+                <form className="mt-12 grid grid-cols-6 gap-5">
+                  <div className="col-span-6 sm:col-span-3 flex flex-col items-start justify-start gap-[0.3rem]">
+                    <label
+                      htmlFor="FirstName"
+                      className="block text-sm font-semibold text-gray-700"
+                    >
+                      First Name
+                    </label>
 
-                <div className="col-span-6 sm:col-span-3">
-                  <label
-                    htmlFor="LastName"
-                    className="block text-sm font-semibold text-gray-700"
-                  >
-                    Last Name
-                  </label>
+                    <Input
+                      type="text"
+                      id="FirstName"
+                      name="first_name"
+                      placeholder="John"
+                      required
+                      className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
+                    />
+                  </div>
 
-                  <Input
-                    type="text"
-                    id="LastName"
-                    name="last_name"
-                    placeholder="Doe"
-                    required
-                    className="mt-1 p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
-                  />
-                </div>
+                  <div className="col-span-6 sm:col-span-3 flex flex-col items-start justify-start gap-[0.3rem]">
+                    <label
+                      htmlFor="LastName"
+                      className="block text-sm font-semibold text-gray-700"
+                    >
+                      Last Name
+                    </label>
 
-                <div className="col-span-6 sm:col-span-3">
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-semibold text-gray-700"
-                  >
-                    Work Email
-                  </label>
+                    <Input
+                      type="text"
+                      id="LastName"
+                      name="last_name"
+                      placeholder="Doe"
+                      required
+                      className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
+                    />
+                  </div>
 
-                  <Input
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="john@doe.mail"
-                    required
-                    className="mt-1 p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
-                  />
-                </div>
+                  <div className="col-span-6 sm:col-span-3 flex flex-col items-start justify-start gap-[0.3rem]">
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-semibold text-gray-700"
+                    >
+                      Work Email
+                    </label>
 
-                <div className="col-span-6 sm:col-span-3">
-                  <label
-                    htmlFor="RegCountry"
-                    className="block text-sm font-semibold text-gray-700"
-                  >
-                    Registration Country
-                  </label>
+                    <Input
+                      type="email"
+                      id="email"
+                      name="email"
+                      placeholder="john@doe.mail"
+                      required
+                      className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
+                    />
+                  </div>
 
-                  <Select
-                    id="RegCountry"
-                    defaultValue=""
-                    options={[
-                      { value: "", label: "Select an option" },
-                      { value: "Nigeria", label: "Nigeria" },
-                      { value: "Ghana", label: "Ghana" },
-                    ]}
-                    className="mt-1 p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-none"
-                  />
-                </div>
+                  <div className="col-span-6 sm:col-span-3 flex flex-col items-start justify-start gap-[0.3rem]">
+                    <label
+                      htmlFor="RegCountry"
+                      className="block text-sm font-semibold text-gray-700"
+                    >
+                      Registration Country
+                    </label>
 
-                <div className="col-span-6">
-                  <label
-                    htmlFor="BusinessName"
-                    className="block text-sm font-semibold text-gray-700"
-                  >
-                    Business Name
-                  </label>
+                    <Select
+                      id="RegCountry"
+                      defaultValue=""
+                      options={[
+                        { value: "", label: "Select an option" },
+                        { value: "Nigeria", label: "Nigeria" },
+                        { value: "Ghana", label: "Ghana" },
+                      ]}
+                      className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-none"
+                    />
+                  </div>
 
-                  <Input
-                    type="text"
-                    id="BusinessName"
-                    name="BusinessName"
-                    required
-                    className="mt-1 p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
-                  />
-                </div>
+                  <div className="col-span-6  flex flex-col items-start justify-start gap-[0.3rem]">
+                    <label
+                      htmlFor="BusinessName"
+                      className="block text-sm font-semibold text-gray-700"
+                    >
+                      Business Name
+                    </label>
 
-                <div className="col-span-6 sm:col-span-3">
-                  <label
-                    htmlFor="password"
-                    className="block text-sm font-semibold text-gray-700"
-                  >
-                    Enter Password
-                  </label>
+                    <Input
+                      type="text"
+                      id="BusinessName"
+                      name="BusinessName"
+                      required
+                      className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
+                    />
+                  </div>
 
-                  <PasswordInput id="password" className="mt-1" />
-                </div>
+                  <div className="col-span-6 sm:col-span-3 flex flex-col items-start justify-start gap-[0.3rem]">
+                    <label
+                      htmlFor="password"
+                      className="block text-sm font-semibold text-gray-700"
+                    >
+                      Enter Password
+                    </label>
 
-                <div className="col-span-6 sm:col-span-3">
-                  <label
-                    htmlFor="PasswordConfirmation"
-                    className="block text-sm font-semibold text-gray-700"
-                  >
-                    Confirm Password
-                  </label>
+                    <PasswordInput id="password" />
+                  </div>
 
-                  <PasswordInput id="PasswordConfirmation" className="mt-1" />
-                </div>
+                  <div className="col-span-6 sm:col-span-3 flex flex-col items-start justify-start gap-[0.3rem]">
+                    <label
+                      htmlFor="PasswordConfirmation"
+                      className="block text-sm font-semibold text-gray-700"
+                    >
+                      Confirm Password
+                    </label>
 
-                <div className="col-span-6">
-                  <label
-                    htmlFor="APIusage"
-                    className="block text-sm font-semibold text-gray-700"
-                  >
-                    How do you want to use Pursfi Open API
-                  </label>
+                    <PasswordInput id="PasswordConfirmation" />
+                  </div>
 
-                  <Select
-                    id="APIusage"
-                    defaultValue=""
-                    options={[
-                      { value: "", label: "Select an option" },
-                      { value: "Business", label: "Business" },
-                      { value: "Personal", label: "Personal" },
-                    ]}
-                    className="mt-1 p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-none"
-                  />
-                </div>
+                  <div className="col-span-6  flex flex-col items-start justify-start gap-[0.3rem]">
+                    <label
+                      htmlFor="APIusage"
+                      className="block text-sm font-semibold text-gray-700"
+                    >
+                      How do you want to use Pursfi Open API
+                    </label>
 
-                {/* <div className="col-span-6">
+                    <Select
+                      id="APIusage"
+                      defaultValue=""
+                      options={[
+                        { value: "", label: "Select an option" },
+                        { value: "Business", label: "Business" },
+                        { value: "Personal", label: "Personal" },
+                      ]}
+                      className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-none"
+                    />
+                  </div>
+
+                  {/* <div className="col-span-6">
                 <label htmlFor="MarketingAccept" className="flex gap-4">
                   <Input
                     type="checkbox"
@@ -241,44 +242,45 @@ const Signup = () => {
                 </label>
               </div> */}
 
-                <div className="col-span-6">
-                  <p className="text-sm text-gray-500">
-                    By clicking 'Continue', you acknowledge that you have read
-                    and accept the {""}
-                    <Link
-                      href="#"
-                      className="text-gray-700 underline font-medium"
-                    >
-                      Terms of Service
-                    </Link>
-                    {""} and {""}
-                    <Link
-                      href="#"
-                      className="text-gray-700 underline font-medium"
-                    >
-                      Privacy Policy
-                    </Link>
-                    .
-                  </p>
-                </div>
+                  <div className="col-span-6">
+                    <p className="text-sm text-gray-500">
+                      By clicking 'Continue', you acknowledge that you have read
+                      and accept the {""}
+                      <Link
+                        href="#"
+                        className="text-gray-700 underline font-medium"
+                      >
+                        Terms of Service
+                      </Link>
+                      {""} and {""}
+                      <Link
+                        href="#"
+                        className="text-gray-700 underline font-medium"
+                      >
+                        Privacy Policy
+                      </Link>
+                      .
+                    </p>
+                  </div>
 
-                <div className="col-span-6 space-y-2 sm:items-center sm:gap-4">
-                  <button
-                    onClick={() => route.push("/")}
-                    className="flex justify-between  w-full  border border-black bg-black px-12 text-left py-6 text-md font-medium text-white transition hover:bg-transparent hover:text-black focus:outline-none focus:ring active:text-black"
-                  >
-                    Create an account
-                    <span>
-                      {" "}
-                      <BsArrowRight className="h-5 w-5" />
-                    </span>
-                  </button>
-                </div>
-              </form>
+                  <div className="col-span-6 space-y-2 sm:items-center sm:gap-4">
+                    <button
+                      onClick={() => route.push("/")}
+                      className="flex justify-between  w-full  bg-black px-12 text-left py-6 text-md font-medium text-white focus:outline-none"
+                    >
+                      Create an account
+                      <span>
+                        {" "}
+                        <BsArrowRight className="h-5 w-5" />
+                      </span>
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
 
             {/* footer */}
-            <div className="lg:flex justify-between gap-8 text-[#9E9E9E] space-y-2 lg:space-y-0">
+            <div className="md:flex justify-between gap-8 text-[#9E9E9E] space-y-2 md:space-y-0">
               <p className="text-sm">
                 Copyright 2021 - 2022 PursFI Inc. All rights Reserved
               </p>
