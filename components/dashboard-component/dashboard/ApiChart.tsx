@@ -1,4 +1,4 @@
-import { Column } from "@ant-design/plots";
+import { Column, ColumnConfig } from "@ant-design/plots";
 
 const ApiChart = () => {
   const data = [
@@ -52,7 +52,7 @@ const ApiChart = () => {
     },
   ];
 
-  const config = {
+  const config: ColumnConfig = {
     data,
     xField: "type",
     yField: "sales",
@@ -74,7 +74,7 @@ const ApiChart = () => {
         enable: false,
       },
     ],
-    // tooltip: false,
+    tooltip: false,
     minColumnWidth: 30,
     maxColumnWidth: 30,
     columnStyle: {

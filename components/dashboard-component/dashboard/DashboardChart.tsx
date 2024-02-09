@@ -1,4 +1,4 @@
-import { Line } from "@ant-design/plots";
+import { Line, LineConfig } from "@ant-design/plots";
 
 const data = [
   {
@@ -39,14 +39,14 @@ const data = [
 ];
 
 const DashbordChart = () => {
-  const config = {
+  const config: LineConfig = {
     data,
     xField: "time",
     yField: "value",
     seriesField: "category",
     yAxis: {
       label: {
-        formatter: (v: number) => `${v / 1000}k`,
+        formatter: (v: string) => `${parseInt(v, 10) / 1000}k`,
       },
     },
   };
