@@ -1,4 +1,3 @@
-import React from "react";
 import { Column } from "@ant-design/plots";
 
 const ApiChart = () => {
@@ -75,7 +74,7 @@ const ApiChart = () => {
         enable: false,
       },
     ],
-    tooltip: false,
+    // tooltip: false,
     minColumnWidth: 30,
     maxColumnWidth: 30,
     columnStyle: {

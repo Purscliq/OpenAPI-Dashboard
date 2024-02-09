@@ -1,4 +1,3 @@
-import React from "react";
 import { Line } from "@ant-design/plots";
 
 const data = [
@@ -47,7 +46,7 @@ const DashbordChart = () => {
     seriesField: "category",
     yAxis: {
       label: {
-        formatter: (v) => `${v / 1000}k`, // Dividing by 1000 to convert to k
+        formatter: (v: number) => `${v / 1000}k`,
       },
     },
   };
