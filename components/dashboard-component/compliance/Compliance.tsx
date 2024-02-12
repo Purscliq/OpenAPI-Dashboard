@@ -35,7 +35,7 @@ const Compliance = () => {
   return (
     <section className="max-w-[1640px] flex flex-col p-4 space-y-6  h-screen overflow-y-scroll">
       <span>
-        <h2 className="text-[32px] font-bold mb-1"> Compliance </h2>
+        <h2 className="text-[24px] font-bold mb-1"> Compliance </h2>
       </span>
 
       <section className="space-y-4">

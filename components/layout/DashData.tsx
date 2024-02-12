@@ -38,7 +38,7 @@ export const sidebarData2: MenuProps["items"] = [
     key: "account",
   },
   {
-    label:"Loan Management",
+    label: "Loan Management",
     icon: <Account className="mr-1" />,
     key: "Loan Management",
     children: [
@@ -53,15 +53,15 @@ export const sidebarData2: MenuProps["items"] = [
     ],
   },
   {
-    label: <Link href="/transaction">Transaction</Link>,
+    label: <Link href="/transactions">Transactions</Link>,
     icon: <Transac className="mr-1" />,
-    key: "transaction",
+    key: "transactions",
   },
 
   {
-    label: <Link href="/dispute">Dispute</Link>,
+    label: <Link href="/disputes">Disputes</Link>,
     icon: <DisputeIcon className="mr-1" />,
-    key: "dispute",
+    key: "disputes",
   },
   {
     label: <Link href="/developer">Developers</Link>,
@@ -98,8 +98,8 @@ export const activeKeys = [
   "dashboard",
   "payroll",
   "setting",
-  "dispute",
-  "transaction",
+  "disputes",
+  "transactions",
   "get-started",
   "developer",
   "developer",
