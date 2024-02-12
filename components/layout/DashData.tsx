@@ -33,19 +33,24 @@ export const sidebarData2: MenuProps["items"] = [
     key: "dashboard",
   },
   {
-    label: <Link href="/account">Account</Link>,
+    label: <Link href="/account">Sub Account</Link>,
     icon: <Account className="mr-1" />,
     key: "account",
   },
   {
-    label: <Link href="/customer">Customer</Link>,
-    icon: <Customer className="mr-1" />,
-    key: "customer",
-  },
-  {
-    label: <Link href="/auth">Authorization</Link>,
-    icon: <Auth className="mr-1" />,
-    key: "auth",
+    label:"Loan Management",
+    icon: <Account className="mr-1" />,
+    key: "Loan Management",
+    children: [
+      {
+        label: <Link href="/loans">Loans</Link>,
+        key: "loans",
+      },
+      {
+        label: <Link href="/roles">External Loans</Link>,
+        key: "external-loans",
+      },
+    ],
   },
   {
     label: <Link href="/transaction">Transaction</Link>,
