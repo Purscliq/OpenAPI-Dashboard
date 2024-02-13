@@ -1,6 +1,7 @@
 import React from "react";
 import ExternalLoansTable from "./ExternalLoansTable";
 import Link from "next/link";
+import ExternalLoanDrawer from "./Drawer/ExternalLoanDrawer";
 
 const data = [
   {
@@ -71,6 +72,7 @@ const ExternalLoans = () => {
       </div>
 
       <div className="">
+        <ExternalLoanDrawer />
         <ExternalLoansTable />
       </div>
     </section>
