@@ -43,11 +43,13 @@ export const sidebarData2: MenuProps["items"] = [
     key: "Loan Management",
     children: [
       {
-        label: <Link href="/loans">Loans</Link>,
+        label: <Link href="/loan-management/loans">Loans</Link>,
         key: "loans",
       },
       {
-        label: <Link href="/roles">External Loans</Link>,
+        label: (
+          <Link href="/loan-management/external-loans">External Loans</Link>
+        ),
         key: "external-loans",
       },
     ],
