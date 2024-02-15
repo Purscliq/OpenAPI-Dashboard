@@ -59,7 +59,7 @@ const Loans = () => {
           Book New Loans
         </Link>
       </div>
-      <div className="grid 2xl:grid-cols-4 md:grid-cols-2 grid-cols-1 md:gap-8 gap-4">
+      <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 md:gap-8 gap-4">
         {data.map((item, index) => (
           <div
             key={index}
