@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Button, Drawer } from "antd";
 
-const LoanDrawer = () => {
+const LoanAccountDrawer = () => {
   const [open, setOpen] = useState(false);
 
   const showDrawer = () => {
@@ -31,7 +31,7 @@ const LoanDrawer = () => {
         style={{ position: "absolute", padding: 0 }}
       >
         <div className="space-y-8 py-4">
-          <p className="font-semibold text-[18px]">Loan History</p>
+          <p className="font-semibold text-[18px]">Loan Details</p>
 
           <div className="p-4 border rounded-md space-y-6">
             <span className="flex justify-between">
@@ -97,4 +97,4 @@ const LoanDrawer = () => {
   );
 };
 
-export default LoanDrawer;
+export default LoanAccountDrawer;
