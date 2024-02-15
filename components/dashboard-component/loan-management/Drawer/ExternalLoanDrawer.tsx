@@ -17,7 +17,7 @@ const ExternalLoanDrawer = () => {
   return (
     <>
       <Button type="primary" onClick={showDrawer}>
-        Drawer
+        Details
       </Button>
 
       <Drawer
