@@ -83,9 +83,9 @@ export const sidebarData2: MenuProps["items"] = [
   },
 
   {
-    label: <Link href="/setting">Settings</Link>,
+    label: <Link href="/settings">Settings</Link>,
     icon: <SettingIcon className="mr-1" />,
-    key: "setting",
+    key: "settings",
   },
 ];
 export const sidebarData3: MenuProps["items"] = [
@@ -104,7 +104,7 @@ export const sidebarData3: MenuProps["items"] = [
 export const activeKeys = [
   "dashboard",
   "payroll",
-  "setting",
+  "settings",
   "disputes",
   "transactions",
   "loan-account",
