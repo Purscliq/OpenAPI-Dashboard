@@ -71,9 +71,9 @@ export const sidebarData2: MenuProps["items"] = [
     key: "disputes",
   },
   {
-    label: <Link href="/developer">Developers</Link>,
+    label: <Link href="/developers">Developers</Link>,
     icon: <DeveloperIcon className="mr-1" />,
-    key: "developer",
+    key: "developers",
   },
 
   {
@@ -112,8 +112,7 @@ export const activeKeys = [
   "external-loans",
   "loan-management",
   "get-started",
-  "developer",
-  "developer",
+  "developers",
   "sandbox",
   "logout",
   "stimulator",
