@@ -16,9 +16,9 @@ import Link from "next/link";
 
 export const sidebarData1: MenuProps["items"] = [
   {
-    label: <Link href="/get-started">Getting Started</Link>,
+    label: <Link href="/getting-started">Getting Started</Link>,
     icon: <Home className="mr-1" />,
-    key: "get-started",
+    key: "getting-started",
   },
   {
     label: <Link href="/compliance">Compliance</Link>,
@@ -111,7 +111,7 @@ export const activeKeys = [
   "loans",
   "external-loans",
   "loan-management",
-  "get-started",
+  "getting-started",
   "developers",
   "sandbox",
   "logout",
