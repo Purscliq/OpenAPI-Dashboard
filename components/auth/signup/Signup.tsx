@@ -66,7 +66,7 @@ const Signup = () => {
           // replace("/signup-otp");
         })
         .catch((err) => {
-         message.error(err?.message);
+         message.error(err?.message || "Something went wrong");
         });
     }
   };

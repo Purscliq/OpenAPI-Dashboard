@@ -1,7 +1,5 @@
 "use client";
 import React from "react";
-
-import { CustomSegment as Segmented } from "@/lib/AntdComponents";
 import TotalIcon from "@/assets/svg/TotalIcon";
 import DisbursIcon from "@/assets/svg/DisbursIcon";
 import ColletIcon from "@/assets/svg/ColletIcon";
