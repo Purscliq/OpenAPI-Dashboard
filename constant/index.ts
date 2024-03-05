@@ -8,7 +8,7 @@ import {
 const baseQuery = fetchBaseQuery({
   baseUrl: process.env.NEXT_PUBLIC_API_URL,
   prepareHeaders: (headers) => {
-    headers.set("Authorization", `Bearer ${localStorage.getItem("token")}`);
+    headers.set("Authorization", `Bearer ${localStorage.getItem("oken")}`);
     headers.set("Accept", "application/json");
   },
 });

@@ -1,6 +1,6 @@
 "use client";
-
-import React from "react";
+import "react-phone-input-2/lib/style.css";
+import React, { ChangeEventHandler, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -9,16 +9,67 @@ import {
   CustomPasswordInput as PasswordInput,
   CustomSelect as Select,
 } from "@/lib/AntdComponents";
-
 import GradientBg from "@/assets/png/side-left.png";
 import Hands from "@/assets/png/handshake-img.png";
 import { BiChevronLeft } from "react-icons/bi";
 import InfoIcon from "@/assets/svg/InfoIcon";
 import { BsArrowRight } from "react-icons/bs";
+import PhoneInput from "react-phone-input-2";
+import { Form, message } from "antd";
+import { passwordSchema } from "@/lib/PasswordSchema";
+import { useRegisterMutation } from "@/services/auth/index.service";
+import { LoadingOutlined } from "@ant-design/icons";
 
+const initailState = {
+  first_name: "",
+  last_name: "",
+  email: "",
+  phone_number: "",
+  password: "",
+  password2: "",
+  business_name: "",
+  ip_address: "",
+  role_id: 1,
+};
 const Signup = () => {
-  const route = useRouter();
+  const { replace } = useRouter();
+  const [formData, setFormData] = useState(initailState);
+  const [validationError, setValidationError] = useState("");
+  const [confirmValidationError, setConfirmValidationError] = useState("");
+  const [register, { isLoading }] = useRegisterMutation();
 
+  const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    if (e.target.name === "password")
+      passwordSchema
+        .validate({ password: e.target?.value })
+        .then(() => setValidationError(""))
+        .catch((error) => setValidationError(error.message));
+    if (e.target.name === "password2" && e.target.value !== formData.password)
+      setConfirmValidationError("password must match");
+    else if (
+      e.target.name === "password2" &&
+      e.target.value == formData.password
+    )
+      setConfirmValidationError("");
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target?.name]: e.target?.value,
+    }));
+  };
+  const handleRegister = () => {
+    if (!validationError && !confirmValidationError) {
+      console.log(formData);
+      register({ ...formData, ip_address: "11234532" })
+        .unwrap()
+        .then((res) => {
+          message.success(res.message)
+          // replace("/signup-otp");
+        })
+        .catch((err) => {
+         message.error(err?.message);
+        });
+    }
+  };
   return (
     <section className="bg-white">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
@@ -91,7 +142,11 @@ const Signup = () => {
                     SIGN UP and join the partnership{" "}
                   </p>
                 </div>
-                <form className="mt-12 grid grid-cols-6 gap-5">
+
+                <Form
+                  onFinish={handleRegister}
+                  className="!mt-12 !grid !grid-cols-6 !gap-5"
+                >
                   <div className="col-span-6 sm:col-span-3 flex flex-col items-start justify-start gap-[0.3rem]">
                     <label
                       htmlFor="FirstName"
@@ -101,11 +156,13 @@ const Signup = () => {
                     </label>
 
                     <Input
-                      type="text"
-                      id="FirstName"
-                      name="first_name"
-                      placeholder="John"
+                      id="firstName"
                       required
+                      value={formData.first_name}
+                      onChange={handleChange}
+                      name="first_name"
+                      type="text"
+                      placeholder="Enter your first name"
                       className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
                     />
                   </div>
@@ -119,11 +176,13 @@ const Signup = () => {
                     </label>
 
                     <Input
-                      type="text"
                       id="LastName"
                       name="last_name"
-                      placeholder="Doe"
                       required
+                      value={formData.last_name}
+                      onChange={handleChange}
+                      type="text"
+                      placeholder="Enter your last name"
                       className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
                     />
                   </div>
@@ -137,38 +196,44 @@ const Signup = () => {
                     </label>
 
                     <Input
-                      type="email"
                       id="email"
-                      name="email"
-                      placeholder="john@doe.mail"
                       required
+                      value={formData.email}
+                      onChange={handleChange}
+                      type="email"
+                      placeholder="Enter your email"
+                      name="email"
                       className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
                     />
                   </div>
 
-                  <div className="col-span-6 sm:col-span-3 flex flex-col items-start justify-start gap-[0.3rem]">
+                  <div className="col-span-6 sm:col-span-3 flex flex-col items-start justify-start gap-[0.3rem] w-full">
                     <label
-                      htmlFor="RegCountry"
+                      htmlFor="RegNum"
                       className="block text-sm font-semibold text-gray-700"
                     >
-                      Registration Country
+                      Registration Number
                     </label>
 
-                    <Select
-                      id="RegCountry"
-                      defaultValue=""
-                      options={[
-                        { value: "", label: "Select an option" },
-                        { value: "Nigeria", label: "Nigeria" },
-                        { value: "Ghana", label: "Ghana" },
-                      ]}
-                      className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-none"
-                    />
+                    <div className="phone-input-container !w-full">
+                      <PhoneInput
+                        country={"ng"}
+                        containerClass="!w-full"
+                        inputClass="phone-input-input !w-full"
+                        value={formData.phone_number}
+                        onChange={(value) =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            phone_number: value,
+                          }))
+                        }
+                      />
+                    </div>
                   </div>
 
                   <div className="col-span-6  flex flex-col items-start justify-start gap-[0.3rem]">
                     <label
-                      htmlFor="BusinessName"
+                      htmlFor="business_name"
                       className="block text-sm font-semibold text-gray-700"
                     >
                       Business Name
@@ -176,9 +241,12 @@ const Signup = () => {
 
                     <Input
                       type="text"
-                      id="BusinessName"
-                      name="BusinessName"
+                      id="business_name"
+                      name="business_name"
                       required
+                      value={formData.business_name}
+                      onChange={handleChange}
+                      placeholder="Enter your business name"
                       className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
                     />
                   </div>
@@ -191,18 +259,41 @@ const Signup = () => {
                       Enter Password
                     </label>
 
-                    <PasswordInput id="password" />
+                    <PasswordInput
+                      id="password"
+                      placeholder="Enter your password"
+                      type="password"
+                      required
+                      value={formData.password}
+                      name="password"
+                      onChange={handleChange}
+                    />
+
+                    {formData.password && validationError && (
+                      <p className="text-red-500">{validationError}</p>
+                    )}
                   </div>
 
                   <div className="col-span-6 sm:col-span-3 flex flex-col items-start justify-start gap-[0.3rem]">
                     <label
-                      htmlFor="PasswordConfirmation"
+                      htmlFor="confirmPassword"
                       className="block text-sm font-semibold text-gray-700"
                     >
                       Confirm Password
                     </label>
 
-                    <PasswordInput id="PasswordConfirmation" />
+                    <PasswordInput
+                      id="confirmPassword"
+                      placeholder="Confirm your password"
+                      type="password"
+                      required
+                      value={formData.password2}
+                      name="password2"
+                      onChange={handleChange}
+                    />
+                    {formData.password2 && confirmValidationError && (
+                      <p> Password must match</p>
+                    )}
                   </div>
 
                   <div className="col-span-6  flex flex-col items-start justify-start gap-[0.3rem]">
@@ -213,16 +304,27 @@ const Signup = () => {
                       How do you want to use Pursfi Open API
                     </label>
 
-                    <Select
-                      id="APIusage"
-                      defaultValue=""
-                      options={[
-                        { value: "", label: "Select an option" },
-                        { value: "Business", label: "Business" },
-                        { value: "Personal", label: "Personal" },
+                    <Form.Item
+                      name="APIusage"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please select an option",
+                        },
                       ]}
-                      className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-none"
-                    />
+                      className="!w-full"
+                    >
+                      <Select
+                        id="APIusage"
+                        defaultValue=""
+                        options={[
+                          { value: "", label: "Select an option" },
+                          { value: "Business", label: "Business" },
+                          { value: "Personal", label: "Personal" },
+                        ]}
+                        className=" !w-full rounded-md  !bg-white !text-gray-700 "
+                      />
+                    </Form.Item>
                   </div>
 
                   {/* <div className="col-span-6">
@@ -264,18 +366,19 @@ const Signup = () => {
                   </div>
 
                   <div className="col-span-6 space-y-2 sm:items-center sm:gap-4">
-                    <button
-                      onClick={() => route.push("/")}
-                      className="flex justify-between  w-full  bg-black px-12 text-left py-6 text-md font-medium text-white focus:outline-none"
-                    >
+                    <button className="flex justify-between  w-full  bg-black px-12 text-left py-6 text-md font-medium text-white focus:outline-none">
                       Create an account
                       <span>
                         {" "}
-                        <BsArrowRight className="h-5 w-5" />
-                      </span>
+                        {isLoading ? (
+                          <LoadingOutlined style={{ fontSize: 24 }} spin />
+                        ) : (
+                          <BsArrowRight className="h-5 w-5" />
+                        )}
+                      </span>{" "}
                     </button>
                   </div>
-                </form>
+                </Form>
               </div>
             </div>
 
