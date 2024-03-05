@@ -1,25 +1,28 @@
 import React from "react";
-import {
-  CustomInput as Input,
-  CustomSelect as Select,
-} from "@/lib/AntdComponents";
+import { Input } from "antd";
 
-const BusinessDetailsTab = () => {
+const { TextArea } = Input;
+
+const BusinessProfileTab = () => {
   return (
-    <section className="bg-white py-4 px-4 space-y-4">
+    <section className="bg- py-4 px-0 space-y-4">
+      <div className="border-b pb-2">
+        <p className="font-semibold text-base">Business Profile</p>
+        <p className="font-normal text-base text-[#7C8493]">
+          This is business information that you can update anytime.
+        </p>
+      </div>
+
       <div className="sm:grid grid-cols-8 gap-12 w-full space-y-4 md:space-y-0">
         <div className="p-2 col-span-3 space-y-2 w-full md:max-w-sm">
-          <p className="font-semibold text-base">Tell us about yourself</p>
-          <p className="font-normal text-base">
-            This must be the name on your registration Documentation.
-          </p>
+          <p className="font-semibold text-base">Business Details</p>
         </div>
 
         <div className="p-2 col-span-5 md:mr-10 lg:mr-20">
           <form className="space-y-4">
             <div className="flex flex-col items-start justify-start gap-[0.3rem]">
               <label
-                htmlFor="BVN"
+                htmlFor="name"
                 className="block text-sm font-semibold text-gray-700"
               >
                 Business Name
@@ -27,8 +30,8 @@ const BusinessDetailsTab = () => {
 
               <Input
                 type="text"
-                id="BVN"
-                name="BVN"
+                id="name"
+                name="name"
                 placeholder="This is placeholder"
                 required
                 className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
@@ -37,16 +40,16 @@ const BusinessDetailsTab = () => {
 
             <div className="flex flex-col items-start justify-start gap-[0.3rem] w-full">
               <label
-                htmlFor="FirstName"
+                htmlFor="email"
                 className="block text-sm font-semibold text-gray-700"
               >
-                Business Address
+                Email
               </label>
 
               <Input
-                type="text"
-                id="FirstName"
-                name="first_name"
+                type="email"
+                id="email"
+                name="email"
                 placeholder="This is placeholder"
                 required
                 className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
@@ -55,36 +58,50 @@ const BusinessDetailsTab = () => {
 
             <div className="flex flex-col items-start justify-start gap-[0.3rem]">
               <label
-                htmlFor="businessType"
+                htmlFor="description"
                 className="block text-sm font-semibold text-gray-700"
               >
-                Business Type
+                Business Description
               </label>
 
-              <Select
-                id="businessType"
-                defaultValue=""
-                options={[
-                  { value: "", label: "Select an option" },
-                  { value: "private", label: "Private" },
-                  { value: "public", label: "Public" },
-                ]}
-                className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-none"
+              <TextArea
+                rows={4}
+                id="description"
+                placeholder="This is placeholder"
+                className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
               />
             </div>
 
             <div className="flex flex-col items-start justify-start gap-[0.3rem]">
               <label
-                htmlFor="TIN"
+                htmlFor="phone"
                 className="block text-sm font-semibold text-gray-700"
               >
-                Enter TIN
+                Phone
               </label>
 
               <Input
-                type="number"
-                id="TIN"
-                name="residential address"
+                type="tel"
+                id="phone"
+                name="phone number"
+                placeholder="This is placeholder"
+                required
+                className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
+              />
+            </div>
+
+            <div className="flex flex-col items-start justify-start gap-[0.3rem] w-full">
+              <label
+                htmlFor="SupportEmail"
+                className="block text-sm font-semibold text-gray-700"
+              >
+                Support Email
+              </label>
+
+              <Input
+                type="email"
+                id="SupportEmail"
+                name="support email"
                 placeholder="This is placeholder"
                 required
                 className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
@@ -93,16 +110,16 @@ const BusinessDetailsTab = () => {
 
             <div className="flex flex-col items-start justify-start gap-[0.3rem]">
               <label
-                htmlFor="TIN2"
+                htmlFor="SupportPhone"
                 className="block text-sm font-semibold text-gray-700"
               >
-                Enter TIN
+                Support Phone
               </label>
 
               <Input
-                type="number"
-                id="TIN2"
-                name="residential address"
+                type="tel"
+                id="SupportPhone"
+                name="support phone"
                 placeholder="This is placeholder"
                 required
                 className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
@@ -110,18 +127,12 @@ const BusinessDetailsTab = () => {
             </div>
 
             <div className="">
-              <div className="flex justify-between gap-4 mt-8">
+              <div className="mt-8">
                 <button
                   type="submit"
                   className="w-full bg-black text-center text-md rounded-md px-4 py-2 font-medium text-white focus:outline-none"
                 >
-                  Save
-                </button>
-                <button
-                  type="button"
-                  className="w-full text-center text-md rounded-md px-4 py-2 font-medium text-black focus:outline-none"
-                >
-                  Cancel
+                  Update
                 </button>
               </div>
             </div>
@@ -132,4 +143,4 @@ const BusinessDetailsTab = () => {
   );
 };
 
-export default BusinessDetailsTab;
+export default BusinessProfileTab;

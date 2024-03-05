@@ -16,9 +16,9 @@ import Link from "next/link";
 
 export const sidebarData1: MenuProps["items"] = [
   {
-    label: <Link href="/get-started">Getting Started</Link>,
+    label: <Link href="/getting-started">Getting Started</Link>,
     icon: <Home className="mr-1" />,
-    key: "get-started",
+    key: "getting-started",
   },
   {
     label: <Link href="/compliance">Compliance</Link>,
@@ -71,9 +71,9 @@ export const sidebarData2: MenuProps["items"] = [
     key: "disputes",
   },
   {
-    label: <Link href="/developer">Developers</Link>,
+    label: <Link href="/developers">Developers</Link>,
     icon: <DeveloperIcon className="mr-1" />,
-    key: "developer",
+    key: "developers",
   },
 
   {
@@ -83,9 +83,9 @@ export const sidebarData2: MenuProps["items"] = [
   },
 
   {
-    label: <Link href="/setting">Settings</Link>,
+    label: <Link href="/settings">Settings</Link>,
     icon: <SettingIcon className="mr-1" />,
-    key: "setting",
+    key: "settings",
   },
 ];
 export const sidebarData3: MenuProps["items"] = [
@@ -104,16 +104,15 @@ export const sidebarData3: MenuProps["items"] = [
 export const activeKeys = [
   "dashboard",
   "payroll",
-  "setting",
+  "settings",
   "disputes",
   "transactions",
   "loan-account",
   "loans",
   "external-loans",
   "loan-management",
-  "get-started",
-  "developer",
-  "developer",
+  "getting-started",
+  "developers",
   "sandbox",
   "logout",
   "stimulator",
