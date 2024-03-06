@@ -62,11 +62,11 @@ const Signup = () => {
       register({ ...formData, ip_address: "11234532" })
         .unwrap()
         .then((res) => {
-          message.success("Registration successful")
+          message.success("Registration successful");
           // replace("/signup-otp");
         })
         .catch((err) => {
-         message.error(err?.message || "Something went wrong");
+          message.error(err?.message || "Something went wrong");
         });
     }
   };
