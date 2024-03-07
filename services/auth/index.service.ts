@@ -7,7 +7,6 @@ export const authApi = createApi({
   refetchOnReconnect: true,
   refetchOnMountOrArgChange: true,
   baseQuery: baseQueryWithReauth,
-  
   endpoints: (builder) => ({
     register: builder.mutation({
       query: (body) => ({
@@ -20,26 +19,39 @@ export const authApi = createApi({
           .then((apiResponse) => {
             localStorage.setItem(
               "refresh",
-              apiResponse?.data?.token?.refreshToken
+              apiResponse.data?.data?.token.refresh_token
             );
-            localStorage.setItem("token", apiResponse.data?.token?.token);
+            localStorage.setItem(
+              "token",
+              apiResponse.data?.data?.token?.access_token
+            );
           })
-          .catch(() => {});
+          .catch((error) => {
+            console.log(error);
+          });
       },
     }),
     login: builder.mutation({
       query: (body) => ({
-        url: "/api/v1/login",
+        url: "/api/v1/auth/login",
         method: "POST",
         body,
       }),
       onQueryStarted(id, { dispatch, queryFulfilled }) {
         queryFulfilled
           .then((apiResponse) => {
-            localStorage.setItem("refresh", apiResponse.data?.refreshToken);
-            localStorage.setItem("token", apiResponse.data?.token);
+            localStorage.setItem(
+              "refresh",
+              apiResponse.data?.data?.token.refresh_token
+            );
+            localStorage.setItem(
+              "token",
+              apiResponse.data?.data?.token?.access_token
+            );
           })
-          .catch(() => {});
+          .catch((error) => {
+            console.log(error);
+          });
       },
     }),
 
@@ -52,28 +64,25 @@ export const authApi = createApi({
     }),
     profile: builder.query({
       query: () => ({
-        url: "user/me",
+        url: "api/v1/users/user/1",
+        method: "GET",
       }),
-      // providesTags: ["profile"],
-      onQueryStarted(id, { dispatch, queryFulfilled }) {
-        queryFulfilled
-          .then((apiResponse) => {
-            dispatch(updateUser(apiResponse?.data?.user));
-          })
-          .catch(() => {
-            dispatch(logOut());
-          });
-      },
+  
     }),
 
     validateOtp: builder.mutation({
-      query: (body) => ({
-        url: "validation/phone/validate/otp",
+      query: ({ otp_token, user_email }) => ({
+        url: `/api/v1/users/verify?token=${otp_token}&user_email=${user_email}`,
         method: "POST",
-        body,
       }),
     }),
   }),
 });
 
-export const { useRegisterMutation } = authApi;
+export const {
+  useRegisterMutation,
+  useProfileQuery,
+  useLazyProfileQuery,
+  useLoginMutation,
+  useValidateOtpMutation,
+} = authApi;

@@ -95,7 +95,7 @@ export const sidebarData3: MenuProps["items"] = [
     key: "sandbox",
   },
   {
-    label: <Link href="/logout">Log Out</Link>,
+    label: <Link href="/">Log Out</Link>,
     icon: <LogoutIcon className="mr-1" />,
     key: "logout",
   },

@@ -38,7 +38,7 @@ const TwoFA = () => {
                   value={otp}
                   onChange={setOtp}
                   numInputs={6}
-                  renderSeparator={<span className="md:mx-2 mx:0.5">-</span>}
+                  renderSeparator={<span className="md:mx-2 mx-0.5">-</span>}
                   placeholder="000000"
                   renderInput={(props) => (
                     <input

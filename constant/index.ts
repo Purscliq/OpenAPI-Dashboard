@@ -7,11 +7,15 @@ import {
 
 const baseQuery = fetchBaseQuery({
   baseUrl: process.env.NEXT_PUBLIC_API_URL,
-  prepareHeaders: (headers) => {
-    headers.set("Authorization", `Bearer ${localStorage.getItem("oken")}`);
+  prepareHeaders: async (headers) => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      headers.set("Authorization", `Bearer ${token}`);
+    }
     headers.set("Accept", "application/json");
   },
 });
+
 
 export const baseQueryWithReauth: BaseQueryFn<
   string | FetchArgs,

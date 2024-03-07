@@ -5,32 +5,47 @@ import Link from "next/link";
 import Image from "next/image";
 import { CustomSelect as Select } from "@/lib/AntdComponents";
 import type { MenuProps } from "antd";
-import { Dropdown, Space } from "antd";
+import { Dropdown } from "antd";
 
 import { CgMenuRightAlt } from "react-icons/cg";
 import { CiSearch } from "react-icons/ci";
 import avatar from "@/assets/png/Avatar.png";
 import NotificationIcon from "@/assets/svg/NotificationIcon";
-
-const items: MenuProps["items"] = [
-  {
-    label: <Link href="#">Profile</Link>,
-    key: "0",
-  },
-  {
-    label: <Link href="#">Settings</Link>,
-    key: "1",
-  },
-  {
-    type: "divider",
-  },
-  {
-    label: <Link href="#">Logout</Link>,
-    key: "3",
-  },
-];
+import { useRouter } from "next/navigation";
 
 const DashNav = () => {
+  const { replace } = useRouter();
+  
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("refresh");
+    replace("/");
+  };
+
+  const items: MenuProps["items"] = [
+    {
+      label: <Link href="#">Profile</Link>,
+      key: "0",
+    },
+    {
+      label: <Link href="#">Settings</Link>,
+      key: "1",
+    },
+    {
+      type: "divider",
+    },
+    {
+      label: (
+        <button
+          onClick={handleLogout}
+          className="flex items-center  justify-center"
+        >
+          Log out
+        </button>
+      ),
+      key: "3",
+    },
+  ];
   return (
     <>
       <nav className="flex justify-between items-center px-5 py-2">

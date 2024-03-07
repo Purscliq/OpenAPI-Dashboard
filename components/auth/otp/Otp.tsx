@@ -1,57 +1,42 @@
 "use client";
 
-import React, { ChangeEventHandler, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import {
-  CustomInput as Input,
-  CustomPasswordInput as PasswordInput,
-} from "@/lib/AntdComponents";
+import { useRouter, useSearchParams } from "next/navigation";
+import OtpInput from "react-otp-input";
+
 import Image from "next/image";
 import GradientBg from "@/assets/png/side-left.png";
 import Hands from "@/assets/png/handshake-img.png";
 import { BiChevronLeft } from "react-icons/bi";
 import InfoIcon from "@/assets/svg/InfoIcon";
 import { BsArrowRight } from "react-icons/bs";
-import { Form, message } from "antd";
-import {
-  useLazyProfileQuery,
-  useLoginMutation,
-} from "@/services/auth/index.service";
 import { LoadingOutlined } from "@ant-design/icons";
+import { useValidateOtpMutation } from "@/services/auth/index.service";
+import { Form, message } from "antd";
 
-const initailState = {
-  email: "",
-  password: "",
-  ip_address: "",
-};
-const Login = () => {
+const Otp = () => {
   const { replace } = useRouter();
-  const [login, { isLoading }] = useLoginMutation();
-  const [formData, setFormData] = useState(initailState);
-  const [getUserProfile, { isLoading: userProfileLoading }] =
-    useLazyProfileQuery();
-
+  const searchParams = useSearchParams();
+  const email = searchParams.get("email");
+  const [otp, setOtp] = useState("");
+  const [validateOtp, { isLoading: isValidating }] = useValidateOtpMutation();
   const handleSubmit = () => {
-    login({ ...formData, ip_address: "11234532" })
+    validateOtp({ otp_token: otp, user_email: email })
       .unwrap()
       .then((res) => {
-        getUserProfile({})
-          .unwrap()
-          .then((res) => {
-            message.success("Login");
-            replace("/getting-started");
-          });
+        message.success("validation successful");
+        setOtp("");
+        replace("/");
       })
       .catch((err) => {
-        message.error(err?.data?.message);
+        console.log(err);
+        message.error(
+          err?.data?.responseDescription ||
+            err?.data?.title ||
+            "something went wrong"
+        );
       });
-  };
-  const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      [e.target?.name]: e.target?.value,
-    }));
   };
   return (
     <section className="bg-white">
@@ -120,9 +105,12 @@ const Login = () => {
 
               <div className="text-center mt-10 lg:mt-0 space-y-2">
                 <h2 className="text-3xl uppercase font-semibold">
-                  WELCOME BACK EXCLUSIVE MEMBER
+                  PLEASE CHECK YOUR EMAIL{" "}
                 </h2>
-                <p className="text-2xl uppercase">LOG IN TO CONTINUE</p>
+                <p className="text-xl uppercase">
+                  WE HAVE SENT A VERIFICATION CODE TO THE EMAIL ADDRESS YOUR
+                  REGISTERED YOUR PURSFI OPEN API ACCOUNT WITH{" "}
+                </p>
               </div>
               <Form
                 onFinish={handleSubmit}
@@ -133,37 +121,23 @@ const Login = () => {
                     htmlFor="email"
                     className="block text-sm font-semibold text-gray-700"
                   >
-                    Work Email
+                    Enter OTP code
                   </label>
 
-                  <Input
-                    id="email"
-                    required
-                    value={formData.email}
-                    onChange={handleChange}
-                    type="email"
-                    placeholder="Enter your email"
-                    name="email"
-                    className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
-                  />
-                </div>
-
-                <div className="col-span-6 flex flex-col items-start justify-start gap-[0.3rem]">
-                  <label
-                    htmlFor="password"
-                    className="block text-sm font-semibold text-gray-700"
-                  >
-                    Password
-                  </label>
-
-                  <PasswordInput
-                    id="password"
-                    placeholder="Enter Password"
-                    type="password"
-                    required
-                    value={formData.password}
-                    name="password"
-                    onChange={handleChange}
+                  {/* OTP field */}
+                  <OtpInput
+                    value={otp}
+                    onChange={(otp) => setOtp(otp)}
+                    numInputs={6}
+                    renderSeparator={<span className="md:mx-3 mx-1.5">-</span>}
+                    placeholder="000000"
+                    renderInput={(props) => (
+                      <input
+                        {...props}
+                        required
+                        className="md:!w-[58px] md:h-[58px] !w-[38px] h-[38px] rounded-lg border focus:border-black outline-none text-center text:xl md:text-2xl"
+                      />
+                    )}
                   />
                 </div>
 
@@ -171,7 +145,7 @@ const Login = () => {
                   <button className="flex justify-between  w-full  bg-black px-12 text-left py-6 text-md font-medium text-white focus:outline-none">
                     Proceed to my Account
                     <span>
-                      {isLoading || userProfileLoading ? (
+                      {isValidating ? (
                         <LoadingOutlined style={{ fontSize: 24 }} spin />
                       ) : (
                         <BsArrowRight className="h-5 w-5" />
@@ -182,8 +156,9 @@ const Login = () => {
               </Form>
 
               <div className="text-center mt-10">
-                <Link href="/forgot-password" className="hover:underline">
-                  Having Issues with your Password?
+                <Link href="" className="hover:underline">
+                  Did’nt receive any code ?{" "}
+                  <span className="font-semibold">Click to resend</span>
                 </Link>
               </div>
             </div>
@@ -208,4 +183,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Otp;

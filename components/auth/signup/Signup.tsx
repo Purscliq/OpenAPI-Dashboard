@@ -17,7 +17,10 @@ import { BsArrowRight } from "react-icons/bs";
 import PhoneInput from "react-phone-input-2";
 import { Form, message } from "antd";
 import { passwordSchema } from "@/lib/PasswordSchema";
-import { useRegisterMutation } from "@/services/auth/index.service";
+import {
+  useLazyProfileQuery,
+  useRegisterMutation,
+} from "@/services/auth/index.service";
 import { LoadingOutlined } from "@ant-design/icons";
 
 const initailState = {
@@ -32,11 +35,12 @@ const initailState = {
   role_id: 1,
 };
 const Signup = () => {
-  const { replace } = useRouter();
+  const router = useRouter();
   const [formData, setFormData] = useState(initailState);
   const [validationError, setValidationError] = useState("");
   const [confirmValidationError, setConfirmValidationError] = useState("");
   const [register, { isLoading }] = useRegisterMutation();
+  const [getUser, { isLoading: isLoadingProfile }] = useLazyProfileQuery();
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     if (e.target.name === "password")
@@ -58,21 +62,23 @@ const Signup = () => {
   };
   const handleRegister = () => {
     if (!validationError && !confirmValidationError) {
-      console.log(formData);
       register({ ...formData, ip_address: "11234532" })
         .unwrap()
         .then((res) => {
-          console.log(res);
-          message.success("Registration successful")
-          // replace("/signup-otp");
+          getUser({})
+            .unwrap()
+            .then((res) => {
+              message.success("Registration successful");
+              const url = `/otp?email=${encodeURIComponent(formData.email)}`;
+              router.replace(url);
+            });
         })
         .catch((err) => {
-        console.log(err);
-        
-         message.error(err?.data?.message || "Something went wrong");
+          message.error(err?.data?.message || "Something went wrong");
         });
     }
   };
+
   return (
     <section className="bg-white">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
@@ -373,7 +379,7 @@ const Signup = () => {
                       Create an account
                       <span>
                         {" "}
-                        {isLoading ? (
+                        {isLoading || isLoadingProfile ? (
                           <LoadingOutlined style={{ fontSize: 24 }} spin />
                         ) : (
                           <BsArrowRight className="h-5 w-5" />
