@@ -15,10 +15,13 @@ import { useRouter } from "next/navigation";
 
 const DashNav = () => {
   const { replace } = useRouter();
-  
+
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("refresh");
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("token");
+      localStorage.removeItem("refresh");
+    }
+
     replace("/");
   };
 

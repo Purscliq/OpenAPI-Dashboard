@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useEffect, useLayoutEffect } from "react";
 import { useLazyProfileQuery } from "@/services/auth/index.service";
 import { updateUser } from "@/slice/userSlice";
@@ -6,8 +6,11 @@ import { useAppDispatch } from "@/context/store";
 
 const Template = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useAppDispatch();
-  const token = localStorage.getItem("token");
+  let token: unknown = null;
 
+  if (typeof window !== "undefined") {
+    token = localStorage.getItem("token");
+  }
   const [getUser, { isLoading }] = useLazyProfileQuery({});
   useEffect(() => {
     if (token) {
