@@ -1,23 +1,58 @@
 "use client";
 
-import React from "react";
+import React, { ChangeEventHandler, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   CustomInput as Input,
   CustomPasswordInput as PasswordInput,
 } from "@/lib/AntdComponents";
-
 import Image from "next/image";
 import GradientBg from "@/assets/png/side-left.png";
 import Hands from "@/assets/png/handshake-img.png";
 import { BiChevronLeft } from "react-icons/bi";
 import InfoIcon from "@/assets/svg/InfoIcon";
 import { BsArrowRight } from "react-icons/bs";
+import { Form, message } from "antd";
+import {
+  useLazyProfileQuery,
+  useLoginMutation,
+} from "@/services/auth/index.service";
+import { LoadingOutlined } from "@ant-design/icons";
 
+const initailState = {
+  email: "",
+  password: "",
+  ip_address: "",
+};
 const Login = () => {
-  const route = useRouter();
+  const { replace } = useRouter();
+  const [login, { isLoading }] = useLoginMutation();
+  const [formData, setFormData] = useState(initailState);
+  const [getUserProfile, { isLoading: userProfileLoading }] =
+    useLazyProfileQuery();
 
+  const handleSubmit = () => {
+    login({ ...formData, ip_address: "11234532" })
+      .unwrap()
+      .then((res) => {
+        getUserProfile({})
+          .unwrap()
+          .then((res) => {
+            message.success("Login");
+            replace("/getting-started");
+          });
+      })
+      .catch((err) => {
+        message.error(err?.data?.message);
+      });
+  };
+  const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target?.name]: e.target?.value,
+    }));
+  };
   return (
     <section className="bg-white">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
@@ -89,7 +124,10 @@ const Login = () => {
                 </h2>
                 <p className="text-2xl uppercase">LOG IN TO CONTINUE</p>
               </div>
-              <form className="mt-12 grid grid-cols-6 gap-5">
+              <Form
+                onFinish={handleSubmit}
+                className="!mt-12 !grid !grid-cols-6 !gap-5"
+              >
                 <div className="col-span-6 flex flex-col items-start justify-start gap-[0.3rem]">
                   <label
                     htmlFor="email"
@@ -99,11 +137,13 @@ const Login = () => {
                   </label>
 
                   <Input
-                    type="email"
                     id="email"
-                    name="email"
-                    placeholder="john@doe.mail"
                     required
+                    value={formData.email}
+                    onChange={handleChange}
+                    type="email"
+                    placeholder="Enter your email"
+                    name="email"
                     className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
                   />
                 </div>
@@ -116,22 +156,30 @@ const Login = () => {
                     Password
                   </label>
 
-                  <PasswordInput id="password" placeholder="Enter Password" />
+                  <PasswordInput
+                    id="password"
+                    placeholder="Enter Password"
+                    type="password"
+                    required
+                    value={formData.password}
+                    name="password"
+                    onChange={handleChange}
+                  />
                 </div>
 
                 <div className="col-span-6 space-y-2 sm:items-center sm:gap-4">
-                  <button
-                    onClick={() => route.push("/dashboard")}
-                    className="flex justify-between  w-full  bg-black px-12 text-left py-6 text-md font-medium text-white focus:outline-none"
-                  >
+                  <button className="flex justify-between  w-full  bg-black px-12 text-left py-6 text-md font-medium text-white focus:outline-none">
                     Proceed to my Account
                     <span>
-                      {" "}
-                      <BsArrowRight className="h-5 w-5" />
-                    </span>
+                      {isLoading || userProfileLoading ? (
+                        <LoadingOutlined style={{ fontSize: 24 }} spin />
+                      ) : (
+                        <BsArrowRight className="h-5 w-5" />
+                      )}
+                    </span>{" "}
                   </button>
                 </div>
-              </form>
+              </Form>
 
               <div className="text-center mt-10">
                 <Link href="/forgot-password" className="hover:underline">

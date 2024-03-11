@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import OtpInput from "react-otp-input";
 
 import Image from "next/image";
@@ -11,11 +11,33 @@ import Hands from "@/assets/png/handshake-img.png";
 import { BiChevronLeft } from "react-icons/bi";
 import InfoIcon from "@/assets/svg/InfoIcon";
 import { BsArrowRight } from "react-icons/bs";
+import { LoadingOutlined } from "@ant-design/icons";
+import { useValidateOtpMutation } from "@/services/auth/index.service";
+import { Form, message } from "antd";
 
 const Otp = () => {
-  const route = useRouter();
+  const { replace } = useRouter();
+  const searchParams = useSearchParams();
+  const email = searchParams.get("email");
   const [otp, setOtp] = useState("");
-
+  const [validateOtp, { isLoading: isValidating }] = useValidateOtpMutation();
+  const handleSubmit = () => {
+    validateOtp({ otp_token: otp, user_email: email })
+      .unwrap()
+      .then((res) => {
+        message.success("validation successful");
+        setOtp("");
+        replace("/");
+      })
+      .catch((err) => {
+        console.log(err);
+        message.error(
+          err?.data?.responseDescription ||
+            err?.data?.title ||
+            "something went wrong"
+        );
+      });
+  };
   return (
     <section className="bg-white">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
@@ -83,11 +105,17 @@ const Otp = () => {
 
               <div className="text-center mt-10 lg:mt-0 space-y-2">
                 <h2 className="text-3xl uppercase font-semibold">
-                  ENTER YOUR 2FA AUTHENTICATION CODE
+                  PLEASE CHECK YOUR EMAIL{" "}
                 </h2>
-                <p className="text-2xl uppercase">LOG IN TO CONTINUE</p>
+                <p className="text-xl uppercase">
+                  WE HAVE SENT A VERIFICATION CODE TO THE EMAIL ADDRESS YOUR
+                  REGISTERED YOUR PURSFI OPEN API ACCOUNT WITH{" "}
+                </p>
               </div>
-              <form className="mt-12 grid grid-cols-6 gap-5">
+              <Form
+                onFinish={handleSubmit}
+                className="!mt-12 !grid !grid-cols-6 !gap-5"
+              >
                 <div className="col-span-6 flex flex-col items-start justify-start gap-[0.3rem]">
                   <label
                     htmlFor="email"
@@ -99,7 +127,7 @@ const Otp = () => {
                   {/* OTP field */}
                   <OtpInput
                     value={otp}
-                    onChange={setOtp}
+                    onChange={(otp) => setOtp(otp)}
                     numInputs={6}
                     renderSeparator={<span className="md:mx-3 mx-1.5">-</span>}
                     placeholder="000000"
@@ -114,22 +142,23 @@ const Otp = () => {
                 </div>
 
                 <div className="col-span-6 space-y-2 sm:items-center sm:gap-4">
-                  <button
-                    onClick={() => route.push("/dashboard")}
-                    className="flex justify-between  w-full  bg-black px-12 text-left py-6 text-md font-medium text-white focus:outline-none"
-                  >
+                  <button className="flex justify-between  w-full  bg-black px-12 text-left py-6 text-md font-medium text-white focus:outline-none">
                     Proceed to my Account
                     <span>
-                      {" "}
-                      <BsArrowRight className="h-5 w-5" />
-                    </span>
+                      {isValidating ? (
+                        <LoadingOutlined style={{ fontSize: 24 }} spin />
+                      ) : (
+                        <BsArrowRight className="h-5 w-5" />
+                      )}
+                    </span>{" "}
                   </button>
                 </div>
-              </form>
+              </Form>
 
               <div className="text-center mt-10">
-                <Link href="/forgot-password" className="hover:underline">
-                  Having Issues with your Password?
+                <Link href="" className="hover:underline">
+                  Did’nt receive any code ?{" "}
+                  <span className="font-semibold">Click to resend</span>
                 </Link>
               </div>
             </div>
