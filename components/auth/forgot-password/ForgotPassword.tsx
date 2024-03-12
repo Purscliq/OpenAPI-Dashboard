@@ -1,19 +1,44 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { CustomInput as Input } from "@/lib/AntdComponents";
+import { Form, message } from "antd";
+import { useForgotPasswordMutation } from "@/services/auth/index.service";
 
 import Image from "next/image";
 import GradientBg from "@/assets/png/side-left.png";
 import Hands from "@/assets/png/handshake-img.png";
-import { BiChevronLeft } from "react-icons/bi";
 import InfoIcon from "@/assets/svg/InfoIcon";
+import { BiChevronLeft } from "react-icons/bi";
 import { BsArrowRight } from "react-icons/bs";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const ForgotPassword = () => {
-  const route = useRouter();
+  const router = useRouter();
+  const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
+  const [email, setEmail] = useState("");
+
+  const handleSubmit = async () => {
+    try {
+      const response = await forgotPassword({ email });
+      if ("error" in response) {
+        const errorMessage =
+          response.error?.data?.message ||
+          "Failed to send password reset email.";
+        message.error(errorMessage);
+      } else {
+        message.success("Password reset email sent successfully!");
+        router.push("/"); // Redirect to homepage or appropriate page only if successful
+      }
+    } catch (error: any) {
+      const errorMessage =
+        error?.response?.data?.message ||
+        "Failed to send password reset email.";
+      message.error(errorMessage);
+    }
+  };
 
   return (
     <section className="bg-white">
@@ -88,7 +113,11 @@ const ForgotPassword = () => {
                   KINDLY PROVIDE YOUR REGISTERED EMAIL ADDRESS
                 </p>
               </div>
-              <form className="mt-12 grid grid-cols-6 gap-5">
+              {/* Form for password reset */}
+              <Form
+                onFinish={handleSubmit}
+                className="!mt-12 grid grid-cols-6 gap-5"
+              >
                 <div className="col-span-6 flex flex-col items-start justify-start gap-[0.3rem]">
                   <label
                     htmlFor="email"
@@ -96,30 +125,35 @@ const ForgotPassword = () => {
                   >
                     Work Email
                   </label>
-
                   <Input
                     type="email"
                     id="email"
                     name="email"
-                    placeholder="john@doe.mail"
+                    placeholder="Enter your email"
                     required
-                    className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="p-2 border w-full rounded-md bg-white text-sm text-gray-700 shadow-sm"
                   />
                 </div>
 
                 <div className="col-span-6 space-y-2 sm:items-center sm:gap-4">
                   <button
-                    onClick={() => route.push("/")}
-                    className="flex justify-between  w-full  bg-black px-12 text-left py-6 text-md font-medium text-white focus:outline-none"
+                    type="submit"
+                    className="flex justify-between w-full bg-black px-12 text-left py-6 text-md font-medium text-white focus:outline-none"
+                    disabled={isLoading}
                   >
                     Continue
                     <span>
-                      {" "}
-                      <BsArrowRight className="h-5 w-5" />
+                      {isLoading ? (
+                        <LoadingOutlined style={{ fontSize: 24 }} spin />
+                      ) : (
+                        <BsArrowRight className="h-5 w-5" />
+                      )}
                     </span>
                   </button>
                 </div>
-              </form>
+              </Form>
 
               <div className="text-center mt-10">
                 Remember your password? {""}

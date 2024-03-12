@@ -55,6 +55,25 @@ export const authApi = createApi({
       },
     }),
 
+    forgotPassword: builder.mutation({
+      query: (body) => ({
+        url: "/api/v1/auth/forgot-password",
+        method: "POST",
+        body,
+      }),
+      onQueryStarted(id, { dispatch, queryFulfilled }) {
+        queryFulfilled
+          .then((apiResponse) => {
+            // Handle successful response here
+            console.log("Password request successful");
+          })
+          .catch((error) => {
+            // Handle error here
+            console.error("Forgot password request failed:", error);
+          });
+      },
+    }),
+
     refresh: builder.mutation({
       query: (body) => ({
         url: "login/refresh",
@@ -67,7 +86,6 @@ export const authApi = createApi({
         url: "api/v1/users/user/1",
         method: "GET",
       }),
-  
     }),
 
     validateOtp: builder.mutation({
@@ -84,5 +102,6 @@ export const {
   useProfileQuery,
   useLazyProfileQuery,
   useLoginMutation,
+  useForgotPasswordMutation,
   useValidateOtpMutation,
 } = authApi;
