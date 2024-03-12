@@ -1,10 +1,7 @@
 "use client";
-
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { CustomInput as Input } from "@/lib/AntdComponents";
-import { Form, message } from "antd";
+import { message } from "antd";
 import { useForgotPasswordMutation } from "@/services/auth/index.service";
 import Image from "next/image";
 import GradientBg from "@/assets/png/side-left.png";
@@ -13,24 +10,35 @@ import InfoIcon from "@/assets/svg/InfoIcon";
 import { BiChevronLeft } from "react-icons/bi";
 import { BsArrowRight } from "react-icons/bs";
 import { LoadingOutlined } from "@ant-design/icons";
-const ForgotPassword = () => {
-  const { replace } = useRouter();
+const ForgotPass2 = ({ email }: { email: string }) => {
   const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
-  const [email, setEmail] = useState("");
+  const [seconds, setSeconds] = useState(2 * 60);
 
-  const handleSubmit = () => {
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (seconds <= 0) {
+        clearInterval(interval);
+      } else {
+        setSeconds((prevSeconds) => prevSeconds - 1);
+      }
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [seconds]);
+
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+
+const resendLink = () => {
     forgotPassword({ email })
       .unwrap()
-      .then((res) => {
-        message.success("password reset mail sent");
-        const url = `/forgot-password-2?email=${encodeURIComponent(email)}`;
-        replace(url);
+      .then(() => {
+        message.success("Password reset email sent");
+        setSeconds(2 * 60);
       })
       .catch((err) => {
         message.error(err?.data?.message);
       });
   };
-
   return (
     <section className="bg-white">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
@@ -98,59 +106,34 @@ const ForgotPassword = () => {
 
               <div className="text-center mt-10 lg:mt-0 space-y-2">
                 <h2 className="text-3xl uppercase font-semibold">
-                  PASSWORD RESET
+                  VERIFY EMAIL{" "}
                 </h2>
-                <p className="text-2xl uppercase">
-                  KINDLY PROVIDE YOUR REGISTERED EMAIL ADDRESS
+                <p className="text-xl uppercase">
+                  PLEASE CHECK YOUR EMAIL , A LINK HAS BEEN SEND TO YOUR EMAIL{" "}
                 </p>
               </div>
-              {/* Form for password reset */}
-              <Form
-                onFinish={handleSubmit}
-                className="!mt-12 grid grid-cols-6 gap-5"
-              >
-                <div className="col-span-6 flex flex-col items-start justify-start gap-[0.3rem]">
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-semibold text-gray-700"
-                  >
-                    Work Email
-                  </label>
-                  <Input
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="Enter your email"
-                    required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="p-2 border w-full rounded-md bg-white text-sm text-gray-700 shadow-sm"
-                  />
-                </div>
-
-                <div className="col-span-6 space-y-2 sm:items-center sm:gap-4">
-                  <button
-                    type="submit"
-                    className="flex justify-between w-full bg-black px-12 text-left py-6 text-md font-medium text-white focus:outline-none"
-                    disabled={isLoading}
-                  >
-                    Continue
-                    <span>
-                      {isLoading ? (
-                        <LoadingOutlined style={{ fontSize: 24 }} spin />
-                      ) : (
-                        <BsArrowRight className="h-5 w-5" />
-                      )}
-                    </span>
-                  </button>
-                </div>
-              </Form>
+              <div className="mt-12">
+                <button
+                  onClick={resendLink}
+                  disabled={minutes > 0 || isLoading}
+                  className="flex justify-between w-full bg-black px-12 text-left py-6 text-md font-medium text-white focus:outline-none"
+                >
+                  Resend the link
+                  <span>
+                    {isLoading ? (
+                      <LoadingOutlined style={{ fontSize: 24 }} spin />
+                    ) : (
+                      <BsArrowRight className="h-5 w-5" />
+                    )}
+                  </span>
+                </button>
+              </div>
 
               <div className="text-center mt-10">
-                Remember your password? {""}
-                <Link href="/" className="hover:underline">
-                  Login
-                </Link>
+                <p>
+                  Link expires in {minutes} minutes and {remainingSeconds}{" "}
+                  seconds
+                </p>{" "}
               </div>
             </div>
 
@@ -174,4 +157,4 @@ const ForgotPassword = () => {
   );
 };
 
-export default ForgotPassword;
+export default ForgotPass2;
