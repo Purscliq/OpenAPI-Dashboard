@@ -81,7 +81,7 @@ const Signup = () => {
 
   return (
     <section className="bg-white">
-      <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
+      <div className="lg:grid lg:h-screen lg:grid-cols-12">
         <section className="relative flex h-32 items-end bg-gray-900 lg:col-span-5 lg:h-full xl:col-span-4">
           <Image
             alt="Night"
@@ -109,7 +109,7 @@ const Signup = () => {
           </div>
         </section>
 
-        <main className="w-full max-h-screen px-8 py-6 lg:px-4 lg:py-2  lg:col-span-7 xl:col-span-8">
+        <main className="w-full max-h-screen overflow-y-auto px-8 py-6 lg:px-4 lg:py-2  lg:col-span-7 xl:col-span-8">
           <div className="w-full flex flex-col justify-between h-full lg:max-h-screen">
             <div className="md:flex justify-between gap-8">
               <Link href="/" className="hover:underline">
