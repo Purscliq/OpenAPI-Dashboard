@@ -61,12 +61,7 @@ export const authApi = createApi({
         body,
       }),
     }),
-    profile: builder.query({
-      query: () => ({
-        url: "api/v1/users/user/1",
-        method: "GET",
-      }),
-    }),
+
 
     validateOtp: builder.mutation({
       query: ({ otp_token, user_email }) => ({
@@ -93,8 +88,6 @@ export const authApi = createApi({
 
 export const {
   useRegisterMutation,
-  useProfileQuery,
-  useLazyProfileQuery,
   useLoginMutation,
   useForgotPasswordMutation,
   useValidateOtpMutation,

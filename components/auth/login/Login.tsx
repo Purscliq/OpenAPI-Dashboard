@@ -15,7 +15,6 @@ import InfoIcon from "@/assets/svg/InfoIcon";
 import { BsArrowRight } from "react-icons/bs";
 import { Form, message } from "antd";
 import {
-  useLazyProfileQuery,
   useLoginMutation,
 } from "@/services/auth/index.service";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -29,20 +28,15 @@ const Login = () => {
   const { replace } = useRouter();
   const [login, { isLoading }] = useLoginMutation();
   const [formData, setFormData] = useState(initailState);
-  const [getUserProfile, { isLoading: userProfileLoading }] =
-    useLazyProfileQuery();
+
 
   const handleSubmit = () => {
     login({ ...formData, ip_address: "11234532" })
       .unwrap()
       .then((res) => {
-        getUserProfile({})
-          .unwrap()
-          .then((res) => {
             message.success("Login");
             replace("/getting-started");
-          });
-      })
+          })
       .catch((err) => {
         message.error(err?.data?.message);
       });
@@ -171,7 +165,7 @@ const Login = () => {
                   <button className="flex justify-between  w-full  bg-black px-12 text-left py-6 text-md font-medium text-white focus:outline-none">
                     Proceed to my Account
                     <span>
-                      {isLoading || userProfileLoading ? (
+                      {isLoading ? (
                         <LoadingOutlined style={{ fontSize: 24 }} spin />
                       ) : (
                         <BsArrowRight className="h-5 w-5" />
