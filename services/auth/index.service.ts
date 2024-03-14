@@ -62,7 +62,6 @@ export const authApi = createApi({
       }),
     }),
 
-
     validateOtp: builder.mutation({
       query: ({ otp_token, user_email }) => ({
         url: `/api/v1/users/verify?token=${otp_token}&user_email=${user_email}`,
@@ -83,6 +82,24 @@ export const authApi = createApi({
         body,
       }),
     }),
+    enable2fa: builder.mutation({
+      query: () => ({
+        url: "/api/v1/auth/enable-2fa",
+        method: "POST",
+      }),
+    }),
+    generate2fa: builder.query({
+      query: () => ({
+        url: "/api/v1/auth/generate-qr",
+        method: "GET",
+      }),
+    }),
+    validate2fa: builder.mutation({
+      query: ({code}) => ({
+        url: `/api/v1/auth/verify-totp?totp_code=${code}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -91,5 +108,9 @@ export const {
   useLoginMutation,
   useForgotPasswordMutation,
   useValidateOtpMutation,
-  useResetPasswordMutation
+  useResetPasswordMutation,
+  useEnable2faMutation,
+  useLazyGenerate2faQuery,
+  useValidate2faMutation
+
 } = authApi;

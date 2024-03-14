@@ -1,19 +1,33 @@
 "use client";
-
 import React, { useState } from "react";
 import OtpInput from "react-otp-input";
 import Activate from "./Activate";
 import Image from "next/image";
+import { useValidate2faMutation } from "@/services/auth/index.service";
+import { message } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 
-import QR from "@/assets/png/QRCode.png";
+const TwoFA = ({ QRcode }: { QRcode: string }) => {
+  const [validate2FA, { isLoading }] = useValidate2faMutation({});
 
-const TwoFA = () => {
   const [otp, setOtp] = useState("");
-
+  const handleSubmit = () => {
+    validate2FA({ code: otp })
+      .unwrap()
+      .then((res) => {
+        console.log(res);
+        message.success("validation successful");
+      })
+      .catch((err) => {
+        console.log(err);
+        message.error(
+          message.error(err?.data?.message) || "something went wrong"
+        );
+      });
+  };
   return (
     <section className="max-w-[1640px] flex flex-col p-4 space-y-6  h-screen overflow-y-scroll">
       <Activate />
-
       <div className="flex flex-col gap-6 md:mt-12 mt-6">
         <div className="bg-white py-4 px-6 shadow-sm rounded-md sm:grid grid-cols-8 gap-12 w-full space-y-4 md:space-y-0">
           <div className="p-2 col-span-3 space-y-6 w-full md:max-w-sm">
@@ -24,11 +38,18 @@ const TwoFA = () => {
               Scan the QR code using any authenticator on your phone (e.g Google
               Authenticator, Duo Mobile, Authy).
             </p>
-            <Image src={QR} className="" alt="QR Code" title="QR Code" />
+            <Image
+              src={QRcode}
+              className=""
+              alt="QR Code"
+              title="QR Code"
+              width={100}
+              height={100}
+            />
           </div>
 
           <div className="p-2 col-span-5 md:mr-10 lg:mr-20">
-            <form className="flex flex-col justify-between gap-4 h-full">
+            <div className="flex flex-col justify-between gap-4 h-full">
               <div className="flex flex-col gap-4">
                 <p className="font-semibold text-base">
                   Enter the 6 figure confirmation code shown on the app
@@ -36,7 +57,7 @@ const TwoFA = () => {
                 {/* OTP field */}
                 <OtpInput
                   value={otp}
-                  onChange={setOtp}
+                  onChange={(otp) => setOtp(otp)}
                   numInputs={6}
                   renderSeparator={<span className="md:mx-2 mx-0.5">-</span>}
                   placeholder="000000"
@@ -59,14 +80,19 @@ const TwoFA = () => {
                     Cancel
                   </button>
                   <button
-                    type="submit"
+                    type="button"
+                    onClick={handleSubmit}
                     className="w-full bg-black text-center text-md rounded-md px-4 py-2 font-medium text-white focus:outline-none"
                   >
-                    Activate
+                    {isLoading ? (
+                      <LoadingOutlined style={{ fontSize: 24 }} spin />
+                    ) : (
+                      "Activate"
+                    )}
                   </button>
                 </div>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       </div>
