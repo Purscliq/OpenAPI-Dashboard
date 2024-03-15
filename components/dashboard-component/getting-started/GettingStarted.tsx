@@ -6,7 +6,6 @@ import {
   useEnable2faMutation,
   useLazyGenerate2faQuery,
 } from "@/services/auth/index.service";
-import { message } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 
 const GettingStarted = () => {
@@ -20,7 +19,6 @@ const GettingStarted = () => {
     try {
       await enabled2Fa({}).unwrap();
       const res = await generate2FA({});
-      message.success("2FA enabled");
       const url = `/getting-started/2fa?qr=${encodeURIComponent(
         res?.data?.data?.upload_url
       )}`;

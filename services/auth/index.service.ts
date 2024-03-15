@@ -97,7 +97,7 @@ export const authApi = createApi({
     validate2fa: builder.mutation({
       query: ({code}) => ({
         url: `/api/v1/auth/verify-totp?totp_code=${code}`,
-        method: "GET",
+        method: "POST",
       }),
     }),
   }),

@@ -6,9 +6,11 @@ import Image from "next/image";
 import { useValidate2faMutation } from "@/services/auth/index.service";
 import { message } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
+import { useRouter } from "next/navigation";
 
 const TwoFA = ({ QRcode }: { QRcode: string }) => {
   const [validate2FA, { isLoading }] = useValidate2faMutation({});
+  const { replace } = useRouter();
 
   const [otp, setOtp] = useState("");
   const handleSubmit = () => {
@@ -16,7 +18,8 @@ const TwoFA = ({ QRcode }: { QRcode: string }) => {
       .unwrap()
       .then((res) => {
         console.log(res);
-        message.success("validation successful");
+        message.success("2FA Activated");
+        replace("/dashboard")
       })
       .catch((err) => {
         console.log(err);
