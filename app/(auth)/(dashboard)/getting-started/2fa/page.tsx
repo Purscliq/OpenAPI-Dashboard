@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import TwoFA from "@/components/dashboard-component/getting-started/TwoFA";
 import { useSearchParams } from "next/navigation";
 import React from "react";

@@ -9,7 +9,7 @@ export const userApi = createApi({
   endpoints: (builder) => ({
     profile: builder.query({
       query: () => ({
-        url: "api/v1/users/user/1",
+        url: "api/v1/users/user",
         method: "GET",
       }),
     }),
