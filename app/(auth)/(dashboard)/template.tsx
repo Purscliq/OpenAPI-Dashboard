@@ -9,7 +9,7 @@ const template = ({ children }: { children: React.ReactNode }) => {
   const { isLoading, isUninitialized, isSuccess } = useProfileQuery({});
   return (
     <>
-      {(isLoading || isUninitialized) && isSuccess ? (
+      {(isLoading || isUninitialized) && !isSuccess ? (
         <div className="relative h-screen flex items-center justify-center bg-[#FAFAFA]">
           <div className="fixed top-0 left-0 px-6 py-4">
             <Image src={logo} alt="logo" className="w-28 h-28" />
