@@ -1,5 +1,4 @@
 import { baseQueryWithReauth } from "@/constant";
-import { logOut, updateUser } from "@/slice/userSlice";
 import { createApi } from "@reduxjs/toolkit/query/react";
 
 export const authApi = createApi({
@@ -55,36 +54,11 @@ export const authApi = createApi({
       },
     }),
 
-    forgotPassword: builder.mutation({
-      query: (body) => ({
-        url: "/api/v1/auth/forgot-password",
-        method: "POST",
-        body,
-      }),
-      onQueryStarted(id, { dispatch, queryFulfilled }) {
-        queryFulfilled
-          .then((apiResponse) => {
-            // Handle successful response here
-            console.log("Password request successful");
-          })
-          .catch((error) => {
-            // Handle error here
-            console.error("Forgot password request failed:", error);
-          });
-      },
-    }),
-
     refresh: builder.mutation({
       query: (body) => ({
         url: "login/refresh",
         method: "POST",
         body,
-      }),
-    }),
-    profile: builder.query({
-      query: () => ({
-        url: "api/v1/users/user/1",
-        method: "GET",
       }),
     }),
 
@@ -94,14 +68,49 @@ export const authApi = createApi({
         method: "POST",
       }),
     }),
+    forgotPassword: builder.mutation({
+      query: (body) => ({
+        url: "/api/v1/auth/forgot-password",
+        method: "POST",
+        body,
+      }),
+    }),
+    resetPassword: builder.mutation({
+      query: (body) => ({
+        url: "/api/v1/auth/update-forgotten-password",
+        method: "POST",
+        body,
+      }),
+    }),
+    enable2fa: builder.mutation({
+      query: () => ({
+        url: "/api/v1/auth/enable-2fa",
+        method: "POST",
+      }),
+    }),
+    generate2fa: builder.query({
+      query: () => ({
+        url: "/api/v1/auth/generate-qr",
+        method: "GET",
+      }),
+    }),
+    validate2fa: builder.mutation({
+      query: ({code}) => ({
+        url: `/api/v1/auth/verify-totp?totp_code=${code}`,
+        method: "POST",
+      }),
+    }),
   }),
 });
 
 export const {
   useRegisterMutation,
-  useProfileQuery,
-  useLazyProfileQuery,
   useLoginMutation,
   useForgotPasswordMutation,
   useValidateOtpMutation,
+  useResetPasswordMutation,
+  useEnable2faMutation,
+  useLazyGenerate2faQuery,
+  useValidate2faMutation
+
 } = authApi;

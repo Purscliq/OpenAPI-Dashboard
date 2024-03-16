@@ -1,11 +1,9 @@
 "use client";
-
-import React, { useState } from "react";
+import React, { ChangeEventHandler, useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { CustomInput as Input } from "@/lib/AntdComponents";
+import { useRouter, useSearchParams } from "next/navigation";
+import { CustomPasswordInput as PasswordInput } from "@/lib/AntdComponents";
 import { Form, message } from "antd";
-import { useForgotPasswordMutation } from "@/services/auth/index.service";
 import Image from "next/image";
 import GradientBg from "@/assets/png/side-left.png";
 import Hands from "@/assets/png/handshake-img.png";
@@ -13,22 +11,65 @@ import InfoIcon from "@/assets/svg/InfoIcon";
 import { BiChevronLeft } from "react-icons/bi";
 import { BsArrowRight } from "react-icons/bs";
 import { LoadingOutlined } from "@ant-design/icons";
-const ForgotPassword = () => {
+import { useResetPasswordMutation } from "@/services/auth/index.service";
+import { passwordSchema } from "@/lib/PasswordSchema";
+const ResetPass = () => {
   const { replace } = useRouter();
-  const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
-  const [email, setEmail] = useState("");
+  const [resetPassword, { isLoading }] = useResetPasswordMutation();
+  const initialState = {
+    password: "",
+    password2: "",
+    email: "",
+    ip: "",
+    password_reset_token: "",
+  };
+  const [formData, setFormData] = useState(initialState);
+  const [validationError, setValidationError] = useState("");
+  const [confirmValidationError, setConfirmValidationError] = useState("");
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    const ip = "11234532";
+    const email = searchParams.get("email");
+    const token = searchParams.get("token");
+    setFormData((prev) => ({
+      ...prev,
+      ip: ip,
+      email: email || "",
+      password_reset_token: token || "",
+    }));
+  }, [searchParams]);
+  const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    if (e.target.name === "password")
+      passwordSchema
+        .validate({ password: e.target?.value })
+        .then(() => setValidationError(""))
+        .catch((error) => setValidationError(error.message));
+    if (e.target.name === "password2" && e.target.value !== formData.password)
+      setConfirmValidationError("password must match");
+    else if (
+      e.target.name === "password2" &&
+      e.target.value === formData.password
+    )
+      setConfirmValidationError("");
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target?.name]: e.target?.value,
+    }));
+  };
 
   const handleSubmit = () => {
-    forgotPassword({ email })
-      .unwrap()
-      .then((res) => {
-        message.success("password reset mail sent");
-        const url = `/forgot-password-2?email=${encodeURIComponent(email)}`;
-        replace(url);
-      })
-      .catch((err) => {
-        message.error(err?.data?.message);
-      });
+    if (!validationError && !confirmValidationError) {
+      resetPassword(formData)
+        .unwrap()
+        .then((res) => {
+          message.success("password updated");
+          setFormData(initialState);
+          replace("reset-message");
+        })
+        .catch((err) => {
+          message.error(err?.data?.message);
+        });
+    }
   };
 
   return (
@@ -98,11 +139,9 @@ const ForgotPassword = () => {
 
               <div className="text-center mt-10 lg:mt-0 space-y-2">
                 <h2 className="text-3xl uppercase font-semibold">
-                  PASSWORD RESET
+                  PASSWORD RESET{" "}
                 </h2>
-                <p className="text-2xl uppercase">
-                  KINDLY PROVIDE YOUR REGISTERED EMAIL ADDRESS
-                </p>
+                <p className="text-2xl uppercase">ENTER NEW PASSWORD </p>
               </div>
               {/* Form for password reset */}
               <Form
@@ -111,28 +150,52 @@ const ForgotPassword = () => {
               >
                 <div className="col-span-6 flex flex-col items-start justify-start gap-[0.3rem]">
                   <label
-                    htmlFor="email"
+                    htmlFor="password"
                     className="block text-sm font-semibold text-gray-700"
                   >
-                    Work Email
+                    New Password
                   </label>
-                  <Input
-                    type="email"
-                    id="email"
-                    name="email"
-                    placeholder="Enter your email"
+
+                  <PasswordInput
+                    id="password"
+                    placeholder="Enter Password"
+                    type="password"
                     required
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="p-2 border w-full rounded-md bg-white text-sm text-gray-700 shadow-sm"
+                    value={formData.password}
+                    name="password"
+                    onChange={handleChange}
                   />
+                  {formData.password && validationError && (
+                    <p className="text-red-500">{validationError}</p>
+                  )}
+                </div>
+                <div className="col-span-6 flex flex-col items-start justify-start gap-[0.3rem]">
+                  <label
+                    htmlFor="password2"
+                    className="block text-sm font-semibold text-gray-700"
+                  >
+                    Confirm Password
+                  </label>
+
+                  <PasswordInput
+                    id="password2"
+                    placeholder="Enter Password"
+                    type="password"
+                    required
+                    value={formData.password2}
+                    name="password2"
+                    onChange={handleChange}
+                  />
+                  {formData.password2 && confirmValidationError && (
+                    <p> Password must match</p>
+                  )}
                 </div>
 
                 <div className="col-span-6 space-y-2 sm:items-center sm:gap-4">
                   <button
                     type="submit"
-                    className="flex justify-between w-full bg-black px-12 text-left py-6 text-md font-medium text-white focus:outline-none"
                     disabled={isLoading}
+                    className="flex justify-between w-full bg-black px-12 text-left py-6 text-md font-medium text-white focus:outline-none"
                   >
                     Continue
                     <span>
@@ -174,4 +237,4 @@ const ForgotPassword = () => {
   );
 };
 
-export default ForgotPassword;
+export default ResetPass;

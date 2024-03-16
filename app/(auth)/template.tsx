@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useLayoutEffect } from "react";
-import { useLazyProfileQuery } from "@/services/auth/index.service";
 import { updateUser } from "@/slice/userSlice";
 import { useAppDispatch } from "@/context/store";
+import { useLazyProfileQuery } from "@/services/users/index.service";
 
 const Template = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useAppDispatch();

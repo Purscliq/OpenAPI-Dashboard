@@ -14,11 +14,11 @@ import { BiChevronLeft } from "react-icons/bi";
 import InfoIcon from "@/assets/svg/InfoIcon";
 import { BsArrowRight } from "react-icons/bs";
 import { Form, message } from "antd";
-import {
-  useLazyProfileQuery,
-  useLoginMutation,
-} from "@/services/auth/index.service";
+import { useLoginMutation } from "@/services/auth/index.service";
 import { LoadingOutlined } from "@ant-design/icons";
+import { useLazyProfileQuery } from "@/services/users/index.service";
+import { updateUser } from "@/slice/userSlice";
+import { useAppDispatch } from "@/context/store";
 
 const initailState = {
   email: "",
@@ -28,25 +28,34 @@ const initailState = {
 const Login = () => {
   const { replace } = useRouter();
   const [login, { isLoading }] = useLoginMutation();
+  const [getUser, { isLoading: isGettingUser }] = useLazyProfileQuery({});
+  const dispatch = useAppDispatch();
   const [formData, setFormData] = useState(initailState);
-  const [getUserProfile, { isLoading: userProfileLoading }] =
-    useLazyProfileQuery();
 
-  const handleSubmit = () => {
-    login({ ...formData, ip_address: "11234532" })
-      .unwrap()
-      .then((res) => {
-        getUserProfile({})
-          .unwrap()
-          .then((res) => {
-            message.success("Login");
-            replace("/getting-started");
-          });
-      })
-      .catch((err) => {
-        message.error(err?.data?.message);
-      });
+  const handleSubmit = async () => {
+    try {
+      await login({ ...formData, ip_address: "11234532" }).unwrap();
+      const res = await getUser({});
+      dispatch(updateUser(res?.data?.data));
+      message.success("Login");
+      replace("/getting-started");
+    } catch (err: any) {
+      console.log(err);
+      message.error(err);
+    }
   };
+
+  // const handleSubmit = () => {
+  //   login({ ...formData, ip_address: "11234532" })
+  //     .unwrap()
+  //     .then((res) => {
+  //           message.success("Login");
+  //           replace("/getting-started");
+  //         })
+  //     .catch((err) => {
+  //       message.error(err?.data?.message);
+  //     });
+  // };
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -171,7 +180,7 @@ const Login = () => {
                   <button className="flex justify-between  w-full  bg-black px-12 text-left py-6 text-md font-medium text-white focus:outline-none">
                     Proceed to my Account
                     <span>
-                      {isLoading || userProfileLoading ? (
+                      {isLoading || isGettingUser ? (
                         <LoadingOutlined style={{ fontSize: 24 }} spin />
                       ) : (
                         <BsArrowRight className="h-5 w-5" />

@@ -17,10 +17,7 @@ import { BsArrowRight } from "react-icons/bs";
 import PhoneInput from "react-phone-input-2";
 import { Form, message } from "antd";
 import { passwordSchema } from "@/lib/PasswordSchema";
-import {
-  useLazyProfileQuery,
-  useRegisterMutation,
-} from "@/services/auth/index.service";
+import { useRegisterMutation } from "@/services/auth/index.service";
 import { LoadingOutlined } from "@ant-design/icons";
 
 const initailState = {
@@ -40,7 +37,6 @@ const Signup = () => {
   const [validationError, setValidationError] = useState("");
   const [confirmValidationError, setConfirmValidationError] = useState("");
   const [register, { isLoading }] = useRegisterMutation();
-  const [getUser, { isLoading: isLoadingProfile }] = useLazyProfileQuery();
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     if (e.target.name === "password")
@@ -65,13 +61,9 @@ const Signup = () => {
       register({ ...formData, ip_address: "11234532" })
         .unwrap()
         .then((res) => {
-          getUser({})
-            .unwrap()
-            .then((res) => {
-              message.success("Registration successful");
-              const url = `/otp?email=${encodeURIComponent(formData.email)}`;
-              router.replace(url);
-            });
+          message.success("Registration successful");
+          const url = `/otp?email=${encodeURIComponent(formData.email)}`;
+          router.replace(url);
         })
         .catch((err) => {
           message.error(err?.data?.message || "Something went wrong");
@@ -379,7 +371,7 @@ const Signup = () => {
                       Create an account
                       <span>
                         {" "}
-                        {isLoading || isLoadingProfile ? (
+                        {isLoading ? (
                           <LoadingOutlined style={{ fontSize: 24 }} spin />
                         ) : (
                           <BsArrowRight className="h-5 w-5" />

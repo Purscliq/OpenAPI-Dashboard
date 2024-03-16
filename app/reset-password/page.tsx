@@ -1,9 +1,7 @@
-import React from 'react'
+import ResetPass from "@/components/auth/reset-pass/ResetPass";
 
-const page = () => {
-  return (
-    <div>page</div>
-  )
-}
+const Page = () => {
+  return <ResetPass />;
+};
 
-export default page
+export default Page;
