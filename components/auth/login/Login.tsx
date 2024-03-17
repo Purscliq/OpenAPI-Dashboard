@@ -37,11 +37,12 @@ const Login = () => {
       await login({ ...formData, ip_address: "11234532" }).unwrap();
       const res = await getUser({});
       dispatch(updateUser(res?.data?.data));
-      message.success("Login");
+      message.success("Login successful");
       replace("/getting-started");
     } catch (err: any) {
       console.log(err);
-      message.error(err);
+      // message.error(err);
+      message.error(err?.message || "An error occurred");
     }
   };
 
