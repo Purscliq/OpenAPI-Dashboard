@@ -95,10 +95,55 @@ export const authApi = createApi({
       }),
     }),
     validate2fa: builder.mutation({
-      query: ({code}) => ({
+      query: ({ code }) => ({
         url: `/api/v1/auth/verify-totp?totp_code=${code}`,
         method: "POST",
       }),
+    }),
+    createApiKey: builder.mutation({
+      query: (body) => ({
+        url: "/api/v1/auth/api_keys",
+        method: "POST",
+        body,
+      }),
+      onQueryStarted(id, { dispatch, queryFulfilled }) {
+        queryFulfilled
+          .then((apiResponse) => {
+            localStorage.setItem(
+              "refresh",
+              apiResponse.data?.data?.token.refresh_token
+            );
+            localStorage.setItem(
+              "token",
+              apiResponse.data?.data?.token?.access_token
+            );
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      },
+    }),
+    getApiKeys: builder.query({
+      query: () => ({
+        url: "/api/v1/auth/api_keys",
+        method: "GET",
+      }),
+      onQueryStarted(id, { dispatch, queryFulfilled }) {
+        queryFulfilled
+          .then((apiResponse) => {
+            localStorage.setItem(
+              "refresh",
+              apiResponse.data?.data?.token.refresh_token
+            );
+            localStorage.setItem(
+              "token",
+              apiResponse.data?.data?.token?.access_token
+            );
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      },
     }),
   }),
 });
@@ -111,6 +156,7 @@ export const {
   useResetPasswordMutation,
   useEnable2faMutation,
   useLazyGenerate2faQuery,
-  useValidate2faMutation
-
+  useValidate2faMutation,
+  useCreateApiKeyMutation,
+  useGetApiKeysQuery,
 } = authApi;
