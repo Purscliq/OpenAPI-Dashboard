@@ -1,10 +1,8 @@
 "use client";
-
 import React, { useState } from "react";
 import { CustomInput, CustomModal as Modal } from "@/lib/AntdComponents";
 import { message } from "antd";
-
-import { useCreateApiKeyMutation } from "@/services/auth/index.service";
+import { useCreateApiKeyMutation } from "@/services/apikeys/index.service";
 
 const CreateAPIKeyModal: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -49,10 +47,8 @@ const CreateAPIKeyModal: React.FC = () => {
         // Check if the API key creation was successful
         if (response.data.status === "success") {
           message.success("API key created successfully");
-          // If successful, close the modal
           setIsModalOpen(false);
         } else {
-          // error message if the API key creation failed
           message.error(response.data.error.message || "An error occurred");
         }
       } else {

@@ -29,7 +29,6 @@ const Login = () => {
   const { replace } = useRouter();
   const [login, { isLoading }] = useLoginMutation();
   const [getUser, { isLoading: isGettingUser }] = useLazyProfileQuery({});
-  const dispatch = useAppDispatch();
   const [formData, setFormData] = useState(initailState);
 
   const handleSubmit = async () => {
@@ -37,9 +36,10 @@ const Login = () => {
       await login({ ...formData, ip_address: "11234532" }).unwrap();
       const res = await getUser({});
       message.success("Login");
-      if (res?.data?.data?.two_fa_enable === true) {
+      console.log(res?.data?.data);
+      if (res?.data?.data?.two_fa_enabled === true) {
+        console.log("true");
         replace("/dashboard");
-        return;
       } else {
         replace("/getting-started");
       }

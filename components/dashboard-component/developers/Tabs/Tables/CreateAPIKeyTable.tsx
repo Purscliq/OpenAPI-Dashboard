@@ -2,8 +2,8 @@
 
 import React from "react";
 import { CustomTable as Table } from "@/lib/AntdComponents";
-import { useGetApiKeysQuery } from "@/services/auth/index.service";
 import DeleteIcon from "@/assets/svg/DeleteIcon";
+import { useGetApiKeysQuery } from "@/services/apikeys/index.service";
 
 const CreateAPIKeyTable = () => {
   const {

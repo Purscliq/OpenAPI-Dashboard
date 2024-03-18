@@ -100,50 +100,11 @@ export const authApi = createApi({
         method: "POST",
       }),
     }),
-    createApiKey: builder.mutation({
-      query: (body) => ({
-        url: "/api/v1/auth/api_keys",
-        method: "POST",
-        body,
-      }),
-      onQueryStarted(id, { dispatch, queryFulfilled }) {
-        queryFulfilled
-          .then((apiResponse) => {
-            localStorage.setItem(
-              "refresh",
-              apiResponse.data?.data?.token.refresh_token
-            );
-            localStorage.setItem(
-              "token",
-              apiResponse.data?.data?.token?.access_token
-            );
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      },
-    }),
-    getApiKeys: builder.query({
+    disable2fa: builder.mutation({
       query: () => ({
-        url: "/api/v1/auth/api_keys",
-        method: "GET",
+        url: `/api/v1/auth/otp/disable`,
+        method: "POST",
       }),
-      onQueryStarted(id, { dispatch, queryFulfilled }) {
-        queryFulfilled
-          .then((apiResponse) => {
-            localStorage.setItem(
-              "refresh",
-              apiResponse.data?.data?.token.refresh_token
-            );
-            localStorage.setItem(
-              "token",
-              apiResponse.data?.data?.token?.access_token
-            );
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      },
     }),
   }),
 });
@@ -157,6 +118,6 @@ export const {
   useEnable2faMutation,
   useLazyGenerate2faQuery,
   useValidate2faMutation,
-  useCreateApiKeyMutation,
-  useGetApiKeysQuery,
+  useDisable2faMutation
+ 
 } = authApi;
