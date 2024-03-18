@@ -95,7 +95,7 @@ export const authApi = createApi({
       }),
     }),
     validate2fa: builder.mutation({
-      query: ({code}) => ({
+      query: ({ code }) => ({
         url: `/api/v1/auth/verify-totp?totp_code=${code}`,
         method: "POST",
       }),
@@ -111,6 +111,6 @@ export const {
   useResetPasswordMutation,
   useEnable2faMutation,
   useLazyGenerate2faQuery,
-  useValidate2faMutation
-
+  useValidate2faMutation,
+ 
 } = authApi;
