@@ -15,19 +15,12 @@ const MyProfileTab = () => {
         </p>
       </div>
 
-      <div className="sm:grid grid-cols-8 gap-12 w-full space-y-4 md:space-y-0">
-        <div className="p-2 col-span-3 space-y-2 w-full md:max-w-sm flex flex-col justify-around">
-          <p className="font-semibold text-base">Personal Details</p>
-          <div className="col-span-3 space-y-2 w-full md:max-w-sm hidden md:block">
-            <p className="font-semibold text-base">New Password</p>
-            <p className="font-normal text-base text-[#7C8493]">
-              Manage your password to make sure it is safe
-            </p>
+      <form className="">
+        <div className="grid grid-cols-1 md:grid-cols-8 gap-8 pb-4 border-b">
+          <div className="md:col-span-3">
+            <p className="font-semibold text-base">Personal Details</p>
           </div>
-        </div>
-
-        <div className="p-2 col-span-5 md:mr-10 lg:mr-20">
-          <form className="space-y-4">
+          <div className="md:col-span-5 space-y-4  md:mr-16 lg:mr-24">
             <div className="flex flex-col items-start justify-start gap-[0.3rem] w-full">
               <label
                 htmlFor="FirstName"
@@ -97,14 +90,20 @@ const MyProfileTab = () => {
                 className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
               />
             </div>
+          </div>
+        </div>
 
-            <div className="md:hidden block py-6">
+        {/* new password */}
+        <div className="grid grid-cols-1 md:grid-cols-8 gap-8 py-4 border-b">
+          <div className="md:col-span-3">
+            <span className="flex flex-col gap-2">
               <p className="font-semibold text-base">New Password</p>
               <p className="font-normal text-base text-[#7C8493]">
                 Manage your password to make sure it is safe
               </p>
-            </div>
-
+            </span>
+          </div>
+          <div className="md:col-span-5 space-y-4  md:mr-16 lg:mr-24">
             <div className="flex flex-col items-start justify-start gap-[0.3rem]">
               <label
                 htmlFor="oldPassword"
@@ -148,9 +147,62 @@ const MyProfileTab = () => {
                 </button>
               </div>
             </div>
-          </form>
+          </div>
         </div>
-      </div>
+      </form>
+
+      {/* disable 2FA */}
+
+      <form className="grid grid-cols-1 md:grid-cols-8 gap-8">
+        <div className="md:col-span-3">
+          <span className="flex flex-col gap-2">
+            <p className="font-semibold text-base">
+              Disable your 2FA Authentication
+            </p>
+            <p className="font-normal text-base text-[#7C8493]">
+              Scan the QR code using any authenticator on your phone{" "}
+              <span className="font-semibold text-[#515B6F]">
+                (e.g Google Authenticator, Duo Mobile, Authy).
+              </span>
+            </p>
+          </span>
+        </div>
+        <div className="md:col-span-5 space-y-4  md:mr-16 lg:mr-24">
+          <div className="flex flex-col items-start justify-start gap-[0.3rem]">
+            <label
+              htmlFor="currentPassword"
+              className="block text-sm font-semibold text-gray-700"
+            >
+              Current Password
+            </label>
+
+            <PasswordInput
+              id="currentPassword"
+              name="current password"
+              placeholder="This is placeholder"
+              required
+              className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
+            />
+          </div>
+
+          <div className="">
+            <div className="mt-8 flex gap-6">
+              <button
+                type="reset"
+                className="w-full text-center text-md rounded-md px-4 py-2 font-medium text-black border border-[#E9EBEB] focus:outline-none"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="w-full bg-[#F6513B] text-center text-md rounded-md px-4 py-2 font-medium text-white focus:outline-none"
+              >
+                Disable
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
     </section>
   );
 };
