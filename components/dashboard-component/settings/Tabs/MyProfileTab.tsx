@@ -1,11 +1,25 @@
 import React from "react";
 import {
   CustomInput as Input,
-  CustomSelect as Select,
   CustomPasswordInput as PasswordInput,
 } from "@/lib/AntdComponents";
+import { useProfileQuery } from "@/services/users/index.service";
+import { useDisable2faMutation } from "@/services/auth/index.service";
+import { message } from "antd";
 
 const MyProfileTab = () => {
+  const { data: user } = useProfileQuery({});
+  const [disabled, { isLoading }] = useDisable2faMutation();
+
+  const handleDisable2FA = () => {
+    disabled({})
+      .unwrap()
+      .then((res) => {
+        message.success("Two-factor authentication has been successfully disabled.");      })
+      .catch((err) => {
+        message.error(err?.data?.message || "Something went wrong");
+      });
+  };
   return (
     <section className="bg- py-4 px-0 space-y-4">
       <div className="border-b pb-2">
@@ -33,8 +47,8 @@ const MyProfileTab = () => {
                 type="text"
                 id="FirstName"
                 name="first name"
-                placeholder="This is placeholder"
-                required
+                value={user?.data?.first_name}
+                disabled
                 className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
               />
             </div>
@@ -50,8 +64,8 @@ const MyProfileTab = () => {
                 type="text"
                 id="LastName"
                 name="last name"
-                placeholder="This is placeholder"
-                required
+                value={user?.data?.last_name}
+                disabled
                 className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
               />
             </div>
@@ -67,8 +81,8 @@ const MyProfileTab = () => {
                 type="email"
                 id="email"
                 name="email"
-                placeholder="This is placeholder"
-                required
+                value={user?.data?.email}
+                disabled
                 className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
               />
             </div>
@@ -85,8 +99,8 @@ const MyProfileTab = () => {
                 type="tel"
                 id="phone"
                 name="phone"
-                placeholder="This is placeholder"
-                required
+                disabled
+                value={user?.data?.phone_number}
                 className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
               />
             </div>
@@ -153,7 +167,7 @@ const MyProfileTab = () => {
 
       {/* disable 2FA */}
 
-      <form className="grid grid-cols-1 md:grid-cols-8 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-8 gap-8">
         <div className="md:col-span-3">
           <span className="flex flex-col gap-2">
             <p className="font-semibold text-base">
@@ -168,23 +182,6 @@ const MyProfileTab = () => {
           </span>
         </div>
         <div className="md:col-span-5 space-y-4  md:mr-16 lg:mr-24">
-          <div className="flex flex-col items-start justify-start gap-[0.3rem]">
-            <label
-              htmlFor="currentPassword"
-              className="block text-sm font-semibold text-gray-700"
-            >
-              Current Password
-            </label>
-
-            <PasswordInput
-              id="currentPassword"
-              name="current password"
-              placeholder="This is placeholder"
-              required
-              className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
-            />
-          </div>
-
           <div className="">
             <div className="mt-8 flex gap-6">
               <button
@@ -194,7 +191,7 @@ const MyProfileTab = () => {
                 Cancel
               </button>
               <button
-                type="submit"
+                onClick={handleDisable2FA}
                 className="w-full bg-[#F6513B] text-center text-md rounded-md px-4 py-2 font-medium text-white focus:outline-none"
               >
                 Disable
@@ -202,7 +199,7 @@ const MyProfileTab = () => {
             </div>
           </div>
         </div>
-      </form>
+      </div>
     </section>
   );
 };

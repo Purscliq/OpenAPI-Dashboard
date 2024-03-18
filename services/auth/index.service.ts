@@ -100,6 +100,12 @@ export const authApi = createApi({
         method: "POST",
       }),
     }),
+    disable2fa: builder.mutation({
+      query: () => ({
+        url: `/api/v1/auth/otp/disable`,
+        method: "POST",
+      }),
+    }),
   }),
 });
 
@@ -112,5 +118,6 @@ export const {
   useEnable2faMutation,
   useLazyGenerate2faQuery,
   useValidate2faMutation,
+  useDisable2faMutation
  
 } = authApi;
