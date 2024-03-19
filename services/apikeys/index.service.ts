@@ -45,9 +45,22 @@ export const webhooksApi = createApi({
       }),
     }),
     readWebhook: builder.query({
-      query: () => ({
-        url: "/api/v1/users/webhooks/{{webhook_id}}",
+      query: (webhook_id) => ({
+        url: `/api/v1/users/webhooks/${webhook_id}`,
         method: "GET",
+      }),
+    }),
+    deleteWebhook: builder.mutation({
+      query: (webhook_id) => ({
+        url: `/api/v1/users/webhooks/${webhook_id}`,
+        method: "DELETE",
+      }),
+    }),
+    updateWebhook: builder.mutation({
+      query: ({ webhook_id, ...body }) => ({
+        url: `/api/v1/users/webhooks/${webhook_id}`,
+        method: "PUT",
+        body,
       }),
     }),
   }),
@@ -57,4 +70,6 @@ export const {
   useCreateWebhookMutation,
   useReadAllWebhooksQuery,
   useReadWebhookQuery,
+  useDeleteWebhookMutation,
+  useUpdateWebhookMutation,
 } = webhooksApi;
