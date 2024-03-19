@@ -9,14 +9,14 @@ export const apiKeysApi = createApi({
   endpoints: (builder) => ({
     createApiKey: builder.mutation({
       query: (body) => ({
-        url: "/api/v1/auth/api_keys/",
+        url: "/api/v1/auth/api_keys",
         method: "POST",
         body,
       }),
     }),
     getApiKeys: builder.query({
       query: () => ({
-        url: "/api/v1/auth/api_keys/",
+        url: "/api/v1/auth/api_keys",
         method: "GET",
       }),
     }),
@@ -33,14 +33,14 @@ export const webhooksApi = createApi({
   endpoints: (builder) => ({
     createWebhook: builder.mutation({
       query: (body) => ({
-        url: "/api/v1/users/webhooks/",
+        url: "/api/v1/users/webhooks",
         method: "POST",
         body,
       }),
     }),
     readAllWebhooks: builder.query({
       query: () => ({
-        url: "/api/v1/users/webhooks/",
+        url: "/api/v1/users/webhooks",
         method: "GET",
       }),
     }),
