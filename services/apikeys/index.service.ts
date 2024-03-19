@@ -33,7 +33,7 @@ export const webhooksApi = createApi({
   endpoints: (builder) => ({
     createWebhook: builder.mutation({
       query: (body) => ({
-        url: "/api/v1/users/webhooks",
+        url: "/api/v1/users/webhooks/",
         method: "POST",
         body,
       }),
