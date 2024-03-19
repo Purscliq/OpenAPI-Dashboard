@@ -5,7 +5,7 @@ import { CustomTable as Table } from "@/lib/AntdComponents";
 import DeleteIcon from "@/assets/svg/DeleteIcon";
 import { useGetApiKeysQuery } from "@/services/apikeys/index.service";
 
-const CreateAPIKeyTable = () => {
+const APIKeyTable = () => {
   const {
     data: apiKeysData,
     isLoading,
@@ -56,7 +56,7 @@ const CreateAPIKeyTable = () => {
         {isLoading ? (
           <p>Loading...</p>
         ) : isError ? (
-          <p>Error fetching API keys</p>
+          <p className="text-red-500">Error fetching API keys</p>
         ) : (
           <Table columns={columns} dataSource={apiKeysData?.data || []} />
         )}
@@ -65,4 +65,4 @@ const CreateAPIKeyTable = () => {
   );
 };
 
-export default CreateAPIKeyTable;
+export default APIKeyTable;
