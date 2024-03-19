@@ -35,7 +35,7 @@ const Login = () => {
     try {
       await login({ ...formData, ip_address: "11234532" }).unwrap();
       const res = await getUser({});
-      message.success("Login");
+      message.success("Login successful");
       console.log(res?.data?.data);
       if (res?.data?.data?.two_fa_enabled === true) {
         console.log("true");

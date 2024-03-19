@@ -28,7 +28,6 @@ const initailState = {
   password: "",
   password2: "",
   business_name: "",
-  ip_address: "",
   role_id: 1,
 };
 const Signup = () => {
@@ -58,7 +57,7 @@ const Signup = () => {
   };
   const handleRegister = () => {
     if (!validationError && !confirmValidationError) {
-      register({ ...formData, ip_address: "11234532" })
+      register({ ...formData })
         .unwrap()
         .then((res) => {
           message.success("Registration successful");
