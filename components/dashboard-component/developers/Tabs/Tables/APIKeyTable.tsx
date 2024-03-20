@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { CustomTable as Table } from "@/lib/AntdComponents";
 import DeleteIcon from "@/assets/svg/DeleteIcon";
 import { useGetApiKeysQuery } from "@/services/apikeys/index.service";
@@ -12,6 +12,13 @@ const APIKeyTable = () => {
     isError,
     error,
   } = useGetApiKeysQuery([]);
+
+  // Log the number of webhooks to the console if data is available
+  useEffect(() => {
+    if (apiKeysData?.data) {
+      console.log("Number of API Keys:", apiKeysData.data.length);
+    }
+  }, [apiKeysData]);
 
   const columns = [
     {
@@ -49,7 +56,11 @@ const APIKeyTable = () => {
   return (
     <div className="bg-white flex flex-col gap-[1rem] py-6 px-4">
       <p className="font-semibold text-[18px]">
-        {isLoading ? "Loading..." : `${apiKeysData?.length} API Key(s)`}
+        {isLoading
+          ? "Loading..."
+          : apiKeysData?.data
+          ? `${apiKeysData.data.length} API Keys(s)`
+          : "No API Keys"}
       </p>
 
       <div className="relative overflow-x-auto  sm:rounded-lg w-full">

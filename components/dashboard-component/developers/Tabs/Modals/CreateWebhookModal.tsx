@@ -81,6 +81,7 @@ const CreateWebhookModal: React.FC = () => {
               </label>
               <input
                 id="name"
+                name="name"
                 type="text"
                 placeholder="John Doe"
                 value={name}
@@ -98,6 +99,7 @@ const CreateWebhookModal: React.FC = () => {
               </label>
               <input
                 id="url"
+                name="url"
                 type="text"
                 placeholder="https://web.com"
                 value={url}
