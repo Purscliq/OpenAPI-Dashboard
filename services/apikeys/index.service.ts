@@ -20,10 +20,20 @@ export const apiKeysApi = createApi({
         method: "GET",
       }),
     }),
+    deleteApiKey: builder.mutation({
+      query: () => ({
+        url: "/api/v1/auth/api_keys/1",
+        method: "DELETE",
+      }),
+    }),
   }),
 });
 
-export const { useCreateApiKeyMutation, useGetApiKeysQuery } = apiKeysApi;
+export const {
+  useCreateApiKeyMutation,
+  useGetApiKeysQuery,
+  useDeleteApiKeyMutation,
+} = apiKeysApi;
 
 export const webhooksApi = createApi({
   reducerPath: "webhooks",
@@ -89,7 +99,7 @@ export const whitelistApi = createApi({
     }),
     getAllIps: builder.query({
       query: () => ({
-        url: "/api/v1/users/ip-address/whitelist",
+        url: "/api/v1/users/ip-address",
         method: "GET",
       }),
     }),

@@ -3,7 +3,11 @@
 import React, { useEffect } from "react";
 import { CustomTable as Table } from "@/lib/AntdComponents";
 import DeleteIcon from "@/assets/svg/DeleteIcon";
-import { useGetApiKeysQuery } from "@/services/apikeys/index.service";
+import { message } from "antd";
+import {
+  useGetApiKeysQuery,
+  useDeleteApiKeyMutation,
+} from "@/services/apikeys/index.service";
 
 const APIKeyTable = () => {
   const {
@@ -11,9 +15,12 @@ const APIKeyTable = () => {
     isLoading,
     isError,
     error,
+    refetch,
   } = useGetApiKeysQuery([]);
 
-  // Log the number of webhooks to the console if data is available
+  const [deleteApiKey, { isLoading: deleteLoading }] =
+    useDeleteApiKeyMutation();
+
   useEffect(() => {
     if (apiKeysData?.data) {
       console.log("Number of API Keys:", apiKeysData.data.length);
@@ -24,6 +31,17 @@ const APIKeyTable = () => {
   const formatCreatedAt = (createdAt: string) => {
     const date = new Date(createdAt);
     return date.toLocaleString(); // Adjust this method according to your preferred date format
+  };
+
+  const handleDelete = async (apiKeyId: string) => {
+    try {
+      await deleteApiKey(apiKeyId);
+      refetch();
+      message.success("API Key deleted successfully");
+    } catch (error) {
+      console.error("Error deleting API key:", error);
+      message.error("Failed to delete API key");
+    }
   };
 
   const columns = [
@@ -44,19 +62,22 @@ const APIKeyTable = () => {
       render: (createdAt: string) => formatCreatedAt(createdAt),
     },
     {
-      title: (
-        <span className="flex items-center space-x-2">
-          {/* delete icon */}
-          {/* or Actions */}
+      title: "Actions",
+      render: (record: any) => (
+        <span className="flex items-center space-x-4">
+          <button type="button" title="Edit" className="">
+            Edit
+          </button>
+          <button
+            type="button"
+            title="Delete"
+            className=""
+            onClick={() => handleDelete(record.id)}
+          >
+            {deleteLoading ? "Deleting..." : <DeleteIcon />}
+          </button>
         </span>
       ),
-      render: () => {
-        return (
-          <span className="cursor-pointer">
-            <DeleteIcon />
-          </span>
-        );
-      },
     },
   ];
 
@@ -66,11 +87,11 @@ const APIKeyTable = () => {
         {isLoading
           ? "Loading..."
           : apiKeysData?.data
-          ? `${apiKeysData.data.length} API Keys(s)`
+          ? `${apiKeysData.data.length} API Key(s)`
           : "No API Keys"}
       </p>
 
-      <div className="relative overflow-x-auto  sm:rounded-lg w-full">
+      <div className="relative overflow-x-auto sm:rounded-lg w-full">
         {isLoading ? (
           <p>Loading...</p>
         ) : isError ? (

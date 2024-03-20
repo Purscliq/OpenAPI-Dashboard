@@ -2,8 +2,17 @@
 
 import React, { useEffect } from "react";
 import { CustomTable as Table } from "@/lib/AntdComponents";
+import { message } from "antd";
 import DeleteIcon from "@/assets/svg/DeleteIcon";
-import { useReadAllWebhooksQuery } from "@/services/apikeys/index.service";
+import {
+  useReadAllWebhooksQuery,
+  useDeleteWebhookMutation,
+} from "@/services/apikeys/index.service"; // Import the mutation hook for deleting a webhook
+
+interface WebhookType {
+  id: string;
+  // other properties...
+}
 
 const WebhookTable = () => {
   const {
@@ -11,7 +20,12 @@ const WebhookTable = () => {
     isLoading,
     isError,
     error,
+    refetch, // Function to manually refetch the webhooks data
   } = useReadAllWebhooksQuery([]);
+
+  // Mutation hook for deleting a webhook
+  const [deleteWebhook, { isLoading: deleteLoading }] =
+    useDeleteWebhookMutation();
 
   // Log the number of webhooks to the console if data is available
   useEffect(() => {
@@ -19,6 +33,19 @@ const WebhookTable = () => {
       console.log("Number of webhooks:", webhooksData.data.length);
     }
   }, [webhooksData]);
+
+  // Function to handle deleting a webhook
+  const handleDelete = async (webhookId: string) => {
+    try {
+      await deleteWebhook(webhookId);
+      // If successful, refetch the webhooks data to update the table
+      refetch();
+      message.success("Webhook deleted successfully");
+    } catch (error) {
+      console.error("Error deleting webhook:", error);
+      message.error("Failed to delete webhook");
+    }
+  };
 
   // Function to format the date
   const formatCreatedAt = (createdAt: string) => {
@@ -49,21 +76,26 @@ const WebhookTable = () => {
       sorter: true,
     },
     {
-      title: (
-        <span className="flex items-center space-x-2">
-          {/* delete icon  and 'active' */}
-          {/* or Actions */}
+      title: "Actions",
+      render: (record: WebhookType) => (
+        <span className="flex items-center space-x-4">
+          <button type="button" title="Edit" className="">
+            Edit
+          </button>
+          <button
+            type="button"
+            title="Delete"
+            className=""
+            onClick={() => handleDelete(record.id)}
+          >
+            {/* Add onClick handler for delete action */}
+            {deleteLoading ? "Deleting..." : <DeleteIcon />}
+          </button>
         </span>
       ),
-      render: () => {
-        return (
-          <span className="cursor-pointer">
-            <DeleteIcon />
-          </span>
-        );
-      },
     },
   ];
+
   return (
     <div className="bg-white flex flex-col gap-[1rem] py-6 px-4">
       <p className="font-semibold text-[18px]">
