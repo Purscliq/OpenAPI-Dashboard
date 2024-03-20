@@ -20,6 +20,12 @@ const APIKeyTable = () => {
     }
   }, [apiKeysData]);
 
+  // Function to format the date
+  const formatCreatedAt = (createdAt: string) => {
+    const date = new Date(createdAt);
+    return date.toLocaleString(); // Adjust this method according to your preferred date format
+  };
+
   const columns = [
     {
       title: "Name",
@@ -32,9 +38,10 @@ const APIKeyTable = () => {
       sorter: true,
     },
     {
-      title: "Expiry Date",
-      dataIndex: "expiryDate",
+      title: "Date Created",
+      dataIndex: "created_at",
       sorter: true,
+      render: (createdAt: string) => formatCreatedAt(createdAt),
     },
     {
       title: (

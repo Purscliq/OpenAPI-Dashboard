@@ -20,17 +20,32 @@ const WebhookTable = () => {
     }
   }, [webhooksData]);
 
+  // Function to format the date
+  const formatCreatedAt = (createdAt: string) => {
+    const date = new Date(createdAt);
+    return date.toLocaleString(); // Adjust this method according to your preferred date format
+  };
+
   const columns = [
     {
       title: "Name",
+      dataIndex: "name",
       sorter: true,
     },
     {
       title: "Source IP",
+      dataIndex: "url",
       sorter: true,
     },
     {
+      title: "Date Created",
+      dataIndex: "created_at",
+      sorter: true,
+      render: (createdAt: string) => formatCreatedAt(createdAt),
+    },
+    {
       title: "Expiry Date",
+      dataIndex: "date",
       sorter: true,
     },
     {
