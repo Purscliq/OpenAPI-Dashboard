@@ -73,3 +73,44 @@ export const {
   useDeleteWebhookMutation,
   useUpdateWebhookMutation,
 } = webhooksApi;
+
+export const whitelistApi = createApi({
+  reducerPath: "whitelist",
+  refetchOnReconnect: true,
+  refetchOnMountOrArgChange: true,
+  baseQuery: baseQueryWithReauth,
+  endpoints: (builder) => ({
+    whitelistIp: builder.mutation({
+      query: (body) => ({
+        url: "/api/v1/users/ip-address/whitelist",
+        method: "POST",
+        body,
+      }),
+    }),
+    getAllIps: builder.query({
+      query: () => ({
+        url: "/api/v1/users/ip-address/whitelist",
+        method: "GET",
+      }),
+    }),
+    getIp: builder.query({
+      query: (ip_address_id) => ({
+        url: `/api/v1/users/ip-address/${ip_address_id}`,
+        method: "GET",
+      }),
+    }),
+    deleteIp: builder.mutation({
+      query: (ip_address_id) => ({
+        url: `/api/v1/users/ip-address/${ip_address_id}`,
+        method: "DELETE",
+      }),
+    }),
+  }),
+});
+
+export const {
+  useWhitelistIpMutation,
+  useGetAllIpsQuery,
+  useGetIpQuery,
+  useDeleteIpMutation,
+} = whitelistApi;
