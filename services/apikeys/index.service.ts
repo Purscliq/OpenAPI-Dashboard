@@ -21,8 +21,8 @@ export const apiKeysApi = createApi({
       }),
     }),
     deleteApiKey: builder.mutation({
-      query: () => ({
-        url: "/api/v1/auth/api_keys/1",
+      query: (api_key_id) => ({
+        url: `/api/v1/auth/api_keys/${api_key_id}`,
         method: "DELETE",
       }),
     }),
