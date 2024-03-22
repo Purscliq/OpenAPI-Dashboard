@@ -20,7 +20,6 @@ const ResetPass = () => {
     password: "",
     password2: "",
     email: "",
-    ip: "",
     password_reset_token: "",
   };
   const [formData, setFormData] = useState(initialState);
@@ -28,12 +27,10 @@ const ResetPass = () => {
   const [confirmValidationError, setConfirmValidationError] = useState("");
   const searchParams = useSearchParams();
   useEffect(() => {
-    const ip = "11234532";
     const email = searchParams.get("email");
     const token = searchParams.get("token");
     setFormData((prev) => ({
       ...prev,
-      ip: ip,
       email: email || "",
       password_reset_token: token || "",
     }));

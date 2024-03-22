@@ -143,7 +143,7 @@ const CreateAPIKeyModal: React.FC = () => {
               <button
                 type="submit"
                 className="bg-black text-white rounded-[0.25rem] w-full md:w-max px-6 py-3 text-base"
-                disabled={isLoading} // Disable button while the request is being processed
+                disabled={isLoading}
               >
                 {isLoading ? "Creating..." : "Create"}
               </button>

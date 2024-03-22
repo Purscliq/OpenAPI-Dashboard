@@ -17,13 +17,10 @@ import { Form, message } from "antd";
 import { useLoginMutation } from "@/services/auth/index.service";
 import { LoadingOutlined } from "@ant-design/icons";
 import { useLazyProfileQuery } from "@/services/users/index.service";
-import { updateUser } from "@/slice/userSlice";
-import { useAppDispatch } from "@/context/store";
 
 const initailState = {
   email: "",
   password: "",
-  ip_address: "",
 };
 const Login = () => {
   const { replace } = useRouter();
@@ -33,7 +30,7 @@ const Login = () => {
 
   const handleSubmit = async () => {
     try {
-      await login({ ...formData, ip_address: "11234532" }).unwrap();
+      await login({ ...formData }).unwrap();
       const res = await getUser({});
       message.success("Login successful");
       console.log(res?.data?.data);
@@ -49,17 +46,6 @@ const Login = () => {
     }
   };
 
-  // const handleSubmit = () => {
-  //   login({ ...formData, ip_address: "11234532" })
-  //     .unwrap()
-  //     .then((res) => {
-  //           message.success("Login");
-  //           replace("/getting-started");
-  //         })
-  //     .catch((err) => {
-  //       message.error(err?.data?.message);
-  //     });
-  // };
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setFormData((prevState) => ({
       ...prevState,
