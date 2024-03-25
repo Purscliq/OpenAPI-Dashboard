@@ -1,4 +1,5 @@
 import { apiKeysApi } from "@/services/apikeys/index.service";
+import { businessApi } from "@/services/business/index.service";
 import { webhooksApi } from "@/services/apikeys/index.service";
 import { whitelistApi } from "@/services/apikeys/index.service";
 import { authApi } from "@/services/auth/index.service";
@@ -14,6 +15,7 @@ export const store = configureStore({
     [apiKeysApi.reducerPath]: apiKeysApi.reducer,
     [webhooksApi.reducerPath]: webhooksApi.reducer,
     [whitelistApi.reducerPath]: whitelistApi.reducer,
+    [businessApi.reducerPath]: businessApi.reducer,
 
     user: userSlice.reducer,
   },
@@ -23,7 +25,8 @@ export const store = configureStore({
       userApi.middleware,
       apiKeysApi.middleware,
       webhooksApi.middleware,
-      whitelistApi.middleware
+      whitelistApi.middleware,
+      businessApi.middleware
     ),
 });
 
