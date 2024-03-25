@@ -1,30 +1,45 @@
-"use client"
 import { DatePicker } from "antd";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   CustomInput as Input,
   CustomTable as Table,
 } from "@/lib/AntdComponents";
 import FilterIcon from "@/assets/svg/FilterIcon";
 import TableIcon from "@/assets/svg/TableIcon";
+import { useGetSubaccountQuery } from "@/services/users/index.service";
 
 const AccountTable = () => {
+  const { data: subaccounts, isLoading } = useGetSubaccountQuery({});
+
   const columns = [
     {
       title: "Account name",
+      dataIndex: "account_name",
       sorter: true,
     },
     {
       title: "Sub-account Id",
+      dataIndex: "id",
       sorter: true,
     },
     {
       title: "Current Balance",
+      dataIndex: "current_balance",
       sorter: true,
+      render: (current_balance:any) => `NGN ${current_balance}`, // Prepend "NGN" format
     },
     {
       title: "Date",
+      dataIndex: "created_at",
       sorter: true,
+      render: (created_at: any) => {
+        const formattedDate = new Date(created_at).toLocaleDateString("en-US", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
+        return formattedDate;
+      },
     },
     {
       title: (
@@ -38,6 +53,7 @@ const AccountTable = () => {
       },
     },
   ];
+
   return (
     <div className="bg-white flex flex-col gap-[1rem] ">
       <div className="flex items-center justify-start w-full gap-[1rem]">
@@ -54,7 +70,7 @@ const AccountTable = () => {
         </div>
       </div>
       <div className="relative overflow-x-auto  sm:rounded-lg w-[22rem] md:w-full">
-        <Table columns={columns} dataSource={[]} />
+        <Table columns={columns} dataSource={subaccounts} loading={isLoading} />
       </div>
     </div>
   );
