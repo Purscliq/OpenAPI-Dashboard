@@ -1,45 +1,108 @@
 "use client";
-import { DatePicker } from "antd";
-import React from "react";
+
+import React, { useEffect } from "react";
 import {
   CustomInput as Input,
   CustomTable as Table,
 } from "@/lib/AntdComponents";
+import { message, DatePicker } from "antd";
+import DeleteIcon from "@/assets/svg/DeleteIcon";
 import FilterIcon from "@/assets/svg/FilterIcon";
 import TableIcon from "@/assets/svg/TableIcon";
+import {
+  useReadAllTransactionsQuery,
+  useDeleteTransactionMutation,
+} from "@/services/business/index.service";
+
+interface TransactionsType {
+  id: string;
+  // other properties...
+}
 
 const TransactionsTable = () => {
+  const {
+    data: transactionData,
+    isLoading,
+    isError,
+    error,
+    refetch, // Function to manually refetch the transactions data
+  } = useReadAllTransactionsQuery([]);
+
+  // Mutation hook for deleting a transaction
+  const [deleteTransaction, { isLoading: deleteLoading }] =
+    useDeleteTransactionMutation();
+
+  // Log the number of transactions to the console if data is available
+  useEffect(() => {
+    if (transactionData?.data) {
+      console.log("Number of transactions:", transactionData.data.length);
+    }
+  }, [transactionData]);
+
+  // Function to handle deleting a transaction
+  const handleDelete = async (TransactionId: string) => {
+    try {
+      await deleteTransaction(TransactionId);
+      // If successful, refetch the transaction data to update the table
+      refetch();
+      message.success("Transaction deleted successfully");
+    } catch (error) {
+      console.error("Error deleting transaction:", error);
+      message.error("Failed to delete transaction");
+    }
+  };
+
+  // Function to format the date
+  const formatCreatedOn = (createdOn: string) => {
+    const date = new Date(createdOn);
+    return date.toLocaleString();
+  };
+
   const columns = [
     {
       title: "Created On",
+      dataIndex: "created_at",
       sorter: true,
+      render: (createdOn: string) => formatCreatedOn(createdOn),
     },
     {
       title: "Transaction Id",
+      dataIndex: "transID",
       sorter: true,
     },
     {
       title: "Customer",
+      dataIndex: "customer",
       sorter: true,
     },
     {
       title: "Currency",
+      dataIndex: "currency",
       sorter: true,
     },
     {
-      title: "Amount request",
+      title: "Amount requested",
+      dataIndex: "amount",
       sorter: true,
     },
     {
-      title: (
-        <span className="flex items-center space-x-2">
-          <p>Action</p>
-          <TableIcon className="ml-4" />
+      title: "Actions",
+      render: (record: TransactionsType) => (
+        <span className="flex items-center space-x-4">
+          <button type="button" title="Edit" className="">
+            Edit
+          </button>
+          <button
+            type="button"
+            title="Delete"
+            className=""
+            onClick={() => handleDelete(record.id)}
+          >
+            {/* Add onClick handler for delete action */}
+            {deleteLoading ? "Deleting..." : <DeleteIcon />}
+          </button>
         </span>
       ),
-      render: () => {
-        return <span className="cursor-pointer">...</span>;
-      },
     },
   ];
   return (
@@ -59,7 +122,13 @@ const TransactionsTable = () => {
         </div>
       </div>
       <div className="relative overflow-x-auto  sm:rounded-lg w-full">
-        <Table columns={columns} dataSource={[]} />
+        {isLoading ? (
+          <p>Loading...</p>
+        ) : isError ? (
+          <p className="text-red-500">Error fetching Transactions</p>
+        ) : (
+          <Table columns={columns} dataSource={transactionData?.data || []} />
+        )}
       </div>
     </div>
   );
