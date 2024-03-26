@@ -1,5 +1,4 @@
 import { DatePicker } from "antd";
-import React, { useEffect, useState } from "react";
 import {
   CustomInput as Input,
   CustomTable as Table,
@@ -19,14 +18,14 @@ const AccountTable = () => {
     },
     {
       title: "Sub-account Id",
-      dataIndex: "id",
+      dataIndex: "business_id",
       sorter: true,
     },
     {
       title: "Current Balance",
       dataIndex: "current_balance",
       sorter: true,
-      render: (current_balance:any) => `NGN ${current_balance}`, // Prepend "NGN" format
+      render: (current_balance:number) => `NGN ${current_balance.toFixed(2)}`, // Prepend "NGN" format
     },
     {
       title: "Date",
@@ -70,7 +69,7 @@ const AccountTable = () => {
         </div>
       </div>
       <div className="relative overflow-x-auto  sm:rounded-lg w-[22rem] md:w-full">
-        <Table columns={columns} dataSource={subaccounts} loading={isLoading} />
+        <Table columns={columns} dataSource={subaccounts?.data || []} loading={isLoading} />
       </div>
     </div>
   );
