@@ -40,6 +40,19 @@ export const businessApi = createApi({
         body,
       }),
     }),
+    getbusiness: builder.query({
+      query: () => ({
+        url: "/api/v1/business",
+        method: "GET",
+      }),
+    }),
+    updatebusiness: builder.mutation({
+      query: (body) => ({
+        url: "/api/v1/business/update",
+        method: "PUT",
+        body
+      }),
+    }),
   }),
 });
 
@@ -49,4 +62,6 @@ export const {
   useReadTransactionQuery,
   useDeleteTransactionMutation,
   useInviteUserMutation,
+  useGetbusinessQuery,
+  useUpdatebusinessMutation
 } = businessApi;

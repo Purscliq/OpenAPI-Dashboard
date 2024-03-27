@@ -82,6 +82,13 @@ export const authApi = createApi({
         body,
       }),
     }),
+    changePassword: builder.mutation({
+      query: (body) => ({
+        url: "/api/v1/auth/update-forgotten-password",
+        method: "POST",
+        body,
+      }),
+    }),
     enable2fa: builder.mutation({
       query: () => ({
         url: "/api/v1/auth/enable-2fa",
@@ -118,6 +125,6 @@ export const {
   useEnable2faMutation,
   useLazyGenerate2faQuery,
   useValidate2faMutation,
-  useDisable2faMutation
- 
+  useDisable2faMutation,
+  useChangePasswordMutation
 } = authApi;

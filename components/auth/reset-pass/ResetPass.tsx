@@ -21,6 +21,7 @@ const ResetPass = () => {
     password2: "",
     email: "",
     token: "",
+    update_type: "",
   };
   const [formData, setFormData] = useState(initialState);
   const [validationError, setValidationError] = useState("");
@@ -29,10 +30,13 @@ const ResetPass = () => {
   useEffect(() => {
     const email = searchParams.get("email");
     const token = searchParams.get("token");
+    const updateType = searchParams.get("update_type");
+
     setFormData((prev) => ({
       ...prev,
       email: email || "",
       token: token || "",
+      update_type: updateType || "",
     }));
   }, [searchParams]);
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
