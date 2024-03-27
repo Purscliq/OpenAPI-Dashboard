@@ -6,9 +6,15 @@ import {
   CustomSelect as Select,
   CustomModal,
 } from "@/lib/AntdComponents";
+import { message } from "antd";
+import { useInviteUserMutation } from "@/services/business/index.service";
 
 const TeamTabModal: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState("");
+
+  const [inviteUser, { isLoading }] = useInviteUserMutation();
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -21,6 +27,78 @@ const TeamTabModal: React.FC = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
+  // const roleToId = {
+  const roleToId: { [key: string]: number } = {
+    superadmin: 1, // 1 for superadmin
+    owner: 2, //  2 for owner
+    developer: 3, //  3 for developer
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Placeholder values - you'll need to replace these with actual values from your app
+    const businessId = 1; // Replace this with the actual business ID
+    const inviteConfirmationUrl = "https://example.com/confirm-invitation"; // Replace with the actual URL
+
+    // const roleId = role;
+    // Convert role name to role ID
+    const roleId = roleToId[role];
+    if (roleId === undefined) {
+      message.error("Invalid role selected.");
+      return;
+    }
+
+    try {
+      // Include the additional required fields
+      const response = await inviteUser({
+        email,
+        role_id: roleId,
+        business_id: businessId,
+        invite_confirmation_url: inviteConfirmationUrl,
+      });
+
+      if ("data" in response) {
+        if (response.data.status === "success") {
+          message.success("Invitation sent successfully");
+          handleOk();
+        } else {
+          message.error(
+            response.data.error?.message || "Failed to send invitation"
+          );
+        }
+      } else {
+        message.error("An error occurred. Please try again later.");
+      }
+    } catch (error) {
+      console.error("Error sending invitation:", error);
+      message.error("Failed to send invitation");
+    }
+  };
+
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await inviteUser({ email, role });
+
+  //     if ("data" in response) {
+  //       if (response.data.status === "success") {
+  //         message.success("Invitation sent successfully");
+  //         handleOk();
+  //       } else {
+  //         message.error(
+  //           response.data.error.message || "Failed to send invitation"
+  //         );
+  //       }
+  //     } else {
+  //       message.error("An error occurred. Please try again later.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error sending invitation:", error);
+  //     message.error("Failed to send invitation");
+  //   }
+  // };
 
   return (
     <>
@@ -44,10 +122,10 @@ const TeamTabModal: React.FC = () => {
               Add Team Member
             </h1>
             <p className="text-[#515B6F] text-base text-center">
-              Enter the following details to add new team member
+              Enter the following details to add a new team member
             </p>
           </div>
-          <form className="mt-8 space-y-6">
+          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
             <div className="space-y-1">
               <label
                 htmlFor="email"
@@ -59,6 +137,8 @@ const TeamTabModal: React.FC = () => {
                 id="email"
                 type="email"
                 placeholder="john@doe.mail"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
                 className="w-full px-3 py-2 resize-none appearance-none bg-transparent outline-none border focus:border-black shadow-sm rounded-lg"
               />
@@ -68,17 +148,20 @@ const TeamTabModal: React.FC = () => {
                 htmlFor="role"
                 className="text-[#25324B] text-base font-semibold"
               >
-                Select a role for member
+                Select a role for the member
               </label>
               <Select
-                id=""
+                id="role"
                 defaultValue=""
+                value={role}
+                onChange={(value) => setRole(value)}
                 options={[
                   { value: "", label: "Select a role" },
-                  { value: "Role1", label: "Role1" },
-                  { value: "Role2", label: "Role2" },
+                  { value: "superadmin", label: "Super Admin" },
+                  { value: "owner", label: "Owner" },
+                  { value: "developer", label: "Developer" },
                 ]}
-                className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-none"
+                className="p-2 border w-full rounded-md bg-white text-sm text-gray-700 shadow-none"
               />
             </div>
 
@@ -86,8 +169,9 @@ const TeamTabModal: React.FC = () => {
               <button
                 type="submit"
                 className="bg-black text-white rounded-[0.25rem] w-full md:w-max px-6 py-3 text-base"
+                disabled={isLoading}
               >
-                Send Invite
+                {isLoading ? "Sending Invitation..." : "Send Invite"}
               </button>
             </div>
           </form>

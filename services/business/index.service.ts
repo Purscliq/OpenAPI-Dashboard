@@ -14,6 +14,7 @@ export const businessApi = createApi({
         body,
       }),
     }),
+
     readAllTransactions: builder.query({
       query: () => ({
         url: "/api/v1/business/transactions",
@@ -32,6 +33,13 @@ export const businessApi = createApi({
         method: "DELETE",
       }),
     }),
+    inviteUser: builder.mutation({
+      query: (body) => ({
+        url: "/api/v1/business/invite-user",
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
@@ -40,4 +48,5 @@ export const {
   useReadAllTransactionsQuery,
   useReadTransactionQuery,
   useDeleteTransactionMutation,
+  useInviteUserMutation,
 } = businessApi;
