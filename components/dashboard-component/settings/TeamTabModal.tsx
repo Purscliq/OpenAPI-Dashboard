@@ -37,11 +37,6 @@ const TeamTabModal: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Placeholder values - you'll need to replace these with actual values from your app
-    const businessId = 1; // Replace this with the actual business ID
-    const inviteConfirmationUrl = "https://example.com/confirm-invitation"; // Replace with the actual URL
-
     // const roleId = role;
     // Convert role name to role ID
     const roleId = roleToId[role];
@@ -55,8 +50,6 @@ const TeamTabModal: React.FC = () => {
       const response = await inviteUser({
         email,
         role_id: roleId,
-        business_id: businessId,
-        invite_confirmation_url: inviteConfirmationUrl,
       });
 
       if ("data" in response) {
