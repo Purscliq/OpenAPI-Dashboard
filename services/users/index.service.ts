@@ -27,15 +27,15 @@ export const userApi = createApi({
     }),
     createSubaccount: builder.mutation({
       query: (body) => ({
-        url: "api/v1/business/subaccount",
+        url: "api/v1/business/subaccounts",
         method: "POST",
-        body: body,
+        body:  body ,
       }),
       invalidatesTags: ["account"],
     }),
     getSubaccount: builder.query({
       query: () => ({
-        url: "api/v1/business/subaccount",
+        url: "api/v1/business/subaccounts",
         method: "GET",
       }),
       providesTags: ["account"],

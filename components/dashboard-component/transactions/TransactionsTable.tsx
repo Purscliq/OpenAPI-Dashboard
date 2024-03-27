@@ -16,7 +16,6 @@ import {
 
 interface TransactionsType {
   id: string;
-  // other properties...
 }
 
 const TransactionsTable = () => {
@@ -25,25 +24,15 @@ const TransactionsTable = () => {
     isLoading,
     isError,
     error,
-    refetch, // Function to manually refetch the transactions data
+    refetch, 
   } = useReadAllTransactionsQuery([]);
 
-  // Mutation hook for deleting a transaction
   const [deleteTransaction, { isLoading: deleteLoading }] =
     useDeleteTransactionMutation();
 
-  // Log the number of transactions to the console if data is available
-  useEffect(() => {
-    if (transactionData?.data) {
-      console.log("Number of transactions:", transactionData.data.length);
-    }
-  }, [transactionData]);
-
-  // Function to handle deleting a transaction
   const handleDelete = async (TransactionId: string) => {
     try {
       await deleteTransaction(TransactionId);
-      // If successful, refetch the transaction data to update the table
       refetch();
       message.success("Transaction deleted successfully");
     } catch (error) {
@@ -52,7 +41,6 @@ const TransactionsTable = () => {
     }
   };
 
-  // Function to format the date
   const formatCreatedOn = (createdOn: string) => {
     const date = new Date(createdOn);
     return date.toLocaleString();
