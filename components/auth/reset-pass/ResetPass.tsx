@@ -20,7 +20,7 @@ const ResetPass = () => {
     password: "",
     password2: "",
     email: "",
-    password_reset_token: "",
+    token: "",
   };
   const [formData, setFormData] = useState(initialState);
   const [validationError, setValidationError] = useState("");
@@ -32,7 +32,7 @@ const ResetPass = () => {
     setFormData((prev) => ({
       ...prev,
       email: email || "",
-      password_reset_token: token || "",
+      token: token || "",
     }));
   }, [searchParams]);
   const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
