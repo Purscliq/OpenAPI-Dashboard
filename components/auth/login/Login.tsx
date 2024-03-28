@@ -33,9 +33,7 @@ const Login = () => {
       await login({ ...formData }).unwrap();
       const res = await getUser({});
       message.success("Login successful");
-      console.log(res?.data?.data);
       if (res?.data?.data?.two_fa_enabled === true) {
-        console.log("true");
         replace("/dashboard");
       } else {
         replace("/getting-started");
