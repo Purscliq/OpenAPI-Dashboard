@@ -1,18 +1,15 @@
 "use client";
 
 import React, { useEffect } from "react";
+import Link from "next/link";
 import {
   CustomInput as Input,
   CustomTable as Table,
 } from "@/lib/AntdComponents";
-import { DatePicker, Avatar, Typography } from "antd";
-import DeleteIcon from "@/assets/svg/DeleteIcon";
+import { DatePicker, Avatar, Typography, Dropdown } from "antd";
+import type { MenuProps } from "antd";
+
 import FilterIcon from "@/assets/svg/FilterIcon";
-import TableIcon from "@/assets/svg/TableIcon";
-import {
-  useReadAllTransactionsQuery,
-  useDeleteTransactionMutation,
-} from "@/services/business/index.service";
 
 interface CustomersType {
   id: string;
@@ -41,11 +38,51 @@ const InitialAvatar: React.FC<InitialAvatarProps> = ({ name }) => {
 };
 
 const CustomersTable = () => {
+  const items: MenuProps["items"] = [
+    {
+      label: <Link href="/customers/details">View Details</Link>,
+      key: "0",
+    },
+  ];
+
+  const data = [
+    {
+      name: "Cruise Tech",
+      created_at: "Feb 9th, 2024",
+      customer_type: "Individual",
+      status: "Active",
+    },
+    {
+      name: "Cruise Tech",
+      created_at: "Feb 9th, 2024",
+      customer_type: "Individual",
+      status: "Active",
+    },
+    {
+      name: "Cruise Tech",
+      created_at: "Feb 9th, 2024",
+      customer_type: "Individual",
+      status: "Inactive",
+    },
+    {
+      name: "Cruise Tech",
+      created_at: "Feb 9th, 2024",
+      customer_type: "Individual",
+      status: "Active",
+    },
+  ];
+
   const columns = [
     {
       title: "Name",
       dataIndex: "name",
       sorter: true,
+      render: (text: string, record: any) => (
+        <span className="flex gap-3 items-center">
+          <InitialAvatar name={text} />
+          {record.name}
+        </span>
+      ),
     },
     {
       title: "Created",
@@ -61,17 +98,25 @@ const CustomersTable = () => {
       title: "Status",
       dataIndex: "status",
       sorter: true,
+      render: (text: string) => (
+        <span className={`text-${text === "Active" ? "green" : "red"}-500`}>
+          {text}
+        </span>
+      ),
     },
     {
       title: "Actions",
       render: () => (
-        <span className="flex items-center space-x-4">
-          <button type="button" title="Edit" className="">
-            Edit
-          </button>
-          <button type="button" title="Delete" className="">
-            <DeleteIcon />
-          </button>
+        <span className="flex items-center">
+          <Dropdown menu={{ items }} trigger={["click"]}>
+            <button
+              type="button"
+              title="Details"
+              className="font-bold text-2xl"
+            >
+              ...
+            </button>
+          </Dropdown>
         </span>
       ),
     },
@@ -89,9 +134,7 @@ const CustomersTable = () => {
         </div>
       </div>
       <div className="relative overflow-x-auto  sm:rounded-lg w-full">
-        <Avatar size="large">CT</Avatar>
-        <InitialAvatar name="Cruise Tech" />
-        <Table columns={columns} dataSource={[]} />
+        <Table columns={columns} dataSource={data} />
       </div>
     </div>
   );
