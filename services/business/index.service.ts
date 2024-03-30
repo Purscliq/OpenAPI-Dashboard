@@ -68,7 +68,10 @@ export const {
   useReadTransactionQuery,
   useDeleteTransactionMutation,
   useInviteUserMutation,
+<<<<<<<<< Temporary merge branch 1
   useGetbusinessQuery,
-  useUpdatebusinessMutation,
+  useUpdatebusinessMutation
+=========
   useGetTeamMembersQuery,
+>>>>>>>>> Temporary merge branch 2
 } = businessApi;
