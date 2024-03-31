@@ -59,6 +59,13 @@ export const businessApi = createApi({
         body,
       }),
     }),
+    createUploadFile: builder.mutation({
+      query: (body) => ({
+        url: "/api/v1/business/image-upload",
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
@@ -71,4 +78,5 @@ export const {
   useGetTeamMembersQuery,
   useGetbusinessQuery,
   useUpdatebusinessMutation,
+  useCreateUploadFileMutation,
 } = businessApi;
