@@ -32,7 +32,7 @@ const BusinessDetailsTab = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!formData.address || !formData.business_type ) {
+    if (!formData.address || !formData.business_type) {
       message.error("Please fill in all fields");
       return;
     }
@@ -106,8 +106,8 @@ const BusinessDetailsTab = () => {
                 required
                 value={formData.address}
                 onChange={handleInputChange}
-                disabled={!!business?.data?.address}  
-                              className="p-2 border w-full rounded-md bg-white text-sm text-gray-700 shadow-sm"
+                disabled={!!business?.data?.address}
+                className="p-2 border w-full rounded-md bg-white text-sm text-gray-700 shadow-sm"
               />
             </div>
 
@@ -128,7 +128,8 @@ const BusinessDetailsTab = () => {
                   { value: "private", label: "Private" },
                   { value: "public", label: "Public" },
                 ]}
-                disabled={!!business?.data?.business_type}                className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-none"
+                disabled={!!business?.data?.business_type}
+                className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-none"
               />
             </div>
 
@@ -145,7 +146,8 @@ const BusinessDetailsTab = () => {
                 name="tin"
                 placeholder="Enter your TIN"
                 value={formData.tin}
-                disabled={!!business?.data?.tin}                onChange={handleInputChange}
+                disabled={!!business?.data?.tin}
+                onChange={handleInputChange}
                 className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
               />
             </div>

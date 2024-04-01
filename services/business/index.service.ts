@@ -5,6 +5,7 @@ export const businessApi = createApi({
   reducerPath: "business",
   refetchOnReconnect: true,
   refetchOnMountOrArgChange: true,
+  tagTypes: ["account"],
   baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
     createTransaction: builder.mutation({
@@ -40,6 +41,12 @@ export const businessApi = createApi({
         body,
       }),
     }),
+    getTeamMembers: builder.query({
+      query: () => ({
+        url: "/api/v1/business/team-members",
+        method: "GET",
+      }),
+    }),
     getbusiness: builder.query({
       query: () => ({
         url: "/api/v1/business",
@@ -50,13 +57,48 @@ export const businessApi = createApi({
       query: (body) => ({
         url: "/api/v1/business/update",
         method: "PUT",
-        body
+        body,
       }),
     }),
-    getTeamMembers: builder.query({
+    createSubaccount: builder.mutation({
+      query: (body) => ({
+        url: "api/v1/business/subaccounts",
+        method: "POST",
+        body: body,
+      }),
+      invalidatesTags: ["account"],
+    }),
+    getSubaccount: builder.query({
       query: () => ({
-        url: "/api/v1/business/team-members",
+        url: "api/v1/business/subaccounts",
         method: "GET",
+      }),
+      providesTags: ["account"],
+    }),
+    updateDirector: builder.mutation({
+      query: (body) => ({
+        url: "api/v1/business/director/update",
+        method: "PATCH",
+        body: body,
+      }),
+    }),
+    getDirector: builder.query({
+      query: () => ({
+        url: "api/v1/business/director",
+        method: "GET",
+      }),
+    }),
+    verifyBvn: builder.mutation({
+      query: () => ({
+        url: "api/v1/business/check-bvn",
+        method: "POST",
+      }),
+    }),
+    createUploadFile: builder.mutation({
+      query: (body) => ({
+        url: "/api/v1/business/image-upload",
+        method: "POST",
+        body,
       }),
     }),
   }),
@@ -70,5 +112,10 @@ export const {
   useInviteUserMutation,
   useGetbusinessQuery,
   useUpdatebusinessMutation,
+  useGetSubaccountQuery,
+  useCreateSubaccountMutation,
+  useUpdateDirectorMutation,
+  useGetDirectorQuery,
+  useVerifyBvnMutation,
   useGetTeamMembersQuery,
 } = businessApi;

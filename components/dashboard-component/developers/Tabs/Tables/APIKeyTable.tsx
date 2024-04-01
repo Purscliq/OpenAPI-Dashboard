@@ -51,6 +51,11 @@ const APIKeyTable = () => {
       sorter: true,
     },
     {
+      title: "Service",
+      dataIndex: "service",
+      sorter: true,
+    },
+    {
       title: "Source IP",
       dataIndex: "sourceIP",
       sorter: true,

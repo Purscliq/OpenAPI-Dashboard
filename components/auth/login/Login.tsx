@@ -165,7 +165,7 @@ const Login = () => {
                 </div>
 
                 <div className="col-span-6 space-y-2 sm:items-center sm:gap-4">
-                  <button className="flex justify-between  w-full  bg-black px-12 text-left py-6 text-md font-medium text-white focus:outline-none">
+                  <button  className="flex justify-between  w-full  bg-black px-12 text-left py-6 text-md font-medium text-white focus:outline-none">
                     Proceed to my Account
                     <span>
                       {isLoading || isGettingUser ? (
