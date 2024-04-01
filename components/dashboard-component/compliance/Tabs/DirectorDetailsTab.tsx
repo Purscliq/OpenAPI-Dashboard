@@ -1,4 +1,9 @@
-import React from "react";
+import React, {
+  ChangeEventHandler,
+  FormEventHandler,
+  useEffect,
+  useState,
+} from "react";
 import {
   CustomInput as Input,
   CustomDatePicker as DatePicker,
@@ -6,19 +11,18 @@ import {
 import { Select } from "antd";
 import type { UploadProps } from "antd";
 import { message, Upload } from "antd";
-
-import ImageIcon from "@/assets/svg/ImageIcon";
 import AttachIcon from "@/assets/svg/AttachIcon";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
+import Image from "next/image";
+import { useFetchCountryQuery } from "@/services/country/index.service";
+import {
+  useGetDirectorQuery,
+  useUpdateDirectorMutation,
+  useVerifyBvnMutation,
+} from "@/services/business/index.service";
 
-const { Option } = Select;
 const { Dragger } = Upload;
-
-const selectBefore = (
-  <Select defaultValue="+234">
-    <Option value="+234">+234</Option>
-    <Option value="+233">+233</Option>
-  </Select>
-);
 
 const props: UploadProps = {
   name: "file",
@@ -40,7 +44,136 @@ const props: UploadProps = {
   },
 };
 
+const data = {
+  bvn: "",
+  legal_first_name: "",
+  legal_last_name: "",
+  phone_number: "",
+  gender: "",
+  dob: "",
+  nationality: "Nigeria",
+  address: "",
+  id_card_url: "",
+  signature_url: "",
+  proof_of_add_url: "",
+};
 const DirectorDetailsTab = () => {
+  const gender = [
+    { label: "Male", value: "Male" },
+    { label: "Female", value: "Female" },
+  ];
+  const { data: country } = useFetchCountryQuery({});
+  const { data: director, refetch } = useGetDirectorQuery({});
+  const [update, { isLoading }] = useUpdateDirectorMutation();
+  const [verifyBvn, { isLoading: isVerifying }] = useVerifyBvnMutation();
+
+  const [bvnError, setBvnError] = useState("");
+  const [formData, setFormData] = useState(data);
+  const [selectedCountry, setSelectedCountry] = useState(
+    "https://flagcdn.com/ng.svg"
+  );
+  const [updatedData, setUpdatedData] = useState(data);
+
+  const handleChange: ChangeEventHandler<
+    HTMLInputElement | HTMLTextAreaElement
+  > = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target?.name]: e.target?.value,
+    }));
+    if (e.target?.name === "bvn") {
+      if (e.target?.value?.length === 11) {
+        verifyBvn({
+          bvn: parseInt(e.target.value),
+          first_name: formData.legal_first_name,
+          last_name: formData.legal_last_name,
+          dob: formData.dob,
+        })
+          .then((res) => {
+            setBvnError("BVN verified successfully ");
+            console.log(res);
+          })
+          .catch((err) => {
+            setBvnError("Issue verifying BVN");
+            console.log(err);
+          });
+      } else {
+        setBvnError("BVN must be exactly 11 digits");
+      }
+    }
+  };
+
+  const handleCountryChange = (
+    value: string,
+    option: Record<string, string> | Record<string, string>[]
+  ) => {
+    if (!Array.isArray(option)) {
+      setSelectedCountry(option?.flag);
+      setFormData((prev) => ({ ...prev, Nationality: option?.name }));
+    }
+  };
+
+  const isFormFilled = () => {
+    return (
+      formData.bvn &&
+      formData.legal_first_name &&
+      formData.legal_last_name &&
+      formData.phone_number &&
+      formData.gender &&
+      formData.dob &&
+      formData.nationality &&
+      formData.address
+    );
+  };
+  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+    if (!bvnError && isFormFilled()) {
+      console.log(formData);
+      update(formData)
+        .unwrap()
+        .then((res) => {
+          refetch();
+          message.success("Dieector profile updated successfully");
+        })
+        .catch((error) => {
+          console.error("Error updating business:", error);
+        });
+    }
+  };
+
+  useEffect(() => {
+    if (director?.data) {
+      setFormData({
+        ...director.data,
+      });
+      setUpdatedData({
+        ...director.data,
+      });
+    }
+  }, [director]);
+
+  const handleCancel = () => {
+    if (updatedData) {
+      setFormData({
+        ...updatedData,
+      });
+    } else {
+      setFormData({
+        bvn: "",
+        legal_first_name: "",
+        legal_last_name: "",
+        phone_number: "",
+        gender: "",
+        dob: "",
+        nationality: "Nigeria",
+        address: "",
+        id_card_url: "",
+        signature_url: "",
+        proof_of_add_url: "",
+      });
+    }
+  };
+
   return (
     <section className="bg-white py-4 px-4 space-y-4">
       <div className="sm:grid grid-cols-8 gap-12 w-full space-y-4 md:space-y-0">
@@ -52,165 +185,141 @@ const DirectorDetailsTab = () => {
         </div>
 
         <div className="p-2 col-span-5 md:mr-10 lg:mr-20">
-          <form className="space-y-4">
-            <div className="flex flex-col items-start justify-start gap-[0.3rem]">
-              <label
-                htmlFor="BVN"
-                className="block text-sm font-semibold text-gray-700"
-              >
+          <form onSubmit={handleSubmit} className="flex flex-col gap-[1rem]">
+            <div className="flex items-center justify-between gap-[1rem]">
+              <span className="w-full">
+                <label className="block text-gray-700 text-sm font-semibold mb-2">
+                  Legal First name
+                </label>
+                <Input
+                  value={formData.legal_first_name}
+                  onChange={handleChange}
+                  name="legal_first_name"
+                  required
+                  placeholder="First Name"
+                  disabled={formData.legal_first_name !== ""}
+                  className="!w-full"
+                />
+              </span>
+              <span className="w-full">
+                <label className="block text-gray-700 text-sm font-semibold mb-2">
+                  Legal Last name
+                </label>
+                <Input
+                  value={formData.legal_last_name}
+                  onChange={handleChange}
+                  name="legal_last_name"
+                  required
+                  placeholder="Last Name"
+                  disabled={formData.legal_last_name !== ""}
+                  className="!w-full"
+                />
+              </span>
+            </div>
+            <div className="flex flex-col gap-[0.1rem]">
+              <label className="block text-gray-700 text-sm font-semibold mb-2">
                 BVN
               </label>
-
-              <Input
-                type="number"
-                id="BVN"
-                name="BVN"
-                placeholder="1234567890"
-                required
-                className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
-              />
-            </div>
-
-            <div className="md:flex gap-4 justify-between space-y-4 md:space-y-0">
-              <div className="flex flex-col items-start justify-start gap-[0.3rem] w-full">
-                <label
-                  htmlFor="FirstName"
-                  className="block text-sm font-semibold text-gray-700"
-                >
-                  Legal First Name
-                </label>
-
+              <span>
                 <Input
-                  type="text"
-                  id="FirstName"
-                  name="first_name"
-                  placeholder="John"
+                  max={11}
+                  min={11}
+                  name="bvn"
                   required
-                  className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
+                  onChange={handleChange}
+                  value={formData.bvn}
+                  placeholder="BVN"
+                  disabled={formData.bvn !== ""}
                 />
-              </div>
-              <div className="flex flex-col items-start justify-start gap-[0.3rem] w-full">
-                <label
-                  htmlFor="LastName"
-                  className="block text-sm font-semibold text-gray-700"
-                >
-                  Legal Last Name
-                </label>
-
-                <Input
-                  type="text"
-                  id="LastName"
-                  name="first_name"
-                  placeholder="Doe"
-                  required
-                  className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
-                />
-              </div>
+                {bvnError && (
+                  <p className="text-red-500 text-[14px] font-[400]">
+                    {bvnError}
+                  </p>
+                )}
+              </span>
             </div>
-
-            <div className="flex flex-col items-start justify-start gap-[0.3rem]">
-              <label
-                htmlFor="phone"
-                className="block text-sm font-semibold text-gray-700"
-              >
+            <div className="flex flex-col gap-[0.1rem]">
+              <label className="block text-gray-700 text-sm font-semibold mb-2">
                 Phone Number
               </label>
-
-              <Input
-                addonBefore={selectBefore}
-                defaultValue=""
-                type="tel"
-                id="phone"
-                name="phone number"
-                placeholder="801234567890"
-                required
+              <PhoneInput
+                country={"ng"}
+                containerClass="!w-full"
+                inputClass="phone-input-input !w-full !disabled:text-gray-700 !"
+                value={formData.phone_number}
+                disabled={formData.phone_number !== ""}
+                onChange={(value) =>
+                  setFormData((prev) => ({ ...prev, phone_number: value }))
+                }
               />
             </div>
-            <div className="flex flex-col items-start justify-start gap-[0.3rem]">
-              <label
-                htmlFor="gender"
-                className="block text-sm font-semibold text-gray-700"
-              >
+            <div className="flex flex-col gap-[0.1rem]">
+              <label className="block text-gray-700 text-sm font-semibold mb-2">
                 Gender
               </label>
-
               <Select
-                id="gender"
-                defaultValue=""
-                options={[
-                  { value: "", label: "Select an option" },
-                  { value: "male", label: "Male" },
-                  { value: "female", label: "Female" },
-                ]}
-                className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-none"
+                onChange={(value) =>
+                  setFormData((prev) => ({ ...prev, gender: value }))
+                }
+                value={formData.gender}
+                options={gender}
+                disabled={formData.gender !== ""}
               />
             </div>
-            <div className="flex flex-col items-start justify-start gap-[0.3rem]">
-              <label
-                htmlFor="DOB"
-                className="block text-sm font-semibold text-gray-700"
-              >
+            <div className="flex flex-col gap-[0.1rem]">
+              <label className="block text-gray-700 text-sm font-semibold mb-2">
                 Date of Birth
               </label>
-              <DatePicker className="w-full" />
+              <DatePicker
+                disabled={formData.dob !== ""}
+                onChange={(value, date) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    dob: `${date}`,
+                  }))
+                }
+              />
             </div>
-            <div className="flex flex-col items-start justify-start gap-[0.3rem]">
-              <label
-                htmlFor="FirstName"
-                className="block text-sm font-semibold text-gray-700"
-              >
+            <div className="flex flex-col gap-[0.1rem]">
+              <label className="block text-gray-700 text-sm font-semibold mb-2">
                 Nationality
               </label>
-
               <Select
-                id="RegCountry"
-                defaultValue=""
-                options={[
-                  { value: "", label: "Select an option" },
-                  { value: "Nigerian", label: "Nigerian" },
-                  { value: "Ghanian", label: "Ghanian" },
-                ]}
-                className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-none"
+                showSearch
+                placeholder="Select a country"
+                value={formData.nationality}
+                optionFilterProp="value"
+                onChange={handleCountryChange}
+                style={{ width: "100%" }}
+                disabled={formData.nationality !== ""}
+                options={country}
+                defaultValue={"Nigeria"}
+                suffixIcon={
+                  <Image
+                    src={selectedCountry}
+                    alt="flag"
+                    width={40}
+                    height={45}
+                    className="border"
+                  />
+                }
               />
             </div>
-            <div className="flex flex-col items-start justify-start gap-[0.3rem]">
-              <label
-                htmlFor="Address"
-                className="block text-sm font-semibold text-gray-700"
-              >
+            <div className="flex flex-col gap-[0.1rem]">
+              <label className="block text-gray-700 text-sm font-semibold mb-2">
                 Residential Address
               </label>
-
               <Input
-                type="text"
-                id="Address"
-                name="residential address"
-                placeholder="John"
+                value={formData.address}
+                name="address"
+                onChange={handleChange}
+                disabled={formData.address !== ""}
                 required
-                className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
-              />
-            </div>
-            <div className="flex flex-col items-start justify-start gap-[0.3rem]">
-              <label
-                htmlFor="FirstName"
-                className="block text-sm font-semibold text-gray-700"
-              >
-                Country
-              </label>
-
-              <Select
-                id="RegCountry"
-                defaultValue=""
-                options={[
-                  { value: "", label: "Select an option" },
-                  { value: "Nigeria", label: "Nigeria" },
-                  { value: "Ghana", label: "Ghana" },
-                ]}
-                className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-none"
+                placeholder="2,oseni close..."
               />
             </div>
 
-            {/* upload */}
+            {/* upload
             <Dragger
               {...props}
               className="flex flex-col items-center  gap-[0.3rem]"
@@ -225,7 +334,7 @@ const DirectorDetailsTab = () => {
               <p className="ant-upload-hint">
                 SVG, PNG, JPG or GIF (max. 400 x 400px)
               </p>
-            </Dragger>
+            </Dragger> */}
 
             <div className="flex flex-col gap-[0.3rem]">
               <label
@@ -289,12 +398,14 @@ const DirectorDetailsTab = () => {
               <div className="flex justify-between gap-4 mt-8">
                 <button
                   type="submit"
+                  disabled={isLoading}
                   className="w-full bg-black text-center text-md rounded-md px-4 py-2 font-medium text-white focus:outline-none"
                 >
-                  Save
+                  {isLoading ? "Saving..." : "Save"}
                 </button>
                 <button
                   type="button"
+                  onClick={handleCancel}
                   className="w-full text-center text-md rounded-md px-4 py-2 font-medium text-black focus:outline-none"
                 >
                   Cancel

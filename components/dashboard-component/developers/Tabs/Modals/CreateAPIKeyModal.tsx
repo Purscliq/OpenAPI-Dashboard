@@ -8,6 +8,7 @@ const CreateAPIKeyModal: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [name, setName] = useState("");
   const [validity, setValidity] = useState("");
+  const [service, setService] = useState("");
   const [sourceIP, setSourceIP] = useState("");
   const [createApiKey, { isLoading }] = useCreateApiKeyMutation();
 
@@ -105,6 +106,25 @@ const CreateAPIKeyModal: React.FC = () => {
             </div>
             <div className="space-y-1">
               <label
+                htmlFor="service"
+                className="text-[#25324B] text-base font-semibold"
+              >
+                Service
+              </label>
+              <select
+                id="service"
+                value={service}
+                onChange={(e) => setService(e.target.value)}
+                required
+                className="w-full px-3 py-2 resize-none appearance-none bg-transparent outline-none border focus:border-black shadow-sm rounded-lg"
+              >
+                <option value="">Select a service</option>
+                <option value="Service1">Service1</option>
+                <option value="Service2">Service2</option>
+              </select>
+            </div>
+            {/* <div className="space-y-1">
+              <label
                 htmlFor="validity"
                 className="text-[#25324B] text-base font-semibold"
               >
@@ -121,7 +141,7 @@ const CreateAPIKeyModal: React.FC = () => {
                 <option value="Time1">Time1</option>
                 <option value="Time2">Time2</option>
               </select>
-            </div>
+            </div> */}
             <div className="space-y-1">
               <label
                 htmlFor="sourceIP"

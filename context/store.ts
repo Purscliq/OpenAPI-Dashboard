@@ -7,6 +7,7 @@ import { userApi } from "@/services/users/index.service";
 import userSlice from "@/slice/userSlice";
 import { configureStore } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { CountrySlice } from "@/services/country/index.service";
 
 export const store = configureStore({
   reducer: {
@@ -16,7 +17,7 @@ export const store = configureStore({
     [webhooksApi.reducerPath]: webhooksApi.reducer,
     [whitelistApi.reducerPath]: whitelistApi.reducer,
     [businessApi.reducerPath]: businessApi.reducer,
-
+    [CountrySlice.reducerPath]: CountrySlice.reducer,
     user: userSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
@@ -26,7 +27,8 @@ export const store = configureStore({
       apiKeysApi.middleware,
       webhooksApi.middleware,
       whitelistApi.middleware,
-      businessApi.middleware
+      businessApi.middleware,
+      CountrySlice.middleware
     ),
 });
 

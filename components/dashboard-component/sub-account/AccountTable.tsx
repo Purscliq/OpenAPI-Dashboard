@@ -5,7 +5,7 @@ import {
 } from "@/lib/AntdComponents";
 import FilterIcon from "@/assets/svg/FilterIcon";
 import TableIcon from "@/assets/svg/TableIcon";
-import { useGetSubaccountQuery } from "@/services/users/index.service";
+import { useGetSubaccountQuery } from "@/services/business/index.service";
 
 const AccountTable = () => {
   const { data: subaccounts, isLoading } = useGetSubaccountQuery({});

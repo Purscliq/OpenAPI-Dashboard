@@ -5,7 +5,6 @@ import { updateUser } from "@/slice/userSlice";
 export const userApi = createApi({
   reducerPath: "userApi",
   refetchOnReconnect: true,
-  tagTypes: ["account"],
   refetchOnMountOrArgChange: true,
   baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
@@ -25,27 +24,12 @@ export const userApi = createApi({
           });
       },
     }),
-    createSubaccount: builder.mutation({
-      query: (body) => ({
-        url: "api/v1/business/subaccounts",
-        method: "POST",
-        body:  body ,
-      }),
-      invalidatesTags: ["account"],
-    }),
-    getSubaccount: builder.query({
-      query: () => ({
-        url: "api/v1/business/subaccounts",
-        method: "GET",
-      }),
-      providesTags: ["account"],
-    }),
+  
   }),
 });
 
 export const {
   useProfileQuery,
   useLazyProfileQuery,
-  useGetSubaccountQuery,
-  useCreateSubaccountMutation,
+ 
 } = userApi;

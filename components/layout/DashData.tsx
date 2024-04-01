@@ -2,6 +2,7 @@ import Account from "@/assets/svg/Account";
 import Auth from "@/assets/svg/Auth";
 import Compliance from "@/assets/svg/Compliance";
 import Customer from "@/assets/svg/Customer";
+import CustomersIcon from "@/assets/svg/CustomersIcon";
 import DashIcon from "@/assets/svg/DashIcon";
 import DeveloperIcon from "@/assets/svg/DeveloperIcon";
 import DisputeIcon from "@/assets/svg/DisputeIcon";
@@ -58,6 +59,11 @@ export const sidebarData2: MenuProps["items"] = [
         key: "external-loans",
       },
     ],
+  },
+  {
+    label: <Link href="/customers">Customers</Link>,
+    icon: <CustomersIcon className="mr-1" />,
+    key: "customers",
   },
   {
     label: <Link href="/transactions">Transactions</Link>,
