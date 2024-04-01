@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   CustomInput as Input,
   CustomDatePicker as DatePicker,
 } from "@/lib/AntdComponents";
 import { Select } from "antd";
-import type { UploadProps } from "antd";
+import type { UploadProps, UploadFile } from "antd";
 import { message, Upload } from "antd";
+import { useCreateUploadFileMutation } from "@/services/business/index.service";
 
 import ImageIcon from "@/assets/svg/ImageIcon";
 import AttachIcon from "@/assets/svg/AttachIcon";
@@ -20,27 +21,47 @@ const selectBefore = (
   </Select>
 );
 
-const props: UploadProps = {
-  name: "file",
-  multiple: true,
-  action: "https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188",
-  onChange(info) {
-    const { status } = info.file;
-    if (status !== "uploading") {
-      console.log(info.file, info.fileList);
-    }
-    if (status === "done") {
-      message.success(`${info.file.name} file uploaded successfully.`);
-    } else if (status === "error") {
-      message.error(`${info.file.name} file upload failed.`);
-    }
-  },
-  onDrop(e) {
-    console.log("Dropped files", e.dataTransfer.files);
-  },
-};
-
 const DirectorDetailsTab = () => {
+  const [createUploadFile, { isLoading }] = useCreateUploadFileMutation();
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+
+  const handleUpload = async ({ file }: { file: UploadFile }) => {
+    try {
+      if (!file.originFileObj) {
+        throw new Error("No file object found.");
+      }
+
+      const formData = new FormData();
+      formData.append("file", file.originFileObj);
+
+      const response = await createUploadFile(formData);
+
+      if ("data" in response) {
+        message.success(`${file.name} uploaded successfully.`);
+      } else {
+        message.error(`Failed to upload ${file.name}.`);
+      }
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      message.error(`Failed to upload ${file.name}.`);
+    }
+  };
+
+  const props: UploadProps = {
+    name: "file",
+    multiple: true,
+    action: "/api/v1/business/image-upload",
+    onChange(info) {
+      setFileList(info.fileList);
+      handleUpload(info);
+    },
+    onRemove(file) {
+      setFileList((prevFileList) =>
+        prevFileList.filter((item) => item.uid !== file.uid)
+      );
+    },
+  };
+
   return (
     <section className="bg-white py-4 px-4 space-y-4">
       <div className="sm:grid grid-cols-8 gap-12 w-full space-y-4 md:space-y-0">
