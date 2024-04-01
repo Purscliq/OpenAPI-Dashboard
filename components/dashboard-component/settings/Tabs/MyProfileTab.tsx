@@ -9,12 +9,15 @@ import {
   useDisable2faMutation,
 } from "@/services/auth/index.service";
 import { message } from "antd";
+import { passwordSchema } from "@/lib/PasswordSchema";
 
 const MyProfileTab = () => {
   const [formData, setFormData] = useState({
     password: "",
     old_password: "",
   });
+  const [validationError, setValidationError] = useState("");
+
   const { data: user } = useProfileQuery({});
   const [disabled, { isLoading }] = useDisable2faMutation();
   const [changePassword, { isLoading: ischanging }] =
@@ -32,22 +35,28 @@ const MyProfileTab = () => {
       });
   };
   const handlechange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    if (e.target.name === "password")
+      passwordSchema
+        .validate({ password: e.target?.value })
+        .then(() => setValidationError(""))
+        .catch((error) => setValidationError(error.message));
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target?.name]: e.target?.value,
+    }));
   };
   const handleUpdatePass = () => {
-    changePassword({})
-      .unwrap()
-      .then((res) => {
-        console.log(res);
-        message.success("Password updated successfully");
-      })
-      .catch((err) => {
-        message.error(err?.data?.message || "Something went wrong");
-      });
+    if (!validationError) {
+      changePassword({ ...formData })
+        .unwrap()
+        .then((res) => {
+          console.log(res);
+          message.success("Password updated successfully");
+        })
+        .catch((err) => {
+          message.error(err?.data?.message || "Something went wrong");
+        });
+    }
   };
   return (
     <section className="bg- py-4 px-0 space-y-4">
@@ -145,7 +154,7 @@ const MyProfileTab = () => {
               </p>
             </span>
           </div>
-          <form onSubmit={handleUpdatePass} className="md:col-span-5 space-y-4 md:mr-16 lg:mr-24">
+          <form className="md:col-span-5 space-y-4 md:mr-16 lg:mr-24">
             <div className="flex flex-col items-start justify-start gap-[0.3rem]">
               <label
                 htmlFor="oldPassword"
@@ -179,12 +188,15 @@ const MyProfileTab = () => {
                 required
                 className="p-2 border w-full rounded-md bg-white text-sm text-gray-700 shadow-sm"
               />
+              {formData.password && validationError && (
+                <p className="text-red-500">{validationError}</p>
+              )}
             </div>
             <div className="">
               <div className="mt-8">
                 <button
-                  type="submit"
                   disabled={ischanging}
+                  onClick={handleUpdatePass}
                   className="w-full bg-black text-center text-md rounded-md px-4 py-2 font-medium text-white focus:outline-none"
                 >
                   {ischanging ? "Updating..." : "Update"}

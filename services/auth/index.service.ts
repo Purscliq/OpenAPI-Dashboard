@@ -84,7 +84,7 @@ export const authApi = createApi({
     }),
     changePassword: builder.mutation({
       query: (body) => ({
-        url: "/api/v1/auth/update-forgotten-password",
+        url: "/api/v1/auth/reset-password",
         method: "POST",
         body,
       }),

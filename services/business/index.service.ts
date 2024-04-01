@@ -40,12 +40,6 @@ export const businessApi = createApi({
         body,
       }),
     }),
-    getTeamMembers: builder.query({
-      query: () => ({
-        url: "/api/v1/business/team-members",
-        method: "GET",
-      }),
-    }),
     getbusiness: builder.query({
       query: () => ({
         url: "/api/v1/business",
@@ -59,11 +53,10 @@ export const businessApi = createApi({
         body,
       }),
     }),
-    createUploadFile: builder.mutation({
-      query: (body) => ({
-        url: "/api/v1/business/image-upload",
-        method: "POST",
-        body,
+    getTeamMembers: builder.query({
+      query: () => ({
+        url: "/api/v1/business/team-members",
+        method: "GET",
       }),
     }),
   }),
@@ -75,8 +68,7 @@ export const {
   useReadTransactionQuery,
   useDeleteTransactionMutation,
   useInviteUserMutation,
-  useGetTeamMembersQuery,
   useGetbusinessQuery,
   useUpdatebusinessMutation,
-  useCreateUploadFileMutation,
+  useGetTeamMembersQuery,
 } = businessApi;
