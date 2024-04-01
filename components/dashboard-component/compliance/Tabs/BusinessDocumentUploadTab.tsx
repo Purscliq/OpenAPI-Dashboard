@@ -1,24 +1,10 @@
 import React from "react";
-import {
-  CustomInput as Input,
-  CustomDatePicker as DatePicker,
-} from "@/lib/AntdComponents";
-import { Select } from "antd";
 import type { UploadProps } from "antd";
 import { message, Upload } from "antd";
 
-import ImageIcon from "@/assets/svg/ImageIcon";
 import AttachIcon from "@/assets/svg/AttachIcon";
 
-const { Option } = Select;
 const { Dragger } = Upload;
-
-const selectBefore = (
-  <Select defaultValue="+234">
-    <Option value="+234">+234</Option>
-    <Option value="+233">+233</Option>
-  </Select>
-);
 
 const props: UploadProps = {
   name: "file",
@@ -55,7 +41,7 @@ const BusinessDocumentUploadTab = () => {
           <form className="space-y-4">
             <div className="flex flex-col gap-[0.3rem]">
               <label
-                htmlFor="IDCard"
+                htmlFor="CAC"
                 className="block text-sm font-semibold text-gray-700"
               >
                 Attach your CAC
@@ -63,7 +49,7 @@ const BusinessDocumentUploadTab = () => {
 
               <Dragger
                 {...props}
-                id="IDCard"
+                id="CAC"
                 className="flex items-center text-center  gap-[0.3rem]"
               >
                 <p className="ant-upload-text flex gap-4">
@@ -75,14 +61,14 @@ const BusinessDocumentUploadTab = () => {
 
             <div className="flex flex-col gap-[0.3rem]">
               <label
-                htmlFor="signature"
+                htmlFor="memorandum"
                 className="block text-sm font-semibold text-gray-700"
               >
                 Attach your memorandum and articles of association
               </label>
               <Dragger
                 {...props}
-                id="signature"
+                id="memorandum"
                 className="flex items-center text-center  gap-[0.3rem]"
               >
                 <p className="ant-upload-text flex gap-4">
@@ -94,14 +80,14 @@ const BusinessDocumentUploadTab = () => {
 
             <div className="flex flex-col gap-[0.3rem]">
               <label
-                htmlFor="ProofOfAddress"
+                htmlFor="TIN"
                 className="block text-sm font-semibold text-gray-700"
               >
-                Attach your cooperate affairs commission
+                Attach your TIN
               </label>
               <Dragger
                 {...props}
-                id="ProofOfAddress"
+                id="TIN"
                 className="flex items-center text-center gap-[0.3rem]"
               >
                 <p className="ant-upload-text flex gap-4">
