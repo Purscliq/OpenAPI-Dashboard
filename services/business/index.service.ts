@@ -57,7 +57,7 @@ export const businessApi = createApi({
       query: (body) => ({
         url: "/api/v1/business/update",
         method: "PUT",
-        body,
+        body
       }),
     }),
     createSubaccount: builder.mutation({
@@ -119,4 +119,5 @@ export const {
   useGetDirectorQuery,
   useVerifyBvnMutation,
   useGetTeamMembersQuery,
+  useCreateUploadFileMutation
 } = businessApi;
