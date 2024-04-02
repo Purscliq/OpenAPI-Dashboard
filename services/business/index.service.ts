@@ -89,9 +89,10 @@ export const businessApi = createApi({
       }),
     }),
     verifyBvn: builder.mutation({
-      query: () => ({
+      query: (body) => ({
         url: "api/v1/business/check-bvn",
         method: "POST",
+        body,
       }),
     }),
     createUploadFile: builder.mutation({

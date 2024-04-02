@@ -4,7 +4,6 @@ import React from "react";
 import { CustomTabs as Tabs } from "@/lib/AntdComponents";
 import type { TabsProps } from "antd";
 import DirectorDetailsTab from "./Tabs/DirectorDetailsTab";
-import DirectorVerificationTab from "./Tabs/DirectorVerificationTab";
 import BusinessDetailsTab from "./Tabs/BusinessDetailsTab";
 import BusinessDocumentUploadTab from "./Tabs/BusinessDocumentUploadTab";
 
@@ -17,16 +16,11 @@ const Compliance = () => {
     },
     {
       key: "2",
-      label: <span className="flex gap-2 px-2">Director Verification</span>,
-      children: <DirectorVerificationTab />,
-    },
-    {
-      key: "3",
       label: <span className="flex gap-2 px-2">Business Details</span>,
       children: <BusinessDetailsTab />,
     },
     {
-      key: "4",
+      key: "3",
       label: <span className="flex gap-2 px-2">Business Document Upload</span>,
       children: <BusinessDocumentUploadTab />,
     },
