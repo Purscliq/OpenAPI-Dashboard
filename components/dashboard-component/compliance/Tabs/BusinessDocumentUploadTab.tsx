@@ -1,46 +1,36 @@
 import React from "react";
-import {
-  CustomInput as Input,
-  CustomDatePicker as DatePicker,
-} from "@/lib/AntdComponents";
-import { Select } from "antd";
-import type { UploadProps } from "antd";
 import { message, Upload } from "antd";
-
-import ImageIcon from "@/assets/svg/ImageIcon";
 import AttachIcon from "@/assets/svg/AttachIcon";
+import type { UploadProps, UploadFile } from "antd";
+import { useCreateUploadFileMutation } from "@/services/business/index.service";
 
-const { Option } = Select;
 const { Dragger } = Upload;
 
-const selectBefore = (
-  <Select defaultValue="+234">
-    <Option value="+234">+234</Option>
-    <Option value="+233">+233</Option>
-  </Select>
-);
-
-const props: UploadProps = {
-  name: "file",
-  multiple: true,
-  action: "https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188",
-  onChange(info) {
-    const { status } = info.file;
-    if (status !== "uploading") {
-      console.log(info.file, info.fileList);
-    }
-    if (status === "done") {
-      message.success(`${info.file.name} file uploaded successfully.`);
-    } else if (status === "error") {
-      message.error(`${info.file.name} file upload failed.`);
-    }
-  },
-  onDrop(e) {
-    console.log("Dropped files", e.dataTransfer.files);
-  },
-};
-
 const BusinessDocumentUploadTab = () => {
+  const [createUploadFile, { isLoading }] = useCreateUploadFileMutation();
+
+  const handleUpload = async ({ file }: { file: UploadFile }) => {
+    try {
+      if (file.originFileObj) {
+        const formData = new FormData();
+        formData.append("file", file.originFileObj);
+
+        const response = await createUploadFile(formData);
+
+        if ("data" in response) {
+          message.success(`${file.name} uploaded successfully.`);
+        } else {
+          message.error(`Failed to upload ${file.name}.`);
+        }
+      } else {
+        message.error(`No file selected.`);
+      }
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      message.error(`Failed to upload ${file.name}.`);
+    }
+  };
+
   return (
     <section className="bg-white py-4 px-4 space-y-4">
       <div className="sm:grid grid-cols-8 gap-12 w-full space-y-4 md:space-y-0">
@@ -55,15 +45,17 @@ const BusinessDocumentUploadTab = () => {
           <form className="space-y-4">
             <div className="flex flex-col gap-[0.3rem]">
               <label
-                htmlFor="IDCard"
+                htmlFor="CAC"
                 className="block text-sm font-semibold text-gray-700"
               >
                 Attach your CAC
               </label>
 
               <Dragger
-                {...props}
-                id="IDCard"
+                name="CAC"
+                multiple
+                action="/api/v1/business/image-upload"
+                onChange={handleUpload}
                 className="flex items-center text-center  gap-[0.3rem]"
               >
                 <p className="ant-upload-text flex gap-4">
@@ -75,14 +67,17 @@ const BusinessDocumentUploadTab = () => {
 
             <div className="flex flex-col gap-[0.3rem]">
               <label
-                htmlFor="signature"
+                htmlFor="memorandum"
                 className="block text-sm font-semibold text-gray-700"
               >
                 Attach your memorandum and articles of association
               </label>
               <Dragger
-                {...props}
-                id="signature"
+                id="memorandum"
+                name="memorandum"
+                multiple
+                action="/api/v1/business/image-upload"
+                onChange={handleUpload}
                 className="flex items-center text-center  gap-[0.3rem]"
               >
                 <p className="ant-upload-text flex gap-4">
@@ -94,14 +89,17 @@ const BusinessDocumentUploadTab = () => {
 
             <div className="flex flex-col gap-[0.3rem]">
               <label
-                htmlFor="ProofOfAddress"
+                htmlFor="TIN"
                 className="block text-sm font-semibold text-gray-700"
               >
-                Attach your cooperate affairs commission
+                Attach your TIN
               </label>
               <Dragger
-                {...props}
-                id="ProofOfAddress"
+                id="TIN"
+                name="TIN"
+                multiple
+                action="/api/v1/business/image-upload"
+                onChange={handleUpload}
                 className="flex items-center text-center gap-[0.3rem]"
               >
                 <p className="ant-upload-text flex gap-4">

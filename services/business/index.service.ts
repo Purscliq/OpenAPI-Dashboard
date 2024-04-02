@@ -118,4 +118,5 @@ export const {
   useGetDirectorQuery,
   useVerifyBvnMutation,
   useGetTeamMembersQuery,
+  useCreateUploadFileMutation
 } = businessApi;
