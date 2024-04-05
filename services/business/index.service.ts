@@ -57,12 +57,12 @@ export const businessApi = createApi({
       query: (body) => ({
         url: "/api/v1/business/update",
         method: "PUT",
-        body
+        body,
       }),
     }),
     createSubaccount: builder.mutation({
       query: (body) => ({
-        url: "api/v1/business/subaccounts",
+        url: "/api/v1/business/account/subaccounts",
         method: "POST",
         body: body,
       }),
@@ -70,7 +70,7 @@ export const businessApi = createApi({
     }),
     getSubaccount: builder.query({
       query: () => ({
-        url: "api/v1/business/subaccounts",
+        url: "/api/v1/business/account/subaccounts",
         method: "GET",
       }),
       providesTags: ["account"],
@@ -119,5 +119,5 @@ export const {
   useGetDirectorQuery,
   useVerifyBvnMutation,
   useGetTeamMembersQuery,
-  useCreateUploadFileMutation
+  useCreateUploadFileMutation,
 } = businessApi;
