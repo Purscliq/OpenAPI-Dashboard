@@ -10,7 +10,6 @@ import Home from "@/assets/svg/Home";
 import LogoutIcon from "@/assets/svg/LogoutIcon";
 import SandIcon from "@/assets/svg/SandIcon";
 import SettingIcon from "@/assets/svg/SettingIcon";
-import StimulatorIcon from "@/assets/svg/StimulatorIcon";
 import Transac from "@/assets/svg/Transac";
 import { MenuProps } from "antd";
 import Link from "next/link";
@@ -83,12 +82,6 @@ export const sidebarData2: MenuProps["items"] = [
   },
 
   {
-    label: <Link href="/stimulator">Stimulator</Link>,
-    icon: <StimulatorIcon className="mr-1" />,
-    key: "stimulator",
-  },
-
-  {
     label: <Link href="/settings">Settings</Link>,
     icon: <SettingIcon className="mr-1" />,
     key: "settings",
@@ -121,7 +114,6 @@ export const activeKeys = [
   "developers",
   "sandbox",
   "logout",
-  "stimulator",
   "auth",
   "customer",
   "compliance",
