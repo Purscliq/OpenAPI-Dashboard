@@ -102,6 +102,12 @@ export const businessApi = createApi({
         body,
       }),
     }),
+    getServices: builder.query({
+      query: () => ({
+        url: "/api/v1/business/services",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -120,4 +126,5 @@ export const {
   useVerifyBvnMutation,
   useGetTeamMembersQuery,
   useCreateUploadFileMutation,
+  useGetServicesQuery,
 } = businessApi;
