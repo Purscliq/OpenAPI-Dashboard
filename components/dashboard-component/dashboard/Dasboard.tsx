@@ -26,7 +26,7 @@ const Dashbord = () => {
     error,
   } = useGetMainAccountQuery({});
 
-  // Log the content of services array
+  // Log the content of account details array
   useEffect(() => {
     console.log("Account Details:", mainAccountData);
   }, [mainAccountData]);
