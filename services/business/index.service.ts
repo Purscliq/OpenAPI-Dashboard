@@ -108,6 +108,12 @@ export const businessApi = createApi({
         method: "GET",
       }),
     }),
+    getMainAccount: builder.query({
+      query: () => ({
+        url: "/api/v1/business/account",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -127,4 +133,5 @@ export const {
   useGetTeamMembersQuery,
   useCreateUploadFileMutation,
   useGetServicesQuery,
+  useGetMainAccountQuery,
 } = businessApi;

@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import TotalIcon from "@/assets/svg/TotalIcon";
 import DisbursIcon from "@/assets/svg/DisbursIcon";
 import ColletIcon from "@/assets/svg/ColletIcon";
@@ -11,10 +12,28 @@ import Line from "@/assets/svg/Line";
 import { CustomTooltip as Tooltip } from "@/lib/AntdComponents";
 import FundModal from "./modal/FundModal";
 
+import { useGetMainAccountQuery } from "@/services/business/index.service";
+
 const Dashbord = () => {
   const [toogleTooltip, setToogleTooltip] = useState(false);
   const [isFundModalOpen, setIsFundModalOpen] = useState(false);
   const [withdraw, setWithdraw] = useState(false);
+
+  const {
+    data: mainAccountData,
+    isLoading,
+    isError,
+    error,
+  } = useGetMainAccountQuery({});
+
+  // Log the content of services array
+  useEffect(() => {
+    console.log("Account Details:", mainAccountData);
+  }, [mainAccountData]);
+
+  const { bank_name, account_name, account_number, account_type, bank_code } =
+    mainAccountData || {};
+
   return (
     <>
       <div className="max-w-[1640px] flex flex-col p-4 space-y-6 overflow-y-scroll">
@@ -298,15 +317,82 @@ const Dashbord = () => {
                 <p className="text-[20px] font-bold">Transaction Analytics</p>
                 <select className="select text-[#3A3F51]  w-fit h-[2em] !border !border-gray-300 !min-h-[1rem] rounded-[6px]">
                   <option selected>Weekly </option>
-                  <option>Montly</option>
+                  <option>Monthly</option>
                   <option>Yearly</option>
-                </select>{" "}
+                </select>
               </div>
               <DashboardChart />
             </article>
           </section>
           <section className="w-full space-y-5">
-            <article className="flex flex-col space-y-4">
+            <div className="flex flex-col gap-4">
+              <article className="flex flex-col space-y-4 bg-white p-[2%]">
+                {isLoading ? (
+                  <p>Loading...</p>
+                ) : (
+                  <>
+                    <div className="flex justify-end items-end mb-3">
+                      <Tooltip
+                        title="copied!"
+                        trigger={"click"}
+                        open={toogleTooltip}
+                      >
+                        <Button
+                          onClick={() => {
+                            setToogleTooltip(true);
+                            navigator.clipboard
+                              .writeText(
+                                `Bank Name: ${bank_name} \n Account Name: ${account_name} \n Account Number: ${account_number}`
+                              )
+                              .finally(() => {
+                                setTimeout(() => {
+                                  setToogleTooltip(false);
+                                }, 2000);
+                              });
+                          }}
+                          className="text-lg font-semibold !border-none"
+                        >
+                          + copy
+                        </Button>
+                      </Tooltip>
+                    </div>{" "}
+                    <span className="flex justify-between items-center">
+                      <p className="text-gray-500 ">{bank_name}</p>
+                      <p className="text-black font-semibold">{account_name}</p>
+                    </span>
+                    <span className="flex gap-[0.2rem] justify-between items-center">
+                      <p className="text-gray-500 ">Account Name</p>
+                      <p className="text-black font-semibold">{account_name}</p>
+                    </span>
+                    <span className="flex justify-between items-center">
+                      <p className="text-gray-500 ">Account Number</p>
+                      <p className="text-black font-semibold">
+                        {account_number}
+                      </p>
+                    </span>
+                    <span className="flex justify-between items-center">
+                      <p className="text-gray-500 ">Account Alias</p>
+                      <p className="text-black font-semibold">{account_type}</p>
+                    </span>
+                  </>
+                )}
+              </article>
+              <div className="flex justify-end items-center space-x-2">
+                <button
+                  onClick={() => setIsFundModalOpen(true)}
+                  className="font-semibold"
+                >
+                  + Fund
+                </button>
+                <button
+                  onClick={() => setWithdraw(true)}
+                  className="font-semibold"
+                >
+                  + Withdraw
+                </button>
+              </div>
+            </div>
+            {/* <article className="flex flex-col space-y-4">
               <div className="flex flex-col space-y-4 bg-white p-[2%]">
                 <div className="flex justify-end items-end mb-3">
                   <Tooltip
@@ -366,7 +452,8 @@ const Dashbord = () => {
                   + Withdraw
                 </button>
               </div>
-            </article>
+            </article> */}
+
             <article className="p-4 bg-white rounded-[20px] space-y-2 border border-gray-200">
               <div className="flex items-center space-x-2 border-b-[0.5px] border-b-gray-300 py-2">
                 <span className="border border-white/30 rounded-full p-1">

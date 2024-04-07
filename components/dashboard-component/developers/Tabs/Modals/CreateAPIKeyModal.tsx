@@ -20,7 +20,7 @@ const CreateAPIKeyModal: React.FC = () => {
     isLoading: servicesLoading,
   } = useGetServicesQuery({});
 
-  // Log the content of services when it changes
+  // Log the content of services array
   useEffect(() => {
     console.log("Services:", services);
   }, [services]);
@@ -41,12 +41,11 @@ const CreateAPIKeyModal: React.FC = () => {
     e.preventDefault();
 
     try {
-      // Get the selected service object
+      // Get the selected service
       const selectedService = services.data.find(
         (s: { name: string }) => s.name === service
       );
 
-      // Call the mutation hook with the input values
       const response = await createApiKey({
         name,
         service_id: selectedService.id, // Include service_id in the request body
