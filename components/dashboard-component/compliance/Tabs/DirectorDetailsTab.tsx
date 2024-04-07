@@ -259,7 +259,10 @@ const DirectorDetailsTab = () => {
                 BVN
               </label>
               <span>
-                <span style={{ position: "relative" }}>
+                <span
+                  // className="relative"
+                  style={{ position: "relative" }}
+                >
                   <Input
                     max={11}
                     min={11}
@@ -272,6 +275,7 @@ const DirectorDetailsTab = () => {
                   />
                   {isVerifying && (
                     <div
+                      // className="absolute top-[50%] right-[8px] -translate-y-[50%]"
                       style={{
                         position: "absolute",
                         top: "50%",
