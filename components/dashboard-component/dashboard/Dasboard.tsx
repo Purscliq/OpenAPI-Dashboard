@@ -6,7 +6,7 @@ import ColletIcon from "@/assets/svg/ColletIcon";
 import TransferIcon from "@/assets/svg/TransferIcon";
 import DashboardChart from "./DashboardChart";
 import ApiChart from "./ApiChart";
-import {  Button } from "antd";
+import { Button } from "antd";
 import Line from "@/assets/svg/Line";
 import { CustomTooltip as Tooltip } from "@/lib/AntdComponents";
 import FundModal from "./modal/FundModal";
@@ -18,18 +18,7 @@ const Dashbord = () => {
   const [isFundModalOpen, setIsFundModalOpen] = useState(false);
   const [withdraw, setWithdraw] = useState(false);
 
-  const {
-    data: mainAccountData,
-    isLoading,
-  
-  } = useGetMainAccountQuery({});
-
-  // Log the content of account details array
-  console.log("Account Details:", mainAccountData);
-
-  const { bank_name, account_name, account_number, account_type, bank_code } =
-    mainAccountData || {};
-
+  const { data: mainAccountData, isLoading } = useGetMainAccountQuery({});
   return (
     <>
       <div className="max-w-[1640px] flex flex-col p-4 space-y-6 overflow-y-scroll">
@@ -349,7 +338,9 @@ const Dashbord = () => {
                   </Tooltip>
                 </div>
                 <span className="flex justify-between items-center">
-                  <p className="text-gray-500 ">{mainAccountData?.data?.bank_name}</p>
+                  <p className="text-gray-500 ">
+                    {mainAccountData?.data?.bank_name}
+                  </p>
                   <p className="text-black font-semibold">
                     {mainAccountData?.data?.account_name}
                   </p>
