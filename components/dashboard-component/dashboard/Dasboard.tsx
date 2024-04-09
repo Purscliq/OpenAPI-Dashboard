@@ -24,6 +24,9 @@ const Dashbord = () => {
   
   } = useGetMainAccountQuery({});
 
+  // Log the content of account details array
+  console.log("Account Details:", mainAccountData);
+
   const { bank_name, account_name, account_number, account_type, bank_code } =
     mainAccountData || {};
 
@@ -320,55 +323,55 @@ const Dashbord = () => {
           <section className="w-full space-y-5">
             <div className="flex flex-col gap-4">
               <article className="flex flex-col space-y-4 bg-white p-[2%]">
-                {isLoading ? (
-                  <p>Loading...</p>
-                ) : (
-                  <>
-                    <div className="flex justify-end items-end mb-3">
-                      <Tooltip
-                        title="copied!"
-                        trigger={"click"}
-                        open={toogleTooltip}
-                      >
-                        <Button
-                          onClick={() => {
-                            setToogleTooltip(true);
-                            navigator.clipboard
-                              .writeText(
-                                `Bank Name: ${bank_name} \n Account Name: ${account_name} \n Account Number: ${account_number}`
-                              )
-                              .finally(() => {
-                                setTimeout(() => {
-                                  setToogleTooltip(false);
-                                }, 2000);
-                              });
-                          }}
-                          className="text-lg font-semibold !border-none"
-                        >
-                          + copy
-                        </Button>
-                      </Tooltip>
-                    </div>{" "}
-                    <span className="flex justify-between items-center">
-                      <p className="text-gray-500 ">{bank_name}</p>
-                      <p className="text-black font-semibold">{account_name}</p>
-                    </span>
-                    <span className="flex gap-[0.2rem] justify-between items-center">
-                      <p className="text-gray-500 ">Account Name</p>
-                      <p className="text-black font-semibold">{account_name}</p>
-                    </span>
-                    <span className="flex justify-between items-center">
-                      <p className="text-gray-500 ">Account Number</p>
-                      <p className="text-black font-semibold">
-                        {account_number}
-                      </p>
-                    </span>
-                    <span className="flex justify-between items-center">
-                      <p className="text-gray-500 ">Account Alias</p>
-                      <p className="text-black font-semibold">{account_type}</p>
-                    </span>
-                  </>
-                )}
+                <div className="flex justify-end items-end mb-3">
+                  <Tooltip
+                    title="copied!"
+                    trigger={"click"}
+                    open={toogleTooltip}
+                  >
+                    <Button
+                      onClick={() => {
+                        setToogleTooltip(true);
+                        navigator.clipboard
+                          .writeText(
+                            `Bank Name: ${mainAccountData.bank_name} \n Account Name: ${mainAccountData.account_name} \n Account Number: ${mainAccountData.account_number}`
+                          )
+                          .finally(() => {
+                            setTimeout(() => {
+                              setToogleTooltip(false);
+                            }, 2000);
+                          });
+                      }}
+                      className="text-lg font-semibold !border-none"
+                    >
+                      + copy
+                    </Button>
+                  </Tooltip>
+                </div>
+                <span className="flex justify-between items-center">
+                  <p className="text-gray-500 ">{mainAccountData.bank_name}</p>
+                  <p className="text-black font-semibold">
+                    {mainAccountData.account_name}
+                  </p>
+                </span>
+                <span className="flex gap-[0.2rem] justify-between items-center">
+                  <p className="text-gray-500 ">Account Name</p>
+                  <p className="text-black font-semibold">
+                    {mainAccountData.account_name}
+                  </p>
+                </span>
+                <span className="flex justify-between items-center">
+                  <p className="text-gray-500 ">Account Number</p>
+                  <p className="text-black font-semibold">
+                    {mainAccountData.account_number}
+                  </p>
+                </span>
+                <span className="flex justify-between items-center">
+                  <p className="text-gray-500 ">Account Alias</p>
+                  <p className="text-black font-semibold">
+                    {mainAccountData.account_type}
+                  </p>
+                </span>
               </article>
               <div className="flex justify-end items-center space-x-2">
                 <button
