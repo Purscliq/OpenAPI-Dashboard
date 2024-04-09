@@ -334,7 +334,7 @@ const Dashbord = () => {
                         setToogleTooltip(true);
                         navigator.clipboard
                           .writeText(
-                            `Bank Name: ${mainAccountData.bank_name} \n Account Name: ${mainAccountData.account_name} \n Account Number: ${mainAccountData.account_number}`
+                            `Bank Name: ${mainAccountData?.data?.bank_name} \n Account Name: ${mainAccountData?.data?.account_name} \n Account Number: ${mainAccountData?.data?.account_number}`
                           )
                           .finally(() => {
                             setTimeout(() => {
@@ -349,27 +349,27 @@ const Dashbord = () => {
                   </Tooltip>
                 </div>
                 <span className="flex justify-between items-center">
-                  <p className="text-gray-500 ">{mainAccountData.bank_name}</p>
+                  <p className="text-gray-500 ">{mainAccountData?.data?.bank_name}</p>
                   <p className="text-black font-semibold">
-                    {mainAccountData.account_name}
+                    {mainAccountData?.data?.account_name}
                   </p>
                 </span>
                 <span className="flex gap-[0.2rem] justify-between items-center">
                   <p className="text-gray-500 ">Account Name</p>
                   <p className="text-black font-semibold">
-                    {mainAccountData.account_name}
+                    {mainAccountData?.data?.account_name}
                   </p>
                 </span>
                 <span className="flex justify-between items-center">
                   <p className="text-gray-500 ">Account Number</p>
                   <p className="text-black font-semibold">
-                    {mainAccountData.account_number}
+                    {mainAccountData?.data?.account_number}
                   </p>
                 </span>
                 <span className="flex justify-between items-center">
                   <p className="text-gray-500 ">Account Alias</p>
                   <p className="text-black font-semibold">
-                    {mainAccountData.account_type}
+                    {mainAccountData?.data?.account_type}
                   </p>
                 </span>
               </article>
