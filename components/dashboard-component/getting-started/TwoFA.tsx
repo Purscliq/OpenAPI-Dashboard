@@ -19,7 +19,7 @@ const TwoFA = ({ QRcode }: { QRcode: string }) => {
       .then((res) => {
         console.log(res);
         message.success("2FA Activated");
-        replace("/dashboard")
+        replace("/dashboard");
       })
       .catch((err) => {
         console.log(err);
@@ -78,6 +78,7 @@ const TwoFA = ({ QRcode }: { QRcode: string }) => {
                 <div className="flex justify-between gap-4 mt-12">
                   <button
                     type="button"
+                    onClick={() => replace("/getting started")}
                     className="w-full text-center text-md rounded-md px-4 py-2 font-medium text-black border border-[#E9EBEB] focus:outline-none"
                   >
                     Cancel

@@ -1,13 +1,12 @@
 "use client";
-
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import TotalIcon from "@/assets/svg/TotalIcon";
 import DisbursIcon from "@/assets/svg/DisbursIcon";
 import ColletIcon from "@/assets/svg/ColletIcon";
 import TransferIcon from "@/assets/svg/TransferIcon";
 import DashboardChart from "./DashboardChart";
 import ApiChart from "./ApiChart";
-import { Avatar, Button } from "antd";
+import {  Button } from "antd";
 import Line from "@/assets/svg/Line";
 import { CustomTooltip as Tooltip } from "@/lib/AntdComponents";
 import FundModal from "./modal/FundModal";
@@ -22,14 +21,8 @@ const Dashbord = () => {
   const {
     data: mainAccountData,
     isLoading,
-    isError,
-    error,
+  
   } = useGetMainAccountQuery({});
-
-  // Log the content of account details array
-  useEffect(() => {
-    console.log("Account Details:", mainAccountData);
-  }, [mainAccountData]);
 
   const { bank_name, account_name, account_number, account_type, bank_code } =
     mainAccountData || {};
