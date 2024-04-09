@@ -42,23 +42,23 @@ export const sidebarData2: MenuProps["items"] = [
     icon: <Account className="mr-1" />,
     key: "loan-account",
   },
-  {
-    label: "Loan Management",
-    icon: <Account className="mr-1" />,
-    key: "loan-management",
-    children: [
-      {
-        label: <Link href="/loan-management/loans">Loans</Link>,
-        key: "loans",
-      },
-      {
-        label: (
-          <Link href="/loan-management/external-loans">External Loans</Link>
-        ),
-        key: "external-loans",
-      },
-    ],
-  },
+  // {
+  //   label: "Loan Management",
+  //   icon: <Account className="mr-1" />,
+  //   key: "loan-management",
+  //   children: [
+  //     {
+  //       label: <Link href="/loan-management/loans">Loans</Link>,
+  //       key: "loans",
+  //     },
+  //     {
+  //       label: (
+  //         <Link href="/loan-management/external-loans">External Loans</Link>
+  //       ),
+  //       key: "external-loans",
+  //     },
+  //   ],
+  // },
   {
     label: <Link href="/customers">Customers</Link>,
     icon: <CustomersIcon className="mr-1" />,
@@ -109,7 +109,7 @@ export const activeKeys = [
   "loan-account",
   "loans",
   "external-loans",
-  "loan-management",
+  // "loan-management",
   "getting-started",
   "developers",
   "sandbox",
