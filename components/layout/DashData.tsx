@@ -89,7 +89,7 @@ export const sidebarData2: MenuProps["items"] = [
 ];
 export const sidebarData3: MenuProps["items"] = [
   {
-    label: <Link href="/sandbox">SandBox</Link>,
+    label: <Link href="">SandBox</Link>,
     icon: <SandIcon className="mr-1" />,
     key: "sandbox",
   },
