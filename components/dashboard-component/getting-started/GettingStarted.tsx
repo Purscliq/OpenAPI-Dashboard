@@ -1,4 +1,5 @@
 "use client";
+
 import Activate from "./Activate";
 import { GoArrowRight } from "react-icons/go";
 import { useRouter } from "next/navigation";
@@ -41,6 +42,10 @@ const GettingStarted = () => {
               Provide the necessary details and documents. This helps us make
               sure you comply with regulations
             </p>
+
+            <p className="text-[#1AD48E] text-[14px] font-medium pt-4">
+              Pending
+            </p>
           </span>
           <span className="flex items-center">
             <button
@@ -65,6 +70,10 @@ const GettingStarted = () => {
               Integrate PursFi API with our developers documentation which
               contain the libraries, APIs and SDKs
             </p>
+
+            <p className="text-[#1AD48E] text-[14px] font-medium pt-4">
+              Pending
+            </p>
           </span>
           <span className="flex items-center">
             <button
@@ -83,6 +92,10 @@ const GettingStarted = () => {
             </p>
             <p className="text-[#515B6F] max-w-xl">
               Setup your notifications, general fee bearer and more
+            </p>
+
+            <p className="text-[#1AD48E] text-[14px] font-medium pt-4">
+              Pending
             </p>
           </span>
           <span className="flex items-center">
