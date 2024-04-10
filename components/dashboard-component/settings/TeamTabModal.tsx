@@ -30,7 +30,7 @@ const TeamTabModal: React.FC = () => {
 
   // const roleToId = {
   const roleToId: { [key: string]: number } = {
-    superadmin: 1, // 1 for superadmin
+    biller: 1, // 1 for biller
     owner: 2, //  2 for owner
     developer: 3, //  3 for developer
   };
@@ -150,7 +150,7 @@ const TeamTabModal: React.FC = () => {
                 onChange={(value) => setRole(value)}
                 options={[
                   { value: "", label: "Select a role" },
-                  { value: "superadmin", label: "Super Admin" },
+                  { value: "biller", label: "Biller" },
                   { value: "owner", label: "Owner" },
                   { value: "developer", label: "Developer" },
                 ]}

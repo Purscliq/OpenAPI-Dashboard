@@ -34,7 +34,7 @@ const TeamTabTable = () => {
   };
 
   const idToRole: { [key: number]: string } = {
-    1: "Super Admin",
+    1: "Biller",
     2: "Owner",
     3: "Developer",
   };
