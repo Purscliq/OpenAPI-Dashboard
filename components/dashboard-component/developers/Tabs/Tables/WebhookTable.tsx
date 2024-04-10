@@ -7,11 +7,11 @@ import DeleteIcon from "@/assets/svg/DeleteIcon";
 import {
   useReadAllWebhooksQuery,
   useDeleteWebhookMutation,
-} from "@/services/apikeys/index.service"; // Import the mutation hook for deleting a webhook
+} from "@/services/apikeys/index.service";
+import { LoadingOutlined } from "@ant-design/icons";
 
 interface WebhookType {
   id: string;
-  // other properties...
 }
 
 const WebhookTable = () => {
@@ -23,7 +23,7 @@ const WebhookTable = () => {
     refetch, // Function to manually refetch the webhooks data
   } = useReadAllWebhooksQuery([]);
 
-  // Mutation hook for deleting a webhook
+  // deleting a webhook
   const [deleteWebhook, { isLoading: deleteLoading }] =
     useDeleteWebhookMutation();
 
@@ -50,7 +50,7 @@ const WebhookTable = () => {
   // Function to format the date
   const formatCreatedAt = (createdAt: string) => {
     const date = new Date(createdAt);
-    return date.toLocaleString(); // Adjust this method according to your preferred date format
+    return date.toLocaleString();
   };
 
   const columns = [
@@ -88,7 +88,6 @@ const WebhookTable = () => {
             className=""
             onClick={() => handleDelete(record.id)}
           >
-            {/* Add onClick handler for delete action */}
             {deleteLoading ? "Deleting..." : <DeleteIcon />}
           </button>
         </span>
@@ -96,24 +95,28 @@ const WebhookTable = () => {
     },
   ];
 
+  // if (isLoading) {
+  //   return (
+  //     <div className="bg-white flex flex-col justify-center items-center h-[30vh]">
+  //       <LoadingOutlined style={{ fontSize: 24 }} spin />
+  //     </div>
+  //   );
+  // }
+
   return (
     <div className="bg-white flex flex-col gap-[1rem] py-6 px-4">
       <p className="font-semibold text-[18px]">
-        {isLoading
-          ? "Loading..."
-          : webhooksData?.data
+        {webhooksData?.data
           ? `${webhooksData.data.length} Webhook(s)`
           : "No Webhooks"}
       </p>
 
       <div className="relative overflow-x-auto  sm:rounded-lg w-full">
-        {isLoading ? (
-          <p>Loading...</p>
-        ) : isError ? (
-          <p className="text-red-500">Error fetching Webhooks</p>
-        ) : (
-          <Table columns={columns} dataSource={webhooksData?.data || []} />
-        )}
+        <Table
+          columns={columns}
+          dataSource={webhooksData?.data || []}
+          loading={isLoading}
+        />
       </div>
     </div>
   );

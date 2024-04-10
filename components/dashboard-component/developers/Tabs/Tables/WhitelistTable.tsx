@@ -8,6 +8,7 @@ import {
   useGetAllIpsQuery,
   useDeleteIpMutation,
 } from "@/services/apikeys/index.service";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const WhitelistTable = () => {
   const {
@@ -68,24 +69,28 @@ const WhitelistTable = () => {
     },
   ];
 
+  // if (isLoading) {
+  //   return (
+  //     <div className="bg-white flex flex-col justify-center items-center h-[30vh]">
+  //       <LoadingOutlined style={{ fontSize: 24 }} spin />
+  //     </div>
+  //   );
+  // }
+
   return (
     <div className="bg-white flex flex-col gap-[1rem] py-6 px-4">
       <p className="font-semibold text-[18px]">
-        {isLoading
-          ? "Loading..."
-          : whitelistData?.data
+        {whitelistData?.data
           ? `${whitelistData.data.length} Whitelisted IP(s)`
           : "No Whitelisted IPs"}
       </p>
 
       <div className="relative overflow-x-auto sm:rounded-lg w-full">
-        {isLoading ? (
-          <p>Loading...</p>
-        ) : isError ? (
-          <p className="text-red-500">Error fetching Whitelisted IPs</p>
-        ) : (
-          <Table columns={columns} dataSource={whitelistData?.data || []} />
-        )}
+        <Table
+          columns={columns}
+          dataSource={whitelistData?.data || []}
+          loading={isLoading}
+        />
       </div>
     </div>
   );
