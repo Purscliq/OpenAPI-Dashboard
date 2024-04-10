@@ -3,10 +3,13 @@ import { message, Upload } from "antd";
 import AttachIcon from "@/assets/svg/AttachIcon";
 import type { UploadProps, UploadFile } from "antd";
 import { useCreateUploadFileMutation } from "@/services/business/index.service";
+import { useRouter } from "next/navigation";
 
 const { Dragger } = Upload;
 
 const BusinessDocumentUploadTab = () => {
+  const router = useRouter();
+
   const [createUploadFile, { isLoading }] = useCreateUploadFileMutation();
 
   const handleUpload = async ({ file }: { file: UploadFile }) => {
@@ -18,7 +21,7 @@ const BusinessDocumentUploadTab = () => {
         const response = await createUploadFile(formData);
 
         if ("data" in response) {
-          message.success(`${file.name} uploaded successfully.`);
+          // message.success(`${file.name} uploaded successfully.`);
         } else {
           message.error(`Failed to upload ${file.name}.`);
         }
@@ -54,13 +57,14 @@ const BusinessDocumentUploadTab = () => {
               <Dragger
                 name="CAC"
                 multiple
+                accept="application/pdf"
                 action="/api/v1/business/image-upload"
                 onChange={handleUpload}
                 className="flex items-center text-center  gap-[0.3rem]"
               >
                 <p className="ant-upload-text flex gap-4">
                   <AttachIcon />
-                  Attach Document(PDF,Jpeg, PNG only ) Limited 5mb
+                  Attach Document (PDF only) Limited 5mb
                 </p>
               </Dragger>
             </div>
@@ -76,13 +80,14 @@ const BusinessDocumentUploadTab = () => {
                 id="memorandum"
                 name="memorandum"
                 multiple
+                accept="application/pdf"
                 action="/api/v1/business/image-upload"
                 onChange={handleUpload}
                 className="flex items-center text-center  gap-[0.3rem]"
               >
                 <p className="ant-upload-text flex gap-4">
                   <AttachIcon />
-                  Attach Document(PDF,Jpeg, PNG only ) Limited 5mb
+                  Attach Document (PDF only) Limited 5mb
                 </p>
               </Dragger>
             </div>
@@ -98,13 +103,14 @@ const BusinessDocumentUploadTab = () => {
                 id="TIN"
                 name="TIN"
                 multiple
+                accept="application/pdf, image/jpeg"
                 action="/api/v1/business/image-upload"
                 onChange={handleUpload}
                 className="flex items-center text-center gap-[0.3rem]"
               >
                 <p className="ant-upload-text flex gap-4">
                   <AttachIcon />
-                  Attach Document(PDF,Jpeg, PNG only ) Limited 5mb
+                  Attach Document (PDF, JPEG only) Limited 5mb
                 </p>
               </Dragger>
             </div>
@@ -119,6 +125,8 @@ const BusinessDocumentUploadTab = () => {
                 </button>
                 <button
                   type="button"
+                  // onClick={() => router.push("/about")}
+                  onClick={() => router.back()}
                   className="w-full text-center text-md rounded-md px-4 py-2 font-medium text-black focus:outline-none"
                 >
                   Cancel

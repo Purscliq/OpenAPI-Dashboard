@@ -8,8 +8,10 @@ import {
   useGetbusinessQuery,
   useUpdatebusinessMutation,
 } from "@/services/business/index.service";
+import { useRouter } from "next/navigation";
 
 const BusinessDetailsTab = () => {
+  const router = useRouter();
   const { data: business, refetch } = useGetbusinessQuery({});
   const [update, { isLoading }] = useUpdatebusinessMutation();
   const [formData, setFormData] = useState({
@@ -162,6 +164,8 @@ const BusinessDetailsTab = () => {
                 </button>
                 <button
                   type="button"
+                  // onClick={() => router.push("/about")}
+                  onClick={() => router.back()}
                   className="w-full text-center text-md rounded-md px-4 py-2 font-medium text-black focus:outline-none"
                 >
                   Cancel

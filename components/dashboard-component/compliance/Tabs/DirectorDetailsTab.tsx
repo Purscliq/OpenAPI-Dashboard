@@ -24,6 +24,7 @@ import {
 } from "@/services/business/index.service";
 import { LoadingOutlined } from "@ant-design/icons";
 import { UploadChangeParam } from "antd/es/upload";
+import { useRouter } from "next/navigation";
 
 const { Dragger } = Upload;
 
@@ -59,7 +60,10 @@ const data = {
   signature_url: "",
   proof_of_add_url: "",
 };
+
 const DirectorDetailsTab = () => {
+  const router = useRouter();
+
   const gender = [
     { label: "Male", value: "Male" },
     { label: "Female", value: "Female" },
@@ -156,6 +160,8 @@ const DirectorDetailsTab = () => {
         proof_of_add_url: "",
       });
     }
+    // go back
+    router.back();
   };
   const [createUploadFile] = useCreateUploadFileMutation();
 
@@ -185,7 +191,7 @@ const DirectorDetailsTab = () => {
               proof_of_add_url: uploadUrl,
             }));
           }
-          message.success(`${info.file.name} uploaded successfully.`);
+          // message.success(`${info.file.name} uploaded successfully.`);
         } else {
           message.error(`Failed to upload ${info.file.name}.`);
         }
@@ -394,6 +400,7 @@ const DirectorDetailsTab = () => {
                 id="IDCard"
                 name="id_card_url"
                 multiple
+                accept="application/pdf, image/jpeg"
                 action="/api/v1/business/image-upload"
                 onChange={handleUpload}
                 className="flex items-center text-center  gap-[0.3rem]"
@@ -417,6 +424,7 @@ const DirectorDetailsTab = () => {
                 id="signature"
                 name=" signature_url"
                 multiple
+                accept="application/pdf, image/jpeg"
                 action="/api/v1/business/image-upload"
                 onChange={handleUpload}
                 className="flex items-center text-center  gap-[0.3rem]"
@@ -440,6 +448,7 @@ const DirectorDetailsTab = () => {
                 id="ProofOfAddress"
                 name="proof_of_add_url"
                 multiple
+                accept="application/pdf, image/jpeg"
                 action="/api/v1/business/image-upload"
                 onChange={handleUpload}
                 className="flex items-center text-center gap-[0.3rem]"
