@@ -77,6 +77,7 @@ const DirectorDetailsTab = () => {
     "https://flagcdn.com/ng.svg"
   );
   const [updatedData, setUpdatedData] = useState(data);
+  const [upload_url, setUploadUrl] = useState("");
 
   const handleChange: ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
@@ -118,7 +119,12 @@ const DirectorDetailsTab = () => {
   };
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    update(formData)
+    update({
+      ...formData,
+      id_card_url: upload_url,
+      signature_url: upload_url,
+      proof_of_add_url: upload_url,
+    })
       .unwrap()
       .then((res) => {
         refetch();
@@ -160,49 +166,35 @@ const DirectorDetailsTab = () => {
         proof_of_add_url: "",
       });
     }
-    // go back
     router.back();
   };
   const [createUploadFile] = useCreateUploadFileMutation();
 
-  const handleUpload = async (info: UploadChangeParam<UploadFile>) => {
-    try {
-      if (info.file.originFileObj) {
-        const formData = new FormData();
-        formData.append("file", info.file.originFileObj);
-
-        const response = await createUploadFile(formData);
-
-        if ("data" in response) {
-          const uploadUrl = response.data.upload_url;
-          if (info.file.name === "id_card_url") {
-            setFormData((prevState) => ({
-              ...prevState,
-              id_card_url: uploadUrl,
-            }));
-          } else if (info.file.name === "signature_url") {
-            setFormData((prevState) => ({
-              ...prevState,
-              signature_url: uploadUrl,
-            }));
-          } else if (info.file.name === "proof_of_add_url") {
-            setFormData((prevState) => ({
-              ...prevState,
-              proof_of_add_url: uploadUrl,
-            }));
-          }
-          // message.success(`${info.file.name} uploaded successfully.`);
-        } else {
+  const handleUpload = (
+    info: UploadChangeParam<UploadFile>,
+    fieldName: string
+  ) => {
+    if (info.file.originFileObj) {
+      const formData = new FormData();
+      formData.append("file", info.file.originFileObj);
+      createUploadFile(formData)
+        .unwrap()
+        .then((res) => {
+          const uploadedUrl = res.data.upload_url; 
+          setUploadUrl(uploadedUrl);
+          setFormData((prev) => ({
+            ...prev,
+            [fieldName]: uploadedUrl, 
+          }));
+        })
+        .catch((error) => {
+          console.error("Error uploading file:", error);
           message.error(`Failed to upload ${info.file.name}.`);
-        }
-      } else {
-        message.error(`No file selected.`);
-      }
-    } catch (error) {
-      console.error("Error uploading file:", error);
-      message.error(`Failed to upload ${info.file.name}.`);
+        });
     }
   };
+  
+
   return (
     <section className="bg-white py-4 px-4 space-y-4">
       <div className="sm:grid grid-cols-8 gap-12 w-full space-y-4 md:space-y-0">
@@ -371,22 +363,6 @@ const DirectorDetailsTab = () => {
               />
             </div>
 
-            {/* upload
-            <Dragger
-              {...props}
-              className="flex flex-col items-center  gap-[0.3rem]"
-            >
-              <span className="ant-upload-drag-icon mx-auto">
-                <ImageIcon />
-              </span>
-              <p className="ant-upload-text">
-                <b className="font-semibold">Click to replace</b> or drag and
-                drop
-              </p>
-              <p className="ant-upload-hint">
-                SVG, PNG, JPG or GIF (max. 400 x 400px)
-              </p>
-            </Dragger> */}
             <div className="flex flex-col gap-[0.3rem]">
               <label
                 htmlFor="IDCard"
@@ -402,7 +378,7 @@ const DirectorDetailsTab = () => {
                 multiple
                 accept="application/pdf, image/jpeg"
                 action="/api/v1/business/image-upload"
-                onChange={handleUpload}
+                onChange={(info) => handleUpload(info, "id_card_url")}
                 className="flex items-center text-center  gap-[0.3rem]"
               >
                 <p className="ant-upload-text flex gap-4">
@@ -422,11 +398,11 @@ const DirectorDetailsTab = () => {
               <Dragger
                 {...props}
                 id="signature"
-                name=" signature_url"
+                name="signature_url"
                 multiple
                 accept="application/pdf, image/jpeg"
                 action="/api/v1/business/image-upload"
-                onChange={handleUpload}
+                onChange={(info) => handleUpload(info, "signature_url")}
                 className="flex items-center text-center  gap-[0.3rem]"
               >
                 <p className="ant-upload-text flex gap-4">
@@ -450,7 +426,7 @@ const DirectorDetailsTab = () => {
                 multiple
                 accept="application/pdf, image/jpeg"
                 action="/api/v1/business/image-upload"
-                onChange={handleUpload}
+                onChange={(info) => handleUpload(info, "proof_of_add_url")}
                 className="flex items-center text-center gap-[0.3rem]"
               >
                 <p className="ant-upload-text flex gap-4">
@@ -486,32 +462,3 @@ const DirectorDetailsTab = () => {
 };
 
 export default DirectorDetailsTab;
-function setFormData(
-  arg0: (prevState: {
-    bvn: string;
-    legal_first_name: string;
-    legal_last_name: string;
-    phone_number: string;
-    gender: string;
-    dob: string;
-    nationality: string;
-    address: string;
-    id_card_url: string;
-    signature_url: string;
-    proof_of_add_url: string;
-  }) => {
-    proof_of_add_url: any;
-    bvn: string;
-    legal_first_name: string;
-    legal_last_name: string;
-    phone_number: string;
-    gender: string;
-    dob: string;
-    nationality: string;
-    address: string;
-    id_card_url: string;
-    signature_url: string;
-  }
-) {
-  throw new Error("Function not implemented.");
-}

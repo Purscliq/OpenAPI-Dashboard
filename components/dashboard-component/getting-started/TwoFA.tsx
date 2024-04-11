@@ -7,25 +7,25 @@ import { useValidate2faMutation } from "@/services/auth/index.service";
 import { message } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
+import { useProfileQuery } from "@/services/users/index.service";
 
 const TwoFA = ({ QRcode }: { QRcode: string }) => {
   const [validate2FA, { isLoading }] = useValidate2faMutation({});
-  const { replace } = useRouter();
-
+  const { replace, back, push } = useRouter();
+  const { refetch: refetchUser } = useProfileQuery({});
   const [otp, setOtp] = useState("");
   const handleSubmit = () => {
     validate2FA({ code: otp })
       .unwrap()
       .then((res) => {
-        console.log(res);
         message.success("2FA Activated");
-        replace("/dashboard");
+        return refetchUser();
+      })
+      .then(() => {
+        push("/getting-started");
       })
       .catch((err) => {
-        console.log(err);
-        message.error(
-          message.error(err?.data?.message) || "something went wrong"
-        );
+        message.error(err?.data?.message || "Something went wrong");
       });
   };
   return (
@@ -78,7 +78,7 @@ const TwoFA = ({ QRcode }: { QRcode: string }) => {
                 <div className="flex justify-between gap-4 mt-12">
                   <button
                     type="button"
-                    onClick={() => replace("/getting started")}
+                    onClick={() => back()}
                     className="w-full text-center text-md rounded-md px-4 py-2 font-medium text-black border border-[#E9EBEB] focus:outline-none"
                   >
                     Cancel

@@ -7,9 +7,13 @@ import { useProfileQuery } from "@/services/users/index.service";
 import {
   useChangePasswordMutation,
   useDisable2faMutation,
+  useValidate2faMutation,
 } from "@/services/auth/index.service";
 import { message } from "antd";
 import { passwordSchema } from "@/lib/PasswordSchema";
+import { LoadingOutlined } from "@ant-design/icons";
+import Image from "next/image";
+import OTPInput from "react-otp-input";
 
 const MyProfileTab = () => {
   const [formData, setFormData] = useState({
@@ -58,6 +62,25 @@ const MyProfileTab = () => {
         });
     }
   };
+
+  const [validate2FA, { isLoading: isValidating }] = useValidate2faMutation({});
+
+  const [otp, setOtp] = useState("");
+  const handleverfifyOtp = () => {
+    validate2FA({ code: otp })
+      .unwrap()
+      .then((res) => {
+        console.log(res);
+        message.success("2FA Activated");
+      })
+      .catch((err) => {
+        console.log(err);
+        message.error(
+          message.error(err?.data?.message) || "something went wrong"
+        );
+      });
+  };
+  const qrCode = localStorage.getItem("qr") || "";
   return (
     <section className="bg- py-4 px-0 space-y-4">
       <div className="border-b pb-2">
@@ -208,7 +231,7 @@ const MyProfileTab = () => {
       </form>
 
       {/* disable 2FA */}
-      {user?.data?.two_fa_enabled && (
+      {user?.data?.two_fa_enabled ? (
         <div className="grid grid-cols-1 md:grid-cols-8 gap-8">
           <div className="md:col-span-3">
             <span className="flex flex-col gap-2">
@@ -225,19 +248,76 @@ const MyProfileTab = () => {
           </div>
           <div className="md:col-span-5 space-y-4  md:mr-16 lg:mr-24">
             <div className="">
-              <div className="mt-8 flex gap-6">
-                <button
-                  type="reset"
-                  className="w-full text-center text-md rounded-md px-4 py-2 font-medium text-black border border-[#E9EBEB] focus:outline-none"
-                >
-                  Cancel
-                </button>
+              <div className="mt-8 ">
                 <button
                   onClick={handleDisable2FA}
                   className="w-full bg-[#F6513B] text-center text-md rounded-md px-4 py-2 font-medium text-white focus:outline-none"
                 >
                   Disable
                 </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-6 md:mt-12 mt-6">
+          <div className="bg-white py-4 px-6 shadow-sm rounded-md sm:grid grid-cols-8 gap-12 w-full space-y-4 md:space-y-0">
+            <div className="p-2 col-span-3 space-y-6 w-full md:max-w-sm">
+              <p className="font-semibold text-base">
+                Set Up your 2FA Authentication
+              </p>
+              <p className="font-normal text-base">
+                Scan the QR code using any authenticator on your phone (e.g
+                Google Authenticator, Duo Mobile, Authy).
+              </p>
+              <Image
+                src={qrCode}
+                className=""
+                alt="QR Code"
+                title="QR Code"
+                width={100}
+                height={100}
+              />
+            </div>
+
+            <div className="p-2 col-span-5 md:mr-10 lg:mr-20">
+              <div className="flex flex-col justify-between gap-4 h-full">
+                <div className="flex flex-col gap-4">
+                  <p className="font-semibold text-base">
+                    Enter the 6 figure confirmation code shown on the app
+                  </p>
+                  {/* OTP field */}
+                  <OTPInput
+                    value={otp}
+                    onChange={(otp) => setOtp(otp)}
+                    numInputs={6}
+                    renderSeparator={<span className="md:mx-2 mx-0.5">-</span>}
+                    placeholder="000000"
+                    renderInput={(props) => (
+                      <input
+                        {...props}
+                        required
+                        className="md:!w-[58px] md:h-[58px] !w-[38px] h-[38px] rounded-lg border focus:border-black outline-none text-center text:xl md:text-2xl"
+                      />
+                    )}
+                  />
+                </div>
+
+                <div className="">
+                  <div className=" mt-12">
+                    <button
+                      type="button"
+                      onClick={handleverfifyOtp}
+                      className="w-full bg-black text-center text-md rounded-md px-4 py-2 font-medium text-white focus:outline-none"
+                    >
+                      {isValidating ? (
+                        <LoadingOutlined style={{ fontSize: 24 }} spin />
+                      ) : (
+                        "Activate"
+                      )}
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

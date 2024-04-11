@@ -22,9 +22,7 @@ const TransactionsTable = () => {
   const {
     data: transactionData,
     isLoading,
-    isError,
-    error,
-    refetch, 
+    refetch,
   } = useReadAllTransactionsQuery([]);
 
   const [deleteTransaction, { isLoading: deleteLoading }] =
@@ -86,7 +84,6 @@ const TransactionsTable = () => {
             className=""
             onClick={() => handleDelete(record.id)}
           >
-            {/* Add onClick handler for delete action */}
             {deleteLoading ? "Deleting..." : <DeleteIcon />}
           </button>
         </span>
@@ -110,13 +107,11 @@ const TransactionsTable = () => {
         </div>
       </div>
       <div className="relative overflow-x-auto  sm:rounded-lg w-full">
-        {isLoading ? (
-          <p>Loading...</p>
-        ) : isError ? (
-          <p className="text-red-500">Error fetching Transactions</p>
-        ) : (
-          <Table columns={columns} dataSource={transactionData?.data || []} />
-        )}
+        <Table
+          columns={columns}
+          dataSource={transactionData?.data || []}
+          loading={isLoading}
+        />
       </div>
     </div>
   );

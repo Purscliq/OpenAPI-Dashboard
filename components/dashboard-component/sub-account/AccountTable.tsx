@@ -25,7 +25,7 @@ const AccountTable = () => {
       title: "Current Balance",
       dataIndex: "current_balance",
       sorter: true,
-      render: (current_balance:number) => `NGN ${current_balance.toFixed(2)}`, // Prepend "NGN" format
+      render: (current_balance:number) => `NGN ${current_balance?.toFixed(2)}`, // Prepend "NGN" format
     },
     {
       title: "Date",

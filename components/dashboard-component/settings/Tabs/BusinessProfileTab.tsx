@@ -86,84 +86,80 @@ const BusinessProfileTab = () => {
         <div className="p-2 col-span-3 space-y-2 w-full md:max-w-sm">
           <p className="font-semibold text-base">Business Details</p>
         </div>
-        {isLoading || isgetting ? (
-          <LoadingOutlined style={{ fontSize: 24 }} spin />
-        ) : (
-          <div className="p-2 col-span-5 md:mr-10 lg:mr-20">
-            <form onSubmit={updateBusiness} className="space-y-4">
-              <div className="flex flex-col items-start justify-start gap-[0.3rem]">
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-semibold text-gray-700"
-                >
-                  Business Name
-                </label>
+        <div className="p-2 col-span-5 md:mr-10 lg:mr-20">
+          <form onSubmit={updateBusiness} className="space-y-4">
+            <div className="flex flex-col items-start justify-start gap-[0.3rem]">
+              <label
+                htmlFor="name"
+                className="block text-sm font-semibold text-gray-700"
+              >
+                Business Name
+              </label>
 
-                <Input
-                  type="text"
-                  id="name"
-                  name="name"
-                  placeholder="This is placeholder"
-                  required
-                  value={business?.data?.name}
-                  disabled
-                  className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
-                />
-              </div>{" "}
               <Input
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={formData.email}
-                onChange={handleInputChange}
-                className="p-2 border w-full rounded-md  bg-gray-500 text-sm text-gray-500 shadow-sm"
+                type="text"
+                id="name"
+                name="name"
+                placeholder="This is placeholder"
+                required
+                value={business?.data?.name}
+                disabled
+                className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
               />
-              <TextArea
-                rows={4}
-                name="description"
-                placeholder="Business Description"
-                value={formData.description}
-                onChange={handleInputChange}
-                className="p-2 border w-full rounded-md  bg-gray-500 text-sm text-gray-500 shadow-sm"
-              />
-              <Input
-                type="tel"
-                name="phone"
-                placeholder="Phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-                className="p-2 border w-full rounded-md  bg-gray-500 text-sm text-gray-500 shadow-sm"
-              />
-              <Input
-                type="email"
-                name="support_email"
-                placeholder="Support Email"
-                value={formData.support_email}
-                onChange={handleInputChange}
-                className="p-2 border w-full rounded-md  bg-gray-500 text-sm text-gray-500 shadow-sm"
-              />
-              <Input
-                type="tel"
-                name="support_phone"
-                placeholder="Support Phone"
-                value={formData.support_phone}
-                onChange={handleInputChange}
-                className="p-2 border w-full rounded-md  bg-gray-500 text-sm text-gray-500 shadow-sm"
-              />
-              <div className="">
-                <div className="mt-8">
-                  <button
-                    type="submit"
-                    disabled={isLoading}
-                    className="w-full bg-black text-center text-md rounded-md px-4 py-2 font-medium text-white focus:outline-none"
-                  >
-                    {isLoading ? "Updating..." : "Update"}
-                  </button>
-                </div>
+            </div>{" "}
+            <Input
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={handleInputChange}
+              className="p-2 border w-full rounded-md  bg-gray-500 text-sm text-gray-500 shadow-sm"
+            />
+            <TextArea
+              rows={4}
+              name="description"
+              placeholder="Business Description"
+              value={formData.description}
+              onChange={handleInputChange}
+              className="p-2 border w-full rounded-md  bg-gray-500 text-sm text-gray-500 shadow-sm"
+            />
+            <Input
+              type="tel"
+              name="phone"
+              placeholder="Phone"
+              value={formData.phone}
+              onChange={handleInputChange}
+              className="p-2 border w-full rounded-md  bg-gray-500 text-sm text-gray-500 shadow-sm"
+            />
+            <Input
+              type="email"
+              name="support_email"
+              placeholder="Support Email"
+              value={formData.support_email}
+              onChange={handleInputChange}
+              className="p-2 border w-full rounded-md  bg-gray-500 text-sm text-gray-500 shadow-sm"
+            />
+            <Input
+              type="tel"
+              name="support_phone"
+              placeholder="Support Phone"
+              value={formData.support_phone}
+              onChange={handleInputChange}
+              className="p-2 border w-full rounded-md  bg-gray-500 text-sm text-gray-500 shadow-sm"
+            />
+            <div className="">
+              <div className="mt-8">
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full bg-black text-center text-md rounded-md px-4 py-2 font-medium text-white focus:outline-none"
+                >
+                  {isLoading ? "Updating..." : "Update"}
+                </button>
               </div>
-            </form>
-          </div>
-        )}
+            </div>
+          </form>
+        </div>
       </div>
     </section>
   );

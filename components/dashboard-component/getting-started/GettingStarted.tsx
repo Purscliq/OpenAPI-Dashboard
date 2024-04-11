@@ -8,6 +8,7 @@ import {
   useLazyGenerate2faQuery,
 } from "@/services/auth/index.service";
 import { LoadingOutlined } from "@ant-design/icons";
+import { useProfileQuery } from "@/services/users/index.service";
 
 const GettingStarted = () => {
   const { replace } = useRouter();
@@ -15,15 +16,16 @@ const GettingStarted = () => {
   const [generate2FA, { isLoading: isGenerating }] = useLazyGenerate2faQuery(
     {}
   );
+  const { data: user } = useProfileQuery({});
 
   const handleSubmit = async () => {
     try {
       await enabled2Fa({}).unwrap();
       const res = await generate2FA({});
+      localStorage.setItem("qr", res?.data?.data?.upload_url);
       const url = `/getting-started/2fa?qr=${encodeURIComponent(
         res?.data?.data?.upload_url
       )}`;
-
       replace(url);
     } catch (err) {
       console.log(err);
@@ -43,9 +45,15 @@ const GettingStarted = () => {
               sure you comply with regulations
             </p>
 
-            <p className="text-[#1AD48E] text-[14px] font-medium pt-4">
-              Pending
-            </p>
+            {user?.data?.two_fa_enabled ? (
+              <p className="text-[#1AD48E] text-[14px] font-medium pt-4">
+                Success
+              </p>
+            ) : (
+              <p className="text-[#1AD48E] text-[14px] font-medium pt-4">
+                Pending
+              </p>
+            )}
           </span>
           <span className="flex items-center">
             <button
@@ -70,7 +78,6 @@ const GettingStarted = () => {
               Integrate PursFi API with our developers documentation which
               contain the libraries, APIs and SDKs
             </p>
-
             <p className="text-[#1AD48E] text-[14px] font-medium pt-4">
               Pending
             </p>
