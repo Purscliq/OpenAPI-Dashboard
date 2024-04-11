@@ -5,16 +5,39 @@ import Link from "next/link";
 import Image from "next/image";
 import { CustomSelect as Select } from "@/lib/AntdComponents";
 import type { MenuProps } from "antd";
-import { Dropdown } from "antd";
+import { Dropdown, Avatar, Typography } from "antd";
 
 import { CgMenuRightAlt } from "react-icons/cg";
 import { CiSearch } from "react-icons/ci";
 import avatar from "@/assets/png/Avatar.png";
 import NotificationIcon from "@/assets/svg/NotificationIcon";
 import { useRouter } from "next/navigation";
+import { useProfileQuery } from "@/services/users/index.service";
+
+interface InitialAvatarProps {
+  name: string;
+}
+
+const { Title } = Typography;
+
+const InitialAvatar: React.FC<InitialAvatarProps> = ({ name }) => {
+  const initials = name
+    .split(" ")
+    .map((part: string) => part.charAt(0))
+    .join("");
+
+  return (
+    <Avatar style={{ backgroundColor: "#00000033" }}>
+      <Title level={5} style={{ margin: 0, color: "black", fontWeight: 500 }}>
+        {initials}
+      </Title>
+    </Avatar>
+  );
+};
 
 const DashNav = () => {
   const { replace } = useRouter();
+  const { data: user } = useProfileQuery({});
 
   const handleLogout = () => {
     if (typeof window !== "undefined") {
@@ -49,6 +72,12 @@ const DashNav = () => {
       key: "3",
     },
   ];
+
+  // Full name for initials
+  const fullName = `${user?.data?.first_name ?? ""} ${
+    user?.data?.last_name ?? ""
+  }`;
+
   return (
     <>
       <nav className="flex justify-between items-center px-5 py-2">
@@ -95,10 +124,14 @@ const DashNav = () => {
               className="hover:cursor-pointer"
             >
               <a onClick={(e) => e.preventDefault()}>
-                <Image alt="Avatar" src={avatar} className="w-12 h-12" />
+                {/* <Image alt="Avatar" src={avatar} className="w-12 h-12" /> */}
+                {fullName.trim() ? (
+                  <InitialAvatar name={fullName} />
+                ) : (
+                  <Image alt="Avatar" src={avatar} className="w-12 h-12" />
+                )}
               </a>
             </Dropdown>
-            {/* <Image alt="Avatar" src={avatar} className="w-12 h-12" /> */}
           </div>
         </div>
       </nav>
