@@ -70,18 +70,18 @@ const WebhookTable = () => {
       sorter: true,
       render: (createdAt: string) => formatCreatedAt(createdAt),
     },
-    {
-      title: "Expiry Date",
-      dataIndex: "date",
-      sorter: true,
-    },
+    // {
+    //   title: "Expiry Date",
+    //   dataIndex: "date",
+    //   sorter: true,
+    // },
     {
       title: "Actions",
       render: (record: WebhookType) => (
         <span className="flex items-center space-x-4">
-          <button type="button" title="Edit" className="">
+          {/* <button type="button" title="Edit" className="">
             Edit
-          </button>
+          </button> */}
           <button
             type="button"
             title="Delete"

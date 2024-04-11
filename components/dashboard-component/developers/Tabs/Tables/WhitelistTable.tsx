@@ -53,9 +53,9 @@ const WhitelistTable = () => {
       title: "Actions",
       render: (record: any) => (
         <span className="flex items-center space-x-4">
-          <button type="button" title="Edit" className="">
+          {/* <button type="button" title="Edit" className="">
             Edit
-          </button>
+          </button> */}
           <button
             type="button"
             title="Delete"

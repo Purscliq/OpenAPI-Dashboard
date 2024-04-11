@@ -53,14 +53,14 @@ const APIKeyTable = () => {
     },
     {
       title: "Service",
-      dataIndex: "service",
+      dataIndex: "service_id",
       sorter: true,
     },
-    {
-      title: "Source IP",
-      dataIndex: "sourceIP",
-      sorter: true,
-    },
+    // {
+    //   title: "Source IP",
+    //   dataIndex: "sourceIP",
+    //   sorter: true,
+    // },
     {
       title: "Date Created",
       dataIndex: "created_at",

@@ -89,13 +89,15 @@ const CreateAPIKeyModal: React.FC = () => {
 
   return (
     <>
-      <button
-        type="button"
-        className="py-3 px-9 text-white text-sm bg-black rounded-[0.25rem]"
-        onClick={showModal}
-      >
-        Create API Key
-      </button>
+      <div className="flex md:justify-end">
+        <button
+          type="button"
+          className="py-3 px-9 text-white text-sm bg-black rounded-[0.25rem]"
+          onClick={showModal}
+        >
+          Create API Key
+        </button>
+      </div>
 
       <Modal
         open={isModalOpen}
