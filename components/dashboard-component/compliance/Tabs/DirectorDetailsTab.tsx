@@ -32,17 +32,6 @@ const props: UploadProps = {
   name: "file",
   multiple: true,
   action: "/api/v1/business/image-upload",
-  // onChange(info) {
-  //   const { status } = info.file;
-  //   if (status !== "uploading") {
-  //     console.log(info.file, info.fileList);
-  //   }
-  //   if (status === "done") {
-  //     message.success(`${info.file.name} file uploaded successfully.`);
-  //   } else if (status === "error") {
-  //     message.error(`${info.file.name} file upload failed.`);
-  //   }
-  // },
   onDrop(e) {
     console.log("Dropped files", e.dataTransfer.files);
   },
@@ -82,29 +71,46 @@ const DirectorDetailsTab = () => {
   const handleChange: ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
   > = (e) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      [e.target?.name]: e.target?.value,
-    }));
-    if (e.target?.name === "bvn") {
-      if (e.target?.value?.length === 11) {
-        verifyBvn({
-          bvn: parseInt(e.target.value),
-          first_name: formData.legal_first_name,
-          last_name: formData.legal_last_name,
-          dob: formData.dob,
+    const { name, value } = e.target || {};
+
+    if (name === "phone_number") {
+      const formattedValue = value.startsWith("0") ? value.slice(1) : value;
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: formattedValue,
+      }));
+    } else {
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
+    if (name === "bvn" && value?.length === 11) {
+      verifyBvn({
+        bvn: parseInt(value),
+        first_name: formData.legal_first_name,
+        last_name: formData.legal_last_name,
+        dob: formData.dob,
+      })
+        .unwrap()
+        .then((res) => {
+          const validatedData = res.data.data;
+          setFormData((prevState) => ({
+            ...prevState,
+            legal_first_name: validatedData.firstname,
+            legal_last_name: validatedData.lastname,
+            phone_number: validatedData.phone,
+            gender: validatedData.gender,
+          }));
+          message.success("BVN validated successfully");
         })
-          .then((res) => {
-            message.success("BVN verified successfully ");
-            console.log(res);
-          })
-          .catch((err) => {
-            message.error("Issue verifying BVN");
-            console.log(err);
-          });
-        // } else {
-        //   setBvnError("BVN must be exactly 11 digits");
-      }
+        .catch((err) => {
+          message.warning("Invalid BVN");
+          setFormData((prevState) => ({
+            ...prevState,
+            bvn: "",
+          }));
+        });
     }
   };
 
@@ -180,11 +186,11 @@ const DirectorDetailsTab = () => {
       createUploadFile(formData)
         .unwrap()
         .then((res) => {
-          const uploadedUrl = res.data.upload_url; 
+          const uploadedUrl = res.data.upload_url;
           setUploadUrl(uploadedUrl);
           setFormData((prev) => ({
             ...prev,
-            [fieldName]: uploadedUrl, 
+            [fieldName]: uploadedUrl,
           }));
         })
         .catch((error) => {
@@ -193,7 +199,6 @@ const DirectorDetailsTab = () => {
         });
     }
   };
-  
 
   return (
     <section className="bg-white py-4 px-4 space-y-4">
@@ -256,43 +261,32 @@ const DirectorDetailsTab = () => {
               <label className="block text-gray-700 text-sm font-semibold mb-2">
                 BVN
               </label>
-              <span>
-                <span
-                  // className="relative"
-                  style={{ position: "relative" }}
-                >
-                  <Input
-                    max={11}
-                    min={11}
-                    name="bvn"
-                    required
-                    onChange={handleChange}
-                    value={formData.bvn}
-                    placeholder="BVN"
-                    disabled={!!director?.data?.bvn}
-                  />
-                  {isVerifying && (
-                    <div
-                      // className="absolute top-[50%] right-[8px] -translate-y-[50%]"
-                      style={{
-                        position: "absolute",
-                        top: "50%",
-                        right: "8px",
-                        transform: "translateY(-50%)",
-                      }}
-                    >
-                      <LoadingOutlined
-                        style={{ fontSize: 22, color: "#1890ff" }}
-                      />
-                    </div>
-                  )}
-                </span>
-
-                {/* {bvnError && (
-                  <p className="text-red-500 text-[14px] font-[400]">
-                    {bvnError}
-                  </p>
-                )} */}
+              <span className="relative">
+                <Input
+                  max={11}
+                  min={11}
+                  name="bvn"
+                  required
+                  onChange={handleChange}
+                  value={formData.bvn}
+                  placeholder="BVN"
+                  disabled={!!director?.data?.bvn}
+                />
+                {isVerifying && (
+                  <div
+                    // className="absolute top-[50%] right-[8px] -translate-y-[50%]"
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      right: "8px",
+                      transform: "translateY(-50%)",
+                    }}
+                  >
+                    <LoadingOutlined
+                      style={{ fontSize: 22, color: "#1890ff" }}
+                    />
+                  </div>
+                )}
               </span>
             </div>
             <div className="flex flex-col gap-[0.1rem]">

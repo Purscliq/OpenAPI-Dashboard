@@ -95,6 +95,13 @@ export const businessApi = createApi({
         body,
       }),
     }),
+    verifyTin: builder.mutation({
+      query: (body) => ({
+        url: "api/v1/business/validate-tin",
+        method: "POST",
+        body,
+      }),
+    }),
     createUploadFile: builder.mutation({
       query: (body) => ({
         url: "/api/v1/business/image-upload",
@@ -134,4 +141,5 @@ export const {
   useCreateUploadFileMutation,
   useGetServicesQuery,
   useGetMainAccountQuery,
+  useVerifyTinMutation
 } = businessApi;

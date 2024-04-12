@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEventHandler, useEffect, useState } from "react";
 import {
   CustomInput as Input,
   CustomSelect as Select,
@@ -7,29 +7,48 @@ import { message } from "antd";
 import {
   useGetbusinessQuery,
   useUpdatebusinessMutation,
+  useVerifyTinMutation,
 } from "@/services/business/index.service";
 import { useRouter } from "next/navigation";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const BusinessDetailsTab = () => {
   const router = useRouter();
   const { data: business, refetch } = useGetbusinessQuery({});
   const [update, { isLoading }] = useUpdatebusinessMutation();
+  const [verifyTin, { isLoading: isVerifying }] = useVerifyTinMutation();
+
   const [formData, setFormData] = useState({
     address: "",
     business_type: "",
     tin: "",
   });
 
-  const handleInputChange = (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
+  const handleChange: ChangeEventHandler<
+    HTMLInputElement | HTMLTextAreaElement
+  > = (e) => {
+    const { name, value } = e.target || {};
+    setFormData((prevState) => ({
+      ...prevState,
       [name]: value,
-    });
+    }));
+    if (name === "tin" && value?.length === 11) {
+      verifyTin({
+        tin: value,
+      })
+        .unwrap()
+        .then((res) => {
+          console.log(res);
+          message.success("TIN validated successfully");
+        })
+        .catch((err) => {
+          message.warning("Invalid TIN");
+          setFormData((prevState) => ({
+            ...prevState,
+            tin: "",
+          }));
+        });
+    }
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -38,7 +57,6 @@ const BusinessDetailsTab = () => {
       message.error("Please fill in all fields");
       return;
     }
-
     update({
       ...formData,
     })
@@ -84,8 +102,6 @@ const BusinessDetailsTab = () => {
               <Input
                 type="text"
                 id="businessName"
-                // name="businessName"
-                // placeholder="This is placeholder"
                 required
                 value={business?.data?.name}
                 disabled
@@ -107,7 +123,7 @@ const BusinessDetailsTab = () => {
                 placeholder="Enter your business address"
                 required
                 value={formData.address}
-                onChange={handleInputChange}
+                onChange={handleChange}
                 disabled={!!business?.data?.address}
                 className="p-2 border w-full rounded-md bg-white text-sm text-gray-700 shadow-sm"
               />
@@ -142,16 +158,32 @@ const BusinessDetailsTab = () => {
               >
                 Enter TIN
               </label>
-              <Input
-                type="number"
-                id="TIN"
-                name="tin"
-                placeholder="Enter your TIN"
-                value={formData.tin}
-                disabled={!!business?.data?.tin}
-                onChange={handleInputChange}
-                className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
-              />
+              <span className="relative w-full">
+                <Input
+                  type="number"
+                  id="TIN"
+                  name="tin"
+                  placeholder="Enter your TIN"
+                  value={formData.tin}
+                  disabled={!!business?.data?.tin}
+                  onChange={handleChange}
+                />
+                {isVerifying && (
+                  <div
+                    // className="absolute top-[50%] right-[8px] -translate-y-[50%]"
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      right: "8px",
+                      transform: "translateY(-50%)",
+                    }}
+                  >
+                    <LoadingOutlined
+                      style={{ fontSize: 22, color: "#1890ff" }}
+                    />
+                  </div>
+                )}
+              </span>
             </div>
             <div className="">
               <div className="flex justify-between gap-4 mt-8">
@@ -164,7 +196,6 @@ const BusinessDetailsTab = () => {
                 </button>
                 <button
                   type="button"
-                  // onClick={() => router.push("/about")}
                   onClick={() => router.back()}
                   className="w-full text-center text-md rounded-md px-4 py-2 font-medium text-black focus:outline-none"
                 >
