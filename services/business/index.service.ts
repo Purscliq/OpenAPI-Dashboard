@@ -114,6 +114,24 @@ export const businessApi = createApi({
         method: "GET",
       }),
     }),
+    getTotalCollection: builder.query({
+      query: () => ({
+        url: "/api/v1/business/total-collections",
+        method: "GET",
+      }),
+    }),
+    getTotalDisbursement: builder.query({
+      query: () => ({
+        url: "/api/v1/business/total-disbursements",
+        method: "GET",
+      }),
+    }),
+    getTotalTransfer: builder.query({
+      query: () => ({
+        url: "/api/v1/business/total-transfer",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -134,4 +152,7 @@ export const {
   useCreateUploadFileMutation,
   useGetServicesQuery,
   useGetMainAccountQuery,
+  useGetTotalCollectionQuery,
+  useGetTotalDisbursementQuery,
+  useGetTotalTransferQuery,
 } = businessApi;

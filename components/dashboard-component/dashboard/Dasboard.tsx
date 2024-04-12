@@ -12,6 +12,9 @@ import { CustomTooltip as Tooltip } from "@/lib/AntdComponents";
 import FundModal from "./modal/FundModal";
 
 import { useGetMainAccountQuery } from "@/services/business/index.service";
+import { useGetTotalCollectionQuery } from "@/services/business/index.service";
+import { useGetTotalDisbursementQuery } from "@/services/business/index.service";
+import { useGetTotalTransferQuery } from "@/services/business/index.service";
 
 const Dashbord = () => {
   const [toogleTooltip, setToogleTooltip] = useState(false);
@@ -19,6 +22,10 @@ const Dashbord = () => {
   const [withdraw, setWithdraw] = useState(false);
 
   const { data: mainAccountData, isLoading } = useGetMainAccountQuery({});
+  const { data: totalCollectionData } = useGetTotalCollectionQuery({});
+  const { data: totalDisbursementData } = useGetTotalDisbursementQuery({});
+  const { data: totalTransferData } = useGetTotalTransferQuery({});
+
   return (
     <>
       <div className="max-w-[1640px] flex flex-col p-4 space-y-6 overflow-y-scroll">
@@ -60,7 +67,7 @@ const Dashbord = () => {
                 </div>
 
                 <p className="text-2xl font-semibold text-white/90 flex items-center justify-between">
-                  NGN 28,891.138
+                  NGN 0
                   <svg
                     width="25"
                     height="24"
@@ -127,7 +134,7 @@ const Dashbord = () => {
                 </div>
 
                 <p className="text-2xl font-semibold  flex items-center justify-between">
-                  NGN 1,050.44
+                  NGN {totalCollectionData?.data?.total}
                   <svg
                     width="24"
                     height="24"
@@ -194,7 +201,7 @@ const Dashbord = () => {
                 </div>
 
                 <p className="text-2xl font-semibold  flex items-center justify-between">
-                  NGN 200.31
+                  NGN {totalTransferData?.data?.total}
                   <svg
                     width="24"
                     height="24"
@@ -235,7 +242,7 @@ const Dashbord = () => {
                     <DisbursIcon />
                   </span>
                   <div>
-                    <p className=" font-bold  mb-2">Total Disburstment</p>
+                    <p className=" font-bold  mb-2">Total Disbursement</p>
                     <p className="text-sm text-gray-500 inline-flex items-center ">
                       <svg
                         className="mr-1"
@@ -261,7 +268,7 @@ const Dashbord = () => {
                 </div>
 
                 <p className="text-2xl font-semibold  flex items-center justify-between">
-                  NGN 1,050.44
+                  NGN {totalDisbursementData?.data?.total}
                   <svg
                     width="24"
                     height="24"
