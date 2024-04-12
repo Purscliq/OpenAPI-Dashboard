@@ -15,6 +15,7 @@ import { useGetMainAccountQuery } from "@/services/business/index.service";
 import { useGetTotalCollectionQuery } from "@/services/business/index.service";
 import { useGetTotalDisbursementQuery } from "@/services/business/index.service";
 import { useGetTotalTransferQuery } from "@/services/business/index.service";
+import { useGetTotalTransactionsQuery } from "@/services/business/index.service";
 
 const Dashbord = () => {
   const [toogleTooltip, setToogleTooltip] = useState(false);
@@ -25,6 +26,7 @@ const Dashbord = () => {
   const { data: totalCollectionData } = useGetTotalCollectionQuery({});
   const { data: totalDisbursementData } = useGetTotalDisbursementQuery({});
   const { data: totalTransferData } = useGetTotalTransferQuery({});
+  const { data: totalTransactionData } = useGetTotalTransactionsQuery({});
 
   return (
     <>
@@ -61,13 +63,14 @@ const Dashbord = () => {
                           fill="#31D3A3"
                         />
                       </svg>
-                      15 % compared with last month
+                      {totalTransactionData?.data?.percentage_difference} %
+                      compared with last month
                     </p>
                   </div>
                 </div>
 
                 <p className="text-2xl font-semibold text-white/90 flex items-center justify-between">
-                  NGN 0
+                  NGN {totalTransactionData?.data?.total}
                   <svg
                     width="25"
                     height="24"
@@ -128,7 +131,8 @@ const Dashbord = () => {
                           fill="#FE3766"
                         />
                       </svg>
-                      10 % compared with last month
+                      {totalCollectionData?.data?.percentage_difference} %
+                      compared with last month
                     </p>
                   </div>
                 </div>
@@ -195,7 +199,8 @@ const Dashbord = () => {
                           fill="#F9BA33"
                         />
                       </svg>
-                      2 % compared with last month{" "}
+                      {totalTransferData?.data?.percentage_difference} %
+                      compared with last month
                     </p>
                   </div>
                 </div>
@@ -262,7 +267,8 @@ const Dashbord = () => {
                           fill="#1775E4"
                         />
                       </svg>
-                      8 % compared with last month{" "}
+                      {totalDisbursementData?.data?.percentage_difference} %
+                      compared with last month
                     </p>
                   </div>
                 </div>
