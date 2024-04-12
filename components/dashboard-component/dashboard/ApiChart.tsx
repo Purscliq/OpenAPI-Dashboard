@@ -1,6 +1,9 @@
 import { Column, ColumnConfig } from "@ant-design/plots";
+import { useGetApiCallsQuery } from "@/services/business/index.service";
 
 const ApiChart = () => {
+  const { data: ApiCallsData } = useGetApiCallsQuery({});
+
   const data = [
     {
       type: "Jan",

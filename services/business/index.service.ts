@@ -121,6 +121,36 @@ export const businessApi = createApi({
         method: "GET",
       }),
     }),
+    getTotalCollection: builder.query({
+      query: () => ({
+        url: "/api/v1/business/total-collections",
+        method: "GET",
+      }),
+    }),
+    getTotalDisbursement: builder.query({
+      query: () => ({
+        url: "/api/v1/business/total-disbursements",
+        method: "GET",
+      }),
+    }),
+    getTotalTransfer: builder.query({
+      query: () => ({
+        url: "/api/v1/business/total-transfer",
+        method: "GET",
+      }),
+    }),
+    getTotalTransactions: builder.query({
+      query: () => ({
+        url: "/api/v1/business/total-transactions",
+        method: "GET",
+      }),
+    }),
+    getApiCalls: builder.query({
+      query: () => ({
+        url: "/api/v1/business/api-calls",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -141,5 +171,10 @@ export const {
   useCreateUploadFileMutation,
   useGetServicesQuery,
   useGetMainAccountQuery,
-  useVerifyTinMutation
+  useVerifyTinMutation,
+  useGetTotalCollectionQuery,
+  useGetTotalDisbursementQuery,
+  useGetTotalTransferQuery,
+  useGetTotalTransactionsQuery,
+  useGetApiCallsQuery,
 } = businessApi;
