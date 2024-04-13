@@ -151,6 +151,12 @@ export const businessApi = createApi({
         method: "GET",
       }),
     }),
+    getAllLoans: builder.query({
+      query: () => ({
+        url: "/api/v1/business/loans",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -177,4 +183,5 @@ export const {
   useGetTotalTransferQuery,
   useGetTotalTransactionsQuery,
   useGetApiCallsQuery,
+  useGetAllLoansQuery,
 } = businessApi;

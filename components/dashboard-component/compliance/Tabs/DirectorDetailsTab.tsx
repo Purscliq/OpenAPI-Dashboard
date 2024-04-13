@@ -88,9 +88,6 @@ const DirectorDetailsTab = () => {
     if (name === "bvn" && value?.length === 11) {
       verifyBvn({
         bvn: parseInt(value),
-        first_name: formData.legal_first_name,
-        last_name: formData.legal_last_name,
-        dob: formData.dob,
       })
         .unwrap()
         .then((res) => {
@@ -212,51 +209,6 @@ const DirectorDetailsTab = () => {
 
         <div className="p-2 col-span-5 md:mr-10 lg:mr-20">
           <form onSubmit={handleSubmit} className="flex flex-col gap-[1rem]">
-            <div className="flex items-center justify-between gap-[1rem]">
-              <span className="w-full">
-                <label className="block text-gray-700 text-sm font-semibold mb-2">
-                  Legal First name
-                </label>
-                <Input
-                  value={formData.legal_first_name}
-                  onChange={handleChange}
-                  name="legal_first_name"
-                  required
-                  placeholder="First Name"
-                  disabled={!!director?.data?.legal_first_name}
-                  className="!w-full"
-                />
-              </span>
-              <span className="w-full">
-                <label className="block text-gray-700 text-sm font-semibold mb-2">
-                  Legal Last name
-                </label>
-                <Input
-                  value={formData.legal_last_name}
-                  onChange={handleChange}
-                  name="legal_last_name"
-                  required
-                  placeholder="Last Name"
-                  disabled={!!director?.data?.legal_last_name}
-                  className="!w-full"
-                />
-              </span>
-            </div>
-            <div className="flex flex-col gap-[0.1rem]">
-              <label className="block text-gray-700 text-sm font-semibold mb-2">
-                Date of Birth
-              </label>
-              <DatePicker
-                onChange={(value, date) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    dob: `${date}`,
-                  }))
-                }
-                required
-                disabled={!!director?.data?.dob}
-              />
-            </div>
             <div className="flex flex-col gap-[0.1rem]">
               <label className="block text-gray-700 text-sm font-semibold mb-2">
                 BVN
@@ -289,6 +241,36 @@ const DirectorDetailsTab = () => {
                 )}
               </span>
             </div>
+            <div className="flex items-center justify-between gap-[1rem]">
+              <span className="w-full">
+                <label className="block text-gray-700 text-sm font-semibold mb-2">
+                  Legal First name
+                </label>
+                <Input
+                  value={formData.legal_first_name}
+                  onChange={handleChange}
+                  name="legal_first_name"
+                  required
+                  placeholder="First Name"
+                  disabled={!!director?.data?.legal_first_name}
+                  className="!w-full"
+                />
+              </span>
+              <span className="w-full">
+                <label className="block text-gray-700 text-sm font-semibold mb-2">
+                  Legal Last name
+                </label>
+                <Input
+                  value={formData.legal_last_name}
+                  onChange={handleChange}
+                  name="legal_last_name"
+                  required
+                  placeholder="Last Name"
+                  disabled={!!director?.data?.legal_last_name}
+                  className="!w-full"
+                />
+              </span>
+            </div>
             <div className="flex flex-col gap-[0.1rem]">
               <label className="block text-gray-700 text-sm font-semibold mb-2">
                 Phone Number
@@ -315,6 +297,21 @@ const DirectorDetailsTab = () => {
                 value={formData.gender}
                 options={gender}
                 disabled={!!director?.data?.gender}
+              />
+            </div>
+            <div className="flex flex-col gap-[0.1rem]">
+              <label className="block text-gray-700 text-sm font-semibold mb-2">
+                Date of Birth
+              </label>
+              <DatePicker
+                onChange={(value, date) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    dob: `${date}`,
+                  }))
+                }
+                required
+                disabled={!!director?.data?.dob}
               />
             </div>
 
