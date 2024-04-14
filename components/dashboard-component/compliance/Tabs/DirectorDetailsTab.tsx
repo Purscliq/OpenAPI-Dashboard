@@ -87,7 +87,7 @@ const DirectorDetailsTab = () => {
     }
     if (name === "bvn" && value?.length === 11) {
       verifyBvn({
-        bvn: parseInt(value),
+        bvn: value,
       })
         .unwrap()
         .then((res) => {
