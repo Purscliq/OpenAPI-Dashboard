@@ -8,6 +8,7 @@ import { message } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import { useProfileQuery } from "@/services/users/index.service";
+import Link from "next/link";
 
 const TwoFA = ({ QRcode }: { QRcode: string }) => {
   const [validate2FA, { isLoading }] = useValidate2faMutation({});
@@ -76,13 +77,12 @@ const TwoFA = ({ QRcode }: { QRcode: string }) => {
 
               <div className="">
                 <div className="flex justify-between gap-4 mt-12">
-                  <button
-                    type="button"
-                    onClick={() => back()}
+                  <Link
+                    href="getting-started"
                     className="w-full text-center text-md rounded-md px-4 py-2 font-medium text-black border border-[#E9EBEB] focus:outline-none"
                   >
                     Cancel
-                  </button>
+                  </Link>
                   <button
                     type="button"
                     onClick={handleSubmit}

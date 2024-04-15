@@ -275,15 +275,15 @@ const DirectorDetailsTab = () => {
               <label className="block text-gray-700 text-sm font-semibold mb-2">
                 Phone Number
               </label>
-              <PhoneInput
-                country={"ng"}
-                containerClass="!w-full"
-                inputClass="phone-input-input !w-full !disabled:text-gray-700 !"
+              <Input
+                type="number"
                 value={formData.phone_number}
-                onChange={(value) =>
-                  setFormData((prev) => ({ ...prev, phone_number: value }))
-                }
+                onChange={handleChange}
+                name="legal_last_name"
+                required
+                placeholder="Last Name"
                 disabled={!!director?.data?.phone_number}
+                className="!w-full"
               />
             </div>
             <div className="flex flex-col gap-[0.1rem]">
