@@ -351,11 +351,9 @@ const Dashbord = () => {
                   </Tooltip>
                 </div>
                 <span className="flex justify-between items-center">
-                  <p className="text-gray-500 ">
-                    {mainAccountData?.data?.bank_name}
-                  </p>
+                  <p className="text-gray-500 ">Bank Name</p>
                   <p className="text-black font-semibold">
-                    {mainAccountData?.data?.account_name}
+                    {mainAccountData?.data?.bank_name}
                   </p>
                 </span>
                 <span className="flex gap-[0.2rem] justify-between items-center">
@@ -480,13 +478,13 @@ const Dashbord = () => {
                         fill="#F9BA33"
                       />
                     </svg>
-                    2 % compared with last month{" "}
+                    0 % compared with last month{" "}
                   </p>
                 </div>
               </div>
 
               <p className="text-2xl font-semibold  flex items-center justify-between">
-                NGN 200.31
+                NGN 0
                 <svg
                   width="24"
                   height="24"
