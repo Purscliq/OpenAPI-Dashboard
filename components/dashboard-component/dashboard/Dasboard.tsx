@@ -11,11 +11,15 @@ import Line from "@/assets/svg/Line";
 import { CustomTooltip as Tooltip } from "@/lib/AntdComponents";
 import FundModal from "./modal/FundModal";
 
-import { useGetMainAccountQuery } from "@/services/business/index.service";
-import { useGetTotalCollectionQuery } from "@/services/business/index.service";
-import { useGetTotalDisbursementQuery } from "@/services/business/index.service";
-import { useGetTotalTransferQuery } from "@/services/business/index.service";
-import { useGetTotalTransactionsQuery } from "@/services/business/index.service";
+import {
+  useGetMainAccountQuery,
+  useGetSubaccountQuery,
+  useGetTotalCollectionQuery,
+  useGetTotalDisbursementQuery,
+  useGetTotalTransferQuery,
+  useGetTotalTransactionsQuery,
+  useGetApiCallsQuery,
+} from "@/services/business/index.service";
 
 const Dashbord = () => {
   const [toogleTooltip, setToogleTooltip] = useState(false);
@@ -27,6 +31,8 @@ const Dashbord = () => {
   const { data: totalDisbursementData } = useGetTotalDisbursementQuery({});
   const { data: totalTransferData } = useGetTotalTransferQuery({});
   const { data: totalTransactionData } = useGetTotalTransactionsQuery({});
+  const { data: subAccountData } = useGetSubaccountQuery({});
+  const { data: ApiCallsData } = useGetApiCallsQuery({});
 
   return (
     <>
@@ -484,7 +490,7 @@ const Dashbord = () => {
               </div>
 
               <p className="text-2xl font-semibold  flex items-center justify-between">
-                NGN 0
+                NGN {mainAccountData?.data?.current_balance}
                 <svg
                   width="24"
                   height="24"
@@ -562,7 +568,7 @@ const Dashbord = () => {
                   <p className="font-semibold text-slate-400 text-lg">
                     Main Account
                   </p>
-                  <p className="font-semibold  text-lg">42</p>
+                  <p className="font-semibold  text-lg">1</p>
                   <p className="inline-flex items-center text-lg text-green-500">
                     <svg
                       className="mr-1"
@@ -577,14 +583,16 @@ const Dashbord = () => {
                         fill="#71DD37"
                       />
                     </svg>
-                    52.18%
+                    0%
                   </p>
                 </span>
                 <span className="flex flex-col space-y-2">
                   <p className="font-semibold text-slate-400 text-lg">
                     Sub Account
                   </p>
-                  <p className="font-semibold  text-lg">57</p>
+                  <p className="font-semibold  text-lg">
+                    {subAccountData?.data?.length}
+                  </p>
                   <p className="inline-flex items-center text-lg text-green-500">
                     <svg
                       className="mr-1"
@@ -599,7 +607,7 @@ const Dashbord = () => {
                         fill="#71DD37"
                       />
                     </svg>
-                    52.18%
+                    0%
                   </p>
                 </span>
               </div>
@@ -616,7 +624,9 @@ const Dashbord = () => {
                   <p className="font-semibold text-green-400 text-sm">
                     Total Api Calls
                   </p>
-                  <p className="font-semibold  text-lg">86,004</p>
+                  <p className="font-semibold  text-lg">
+                    {ApiCallsData?.data?.length}
+                  </p>
                 </span>
                 <Line />
               </div>
