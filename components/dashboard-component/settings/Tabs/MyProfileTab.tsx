@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CustomInput as Input,
   CustomPasswordInput as PasswordInput,
@@ -26,10 +26,16 @@ const MyProfileTab = () => {
   const [disabled, { isLoading }] = useDisable2faMutation();
   const [changePassword, { isLoading: ischanging }] =
     useChangePasswordMutation();
+  const [is2FAEnabled, setIs2FAEnabled] = useState(false);
+  useEffect(() => {
+    setIs2FAEnabled(user?.data?.two_fa_enabled || false);
+  }, [user]);
+
   const handleDisable2FA = () => {
     disabled({})
       .unwrap()
       .then((res) => {
+        setIs2FAEnabled(false);
         message.success(
           "Two-factor authentication has been successfully disabled."
         );
@@ -68,9 +74,11 @@ const MyProfileTab = () => {
   const [otp, setOtp] = useState("");
   const handleverfifyOtp = () => {
     validate2FA({ code: otp })
+
       .unwrap()
       .then((res) => {
         console.log(res);
+        setIs2FAEnabled(true)
         message.success("2FA Activated");
       })
       .catch((err) => {
@@ -81,6 +89,7 @@ const MyProfileTab = () => {
       });
   };
   const qrCode = localStorage.getItem("qr") || "";
+
   return (
     <section className="bg- py-4 px-0 space-y-4">
       <div className="border-b pb-2">
@@ -231,7 +240,7 @@ const MyProfileTab = () => {
       </form>
 
       {/* disable 2FA */}
-      {user?.data?.two_fa_enabled ? (
+      {is2FAEnabled ? (
         <div className="grid grid-cols-1 md:grid-cols-8 gap-8">
           <div className="md:col-span-3">
             <span className="flex flex-col gap-2">

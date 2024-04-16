@@ -192,7 +192,6 @@ const DirectorDetailsTab = () => {
         })
         .catch((error) => {
           console.error("Error uploading file:", error);
-          message.error(`Failed to upload ${info.file.name}.`);
         });
     }
   };
@@ -370,6 +369,7 @@ const DirectorDetailsTab = () => {
                 accept="application/pdf, image/jpeg"
                 action="/api/v1/business/image-upload"
                 onChange={(info) => handleUpload(info, "id_card_url")}
+                disabled={!!director?.data?.id_card_url}
                 className="flex items-center text-center  gap-[0.3rem]"
               >
                 <p className="ant-upload-text flex gap-4">
@@ -391,6 +391,7 @@ const DirectorDetailsTab = () => {
                 id="signature"
                 name="signature_url"
                 multiple
+                disabled={!!director?.data?.signature_url}
                 accept="application/pdf, image/jpeg"
                 action="/api/v1/business/image-upload"
                 onChange={(info) => handleUpload(info, "signature_url")}
@@ -418,6 +419,7 @@ const DirectorDetailsTab = () => {
                 accept="application/pdf, image/jpeg"
                 action="/api/v1/business/image-upload"
                 onChange={(info) => handleUpload(info, "proof_of_add_url")}
+                disabled={!!director?.data?.proof_of_add_url}
                 className="flex items-center text-center gap-[0.3rem]"
               >
                 <p className="ant-upload-text flex gap-4">
