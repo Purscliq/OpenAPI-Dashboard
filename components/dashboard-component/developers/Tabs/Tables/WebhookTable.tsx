@@ -8,20 +8,25 @@ import {
   useReadAllWebhooksQuery,
   useDeleteWebhookMutation,
 } from "@/services/apikeys/index.service";
-import { LoadingOutlined } from "@ant-design/icons";
 
 interface WebhookType {
   id: string;
 }
 
-const WebhookTable = () => {
+const WebhookTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
   const {
     data: webhooksData,
     isLoading,
     isError,
     error,
-    refetch, // Function to manually refetch the webhooks data
+    refetch,
   } = useReadAllWebhooksQuery([]);
+
+  useEffect(() => {
+    if (shouldRefresh) {
+      refetch();
+    }
+  }, [shouldRefresh, refetch]);
 
   // deleting a webhook
   const [deleteWebhook, { isLoading: deleteLoading }] =

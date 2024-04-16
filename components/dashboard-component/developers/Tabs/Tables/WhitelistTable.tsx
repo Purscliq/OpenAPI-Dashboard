@@ -8,9 +8,8 @@ import {
   useGetAllIpsQuery,
   useDeleteIpMutation,
 } from "@/services/apikeys/index.service";
-import { LoadingOutlined } from "@ant-design/icons";
 
-const WhitelistTable = () => {
+const WhitelistTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
   const {
     data: whitelistData,
     isLoading,
@@ -18,6 +17,12 @@ const WhitelistTable = () => {
     error,
     refetch,
   } = useGetAllIpsQuery([]);
+
+  useEffect(() => {
+    if (shouldRefresh) {
+      refetch();
+    }
+  }, [shouldRefresh, refetch]);
 
   const [deleteIp, { isLoading: deleteLoading }] = useDeleteIpMutation();
 

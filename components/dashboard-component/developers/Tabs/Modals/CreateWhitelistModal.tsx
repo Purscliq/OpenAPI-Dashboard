@@ -5,7 +5,9 @@ import { CustomModal } from "@/lib/AntdComponents";
 import { message } from "antd";
 import { useWhitelistIpMutation } from "@/services/apikeys/index.service";
 
-const CreateWhitelistModal: React.FC = () => {
+const CreateWhitelistModal: React.FC<{ onWhitelistCreated: () => void }> = ({
+  onWhitelistCreated,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [ipAddress, setIpAddress] = useState("");
   const [whitelistIp, { isLoading }] = useWhitelistIpMutation();
@@ -31,6 +33,7 @@ const CreateWhitelistModal: React.FC = () => {
       if ("data" in response) {
         if (response.data.status === "success") {
           message.success("IP whitelisted successfully");
+          onWhitelistCreated(); // Call the callback function
           handleOk();
         } else {
           message.error(response.data.error.message || "An error occurred");

@@ -5,7 +5,9 @@ import { CustomInput, CustomModal as Modal } from "@/lib/AntdComponents";
 import { message } from "antd";
 import { useCreateWebhookMutation } from "@/services/apikeys/index.service";
 
-const CreateWebhookModal: React.FC = () => {
+const CreateWebhookModal: React.FC<{ onWebhookCreated: () => void }> = ({
+  onWebhookCreated,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
@@ -33,6 +35,7 @@ const CreateWebhookModal: React.FC = () => {
       if ("data" in response) {
         if (response.data.status === "success") {
           message.success("Webhook created successfully");
+          onWebhookCreated(); // Call the callback function
           handleOk();
         } else {
           message.error(response.data.error.message || "An error occurred");

@@ -6,7 +6,9 @@ import { message } from "antd";
 import { useCreateApiKeyMutation } from "@/services/apikeys/index.service";
 import { useGetServicesQuery } from "@/services/business/index.service";
 
-const CreateAPIKeyModal: React.FC = () => {
+const CreateAPIKeyModal: React.FC<{ onApiKeyCreated: () => void }> = ({
+  onApiKeyCreated,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [name, setName] = useState("");
   const [service, setService] = useState("");
@@ -66,6 +68,7 @@ const CreateAPIKeyModal: React.FC = () => {
         // Check if the API key creation was successful
         if (response.data.status === "success") {
           message.success("API key created successfully");
+          onApiKeyCreated(); // Call the callback function
           setIsModalOpen(false);
         } else {
           message.error(response.data.error.message || "An error occurred");

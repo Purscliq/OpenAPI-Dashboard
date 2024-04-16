@@ -8,9 +8,8 @@ import {
   useGetApiKeysQuery,
   useDeleteApiKeyMutation,
 } from "@/services/apikeys/index.service";
-import { LoadingOutlined } from "@ant-design/icons";
 
-const APIKeyTable = () => {
+const APIKeyTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
   const {
     data: apiKeysData,
     isLoading,
@@ -18,6 +17,12 @@ const APIKeyTable = () => {
     error,
     refetch,
   } = useGetApiKeysQuery([]);
+
+  useEffect(() => {
+    if (shouldRefresh) {
+      refetch();
+    }
+  }, [shouldRefresh, refetch]);
 
   const [deleteApiKey, { isLoading: deleteLoading }] =
     useDeleteApiKeyMutation();
