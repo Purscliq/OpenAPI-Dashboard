@@ -78,7 +78,7 @@ const WhitelistTable = () => {
   // }
 
   return (
-    <div className="bg-white flex flex-col gap-[1rem] py-6 px-4">
+    <div className="bg-white flex flex-col gap-[1rem] px-4">
       <p className="font-semibold text-[18px]">
         {whitelistData?.data
           ? `${whitelistData.data.length} Whitelisted IP(s)`

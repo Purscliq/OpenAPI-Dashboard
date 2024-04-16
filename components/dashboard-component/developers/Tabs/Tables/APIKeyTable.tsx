@@ -96,7 +96,7 @@ const APIKeyTable = () => {
   // }
 
   return (
-    <div className="bg-white flex flex-col gap-[1rem] py-6 px-4">
+    <div className="bg-white flex flex-col gap-[1rem] px-4">
       <p className="font-semibold text-[18px]">
         {apiKeysData?.data
           ? `${apiKeysData.data.length} API Key(s)`
