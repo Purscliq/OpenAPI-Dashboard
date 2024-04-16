@@ -50,11 +50,11 @@ const DashNav = () => {
 
   const items: MenuProps["items"] = [
     {
-      label: <Link href="#">Profile</Link>,
+      label: <Link href="">Profile</Link>,
       key: "0",
     },
     {
-      label: <Link href="#">Settings</Link>,
+      label: <Link href="settings">Settings</Link>,
       key: "1",
     },
     {
@@ -99,7 +99,7 @@ const DashNav = () => {
           />
         </div>
         <div className="space-x-8 items-center flex">
-          <div className="hidden lg:block">
+          {/* <div className="hidden lg:block">
             <Select
               id="create"
               defaultValue="create new"
@@ -109,14 +109,15 @@ const DashNav = () => {
               ]}
               className="p-2 border w-full rounded-md border-none  bg-white text-sm text-[#A7A9AD] shadow-none"
             />
-          </div>
-          <button
+          </div> */}
+
+          {/* <button
             type="button"
             className="hidden lg:flex space-x-3 p-2 items-center border border-[#EEF1F6] bg-white rounded-full"
           >
-            {/* <span className="w-2 h-2 rounded-full bg-green-700"></span> */}
             <NotificationIcon />
-          </button>
+          </button> */}
+          {/* <span className="w-2 h-2 rounded-full bg-green-700"></span> */}
           <div className="">
             <Dropdown
               menu={{ items }}
