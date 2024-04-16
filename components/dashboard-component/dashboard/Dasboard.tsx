@@ -625,7 +625,7 @@ const Dashbord = () => {
                     Total Api Calls
                   </p>
                   <p className="font-semibold  text-lg">
-                    {ApiCallsData?.data?.length}
+                    {ApiCallsData?.data?.total_calls}
                   </p>
                 </span>
                 <Line />
