@@ -1,39 +1,31 @@
 import { Column, ColumnConfig } from "@ant-design/plots";
 import { useGetApiCallsQuery } from "@/services/business/index.service";
 
+interface MonthlyData {
+  month: string;
+  calls: number;
+}
+
 const ApiChart = () => {
   const { data: ApiCallsData } = useGetApiCallsQuery({});
 
-  let data = [
-    { type: "Jan", sales: 6000 },
-    { type: "Feb", sales: 15000 },
-    { type: "Mar", sales: 4000 },
-    { type: "Apr", sales: 25000 },
-    { type: "May", sales: 9000 },
-    { type: "Jun", sales: 45000 },
-    { type: "July", sales: 10000 },
-    { type: "Aug", sales: 25000 },
-    { type: "Sep", sales: 30000 },
-    { type: "Oct", sales: 5000 },
-    { type: "Nov", sales: 23000 },
-    { type: "Dec", sales: 24000 },
-  ];
+  let data = [];
 
   if (ApiCallsData?.data?.monthly && ApiCallsData.data.monthly.length > 0) {
     // If monthly data is available, use it
-    data = ApiCallsData.data.monthly.map((item: number, index: number) => ({
-      type: index + 1, // Assuming the API returns data in order of months
-      sales: item,
+    data = ApiCallsData.data.monthly.map((item: MonthlyData) => ({
+      month: item.month,
+      calls: item.calls,
     }));
   }
 
   const config: ColumnConfig = {
     data,
-    xField: "type",
-    yField: "sales",
+    xField: "month",
+    yField: "calls",
     isStack: true,
     color: "black",
-    columnWidthRatio: 1,
+    columnWidthRatio: 0.8,
     xAxis: {
       label: {
         autoHide: false,
@@ -41,7 +33,9 @@ const ApiChart = () => {
       },
     },
     yAxis: {
-      label: null,
+      label: {
+        formatter: (value) => `${value}`, // Format the labels as desired
+      },
     },
     interactions: [
       {

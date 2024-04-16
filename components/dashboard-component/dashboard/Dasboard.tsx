@@ -319,7 +319,10 @@ const Dashbord = () => {
             <article className="border border-gray-200 p-4 rounded-[20px]  flex flex-col space-y-4 bg-white">
               <div className="flex  justify-between items-center p-2">
                 <p className="text-[20px] font-bold">Transaction Analytics</p>
-                <select className="select text-[#3A3F51]  w-fit h-[2em] !border !border-gray-300 !min-h-[1rem] rounded-[6px]">
+                <select
+                  className="select text-[#3A3F51]  w-fit h-[2em] !border !border-gray-300 !min-h-[1rem] rounded-[6px]"
+                  title="Period"
+                >
                   <option selected>Weekly </option>
                   <option>Monthly</option>
                   <option>Yearly</option>
@@ -693,7 +696,7 @@ const Dashbord = () => {
           </article> */}
           </section>
         </div>
-        <article className="border border-gray-200 p-4 rounded-[20px]  flex flex-col  bg-white w-full overflow-x-auto overflow-hidden">
+        <article className="border border-gray-200 p-4 rounded-[20px]  flex flex-col gap-6  bg-white w-full overflow-x-auto overflow-hidden">
           <p className="text-[20px] font-bold">API Calls</p>
           <ApiChart />{" "}
         </article>
