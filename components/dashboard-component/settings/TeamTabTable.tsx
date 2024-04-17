@@ -16,9 +16,7 @@ interface TeamMembersType {
   // other properties...
 }
 
-import TeamTabModal from "./TeamTabModal";
-
-const TeamTabTable = () => {
+const TeamTabTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
   const {
     data: TeamMembersData,
     isLoading,
@@ -26,6 +24,12 @@ const TeamTabTable = () => {
     error,
     refetch, // Function to manually refetch the team members data
   } = useGetTeamMembersQuery([]);
+
+  useEffect(() => {
+    if (shouldRefresh) {
+      refetch();
+    }
+  }, [shouldRefresh, refetch]);
 
   // Function to format the date
   const formatCreatedAt = (createdAt: string) => {
@@ -72,9 +76,7 @@ const TeamTabTable = () => {
       title: <span className="flex items-center space-x-2">Action</span>,
       render: () => {
         return (
-          <span className="cursor-pointer">
-            <DeleteIcon />
-          </span>
+          <span className="cursor-pointer">{/* <DeleteIcon /> */}...</span>
         );
       },
     },
@@ -89,14 +91,13 @@ const TeamTabTable = () => {
   // }
 
   return (
-    <div className="bg-white flex flex-col gap-[1rem] py-6 px-4">
+    <div className="bg-white flex flex-col gap-[1rem] px-4">
       <div className="sm:flex justify-between gap-6 space-y-4 sm:space-y-0">
         <p className="font-semibold text-[18px]">
           {TeamMembersData?.data
             ? `${TeamMembersData.data.length} Team member(s)`
             : "No Team member"}
         </p>
-        <TeamTabModal />
       </div>
 
       <div className="relative overflow-x-auto sm:rounded-lg w-full">

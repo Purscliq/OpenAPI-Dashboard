@@ -9,7 +9,9 @@ import {
 import { message } from "antd";
 import { useInviteUserMutation } from "@/services/business/index.service";
 
-const TeamTabModal: React.FC = () => {
+const TeamTabModal: React.FC<{ onTeamMemberAdded: () => void }> = ({
+  onTeamMemberAdded,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
@@ -55,6 +57,7 @@ const TeamTabModal: React.FC = () => {
       if ("data" in response) {
         if (response.data.status === "success") {
           message.success("Invitation sent successfully");
+          onTeamMemberAdded(); // Call the callback function
           handleOk();
         } else {
           message.error(
@@ -95,13 +98,15 @@ const TeamTabModal: React.FC = () => {
 
   return (
     <>
-      <button
-        type="button"
-        className="py-3 px-9 text-white text-sm bg-black rounded-[0.25rem]"
-        onClick={showModal}
-      >
-        Invite Member
-      </button>
+      <div className="flex md:justify-end">
+        <button
+          type="button"
+          className="py-3 px-9 text-white text-sm bg-black rounded-[0.25rem]"
+          onClick={showModal}
+        >
+          Invite Member
+        </button>
+      </div>
 
       <CustomModal
         open={isModalOpen}
