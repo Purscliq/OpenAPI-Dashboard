@@ -3,23 +3,9 @@
 import React, { useState } from "react";
 import { Button, Drawer } from "antd";
 
-const LoanAccountDrawer = () => {
-  const [open, setOpen] = useState(false);
-
-  const showDrawer = () => {
-    setOpen(true);
-  };
-
-  const onClose = () => {
-    setOpen(false);
-  };
-
+const LoanAccountDrawer = ({ open, onClose }) => {
   return (
     <>
-      <Button type="primary" onClick={showDrawer}>
-        Details
-      </Button>
-
       <Drawer
         onClose={onClose}
         open={open}
