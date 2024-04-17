@@ -43,14 +43,13 @@ const CreateAPIKeyModal: React.FC<{ onApiKeyCreated: () => void }> = ({
     e.preventDefault();
 
     try {
-      // Get the selected service
       const selectedService = services.data.find(
         (s: { name: string }) => s.name === service
       );
 
       const response = await createApiKey({
         name,
-        service_id: selectedService.id, // Include service_id in the request body
+        service_id: selectedService.id, 
         permission_payload: [
           {
             service: "loan service",

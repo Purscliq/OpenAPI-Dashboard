@@ -74,11 +74,10 @@ const MyProfileTab = () => {
   const [otp, setOtp] = useState("");
   const handleverfifyOtp = () => {
     validate2FA({ code: otp })
-
       .unwrap()
       .then((res) => {
         console.log(res);
-        setIs2FAEnabled(true)
+        setIs2FAEnabled(true);
         message.success("2FA Activated");
       })
       .catch((err) => {
@@ -88,7 +87,12 @@ const MyProfileTab = () => {
         );
       });
   };
-  const qrCode = localStorage.getItem("qr") || "";
+
+  let qrCode;
+
+  if (typeof window !== "undefined") {
+    qrCode = localStorage.getItem("qr") || "";
+  }
 
   return (
     <section className="bg- py-4 px-0 space-y-4">
@@ -279,14 +283,16 @@ const MyProfileTab = () => {
                 Scan the QR code using any authenticator on your phone (e.g
                 Google Authenticator, Duo Mobile, Authy).
               </p>
-              <Image
-                src={qrCode}
-                className=""
-                alt="QR Code"
-                title="QR Code"
-                width={100}
-                height={100}
-              />
+              {qrCode && (
+                <Image
+                  src={qrCode}
+                  className=""
+                  alt="QR Code"
+                  title="QR Code"
+                  width={100}
+                  height={100}
+                />
+              )}
             </div>
 
             <div className="p-2 col-span-5 md:mr-10 lg:mr-20">
