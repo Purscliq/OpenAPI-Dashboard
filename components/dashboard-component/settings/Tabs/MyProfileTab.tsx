@@ -87,10 +87,11 @@ const MyProfileTab = () => {
         );
       });
   };
-  let qrCode: unknown = null;
+
+  let qrCode;
 
   if (typeof window !== "undefined") {
-    qrCode = localStorage.getItem("qr");
+    qrCode = localStorage.getItem("qr") || "";
   }
 
   return (
@@ -282,14 +283,16 @@ const MyProfileTab = () => {
                 Scan the QR code using any authenticator on your phone (e.g
                 Google Authenticator, Duo Mobile, Authy).
               </p>
-              <Image
-                src={qrCode}
-                className=""
-                alt="QR Code"
-                title="QR Code"
-                width={100}
-                height={100}
-              />
+              {qrCode && (
+                <Image
+                  src={qrCode}
+                  className=""
+                  alt="QR Code"
+                  title="QR Code"
+                  width={100}
+                  height={100}
+                />
+              )}
             </div>
 
             <div className="p-2 col-span-5 md:mr-10 lg:mr-20">
