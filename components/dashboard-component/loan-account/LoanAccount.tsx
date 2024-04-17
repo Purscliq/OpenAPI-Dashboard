@@ -5,7 +5,6 @@ import AllLoansIcon from "@/assets/svg/AllLoansIcon";
 import RunningLoansIcon from "@/assets/svg/RunningLoansIcon";
 import PaidLoansIcon from "@/assets/svg/PaidLoansIcon";
 import PastDueLoansIcon from "@/assets/svg/PastDueLoansIcon";
-import LoanAccountDrawer from "./LoanAccountDrawer";
 
 const data = [
   {
@@ -72,7 +71,6 @@ const LoanAccount = () => {
       </div>
 
       <div className="">
-        <LoanAccountDrawer />
         <LoanAccountTable />
       </div>
     </section>

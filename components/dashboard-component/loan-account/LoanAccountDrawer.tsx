@@ -3,7 +3,13 @@
 import React, { useState } from "react";
 import { Button, Drawer } from "antd";
 
-const LoanAccountDrawer = ({ open, onClose }) => {
+const LoanAccountDrawer = ({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) => {
   return (
     <>
       <Drawer
