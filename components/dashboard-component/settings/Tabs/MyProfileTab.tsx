@@ -74,11 +74,10 @@ const MyProfileTab = () => {
   const [otp, setOtp] = useState("");
   const handleverfifyOtp = () => {
     validate2FA({ code: otp })
-
       .unwrap()
       .then((res) => {
         console.log(res);
-        setIs2FAEnabled(true)
+        setIs2FAEnabled(true);
         message.success("2FA Activated");
       })
       .catch((err) => {
@@ -88,7 +87,11 @@ const MyProfileTab = () => {
         );
       });
   };
-  const qrCode = localStorage.getItem("qr") || "";
+  let qrCode: unknown = null;
+
+  if (typeof window !== "undefined") {
+    qrCode = localStorage.getItem("qr");
+  }
 
   return (
     <section className="bg- py-4 px-0 space-y-4">
