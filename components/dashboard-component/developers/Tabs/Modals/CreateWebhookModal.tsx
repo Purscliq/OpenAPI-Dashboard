@@ -34,8 +34,8 @@ const CreateWebhookModal: React.FC<{ onWebhookCreated: () => void }> = ({
 
       if ("data" in response) {
         if (response.data.status === "success") {
-          // message.success("Webhook created successfully");
-          onWebhookCreated();
+          message.success("Webhook created successfully");
+          onWebhookCreated(); // Call the callback function
           handleOk();
         } else {
           message.error(response.data.error.message || "An error occurred");

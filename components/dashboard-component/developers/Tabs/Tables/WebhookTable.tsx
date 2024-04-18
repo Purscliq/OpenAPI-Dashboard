@@ -45,9 +45,9 @@ const WebhookTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
       await deleteWebhook(webhookId);
       // If successful, refetch the webhooks data to update the table
       refetch();
-      // message.success("Webhook deleted successfully");
+      message.success("Webhook deleted successfully");
     } catch (error) {
-      // console.error("Error deleting webhook:", error);
+      console.error("Error deleting webhook:", error);
       message.error("Failed to delete webhook");
     }
   };

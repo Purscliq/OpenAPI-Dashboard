@@ -49,7 +49,7 @@ const CreateAPIKeyModal: React.FC<{ onApiKeyCreated: () => void }> = ({
 
       const response = await createApiKey({
         name,
-        service_id: selectedService.id,
+        service_id: selectedService.id, 
         permission_payload: [
           {
             service: "loan service",
@@ -66,8 +66,8 @@ const CreateAPIKeyModal: React.FC<{ onApiKeyCreated: () => void }> = ({
       if ("data" in response) {
         // Check if the API key creation was successful
         if (response.data.status === "success") {
-          // message.success("API key created successfully");
-          onApiKeyCreated();
+          message.success("API key created successfully");
+          onApiKeyCreated(); // Call the callback function
           setIsModalOpen(false);
         } else {
           message.error(response.data.error.message || "An error occurred");

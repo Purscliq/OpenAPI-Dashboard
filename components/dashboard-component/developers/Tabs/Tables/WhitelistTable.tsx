@@ -26,19 +26,19 @@ const WhitelistTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
 
   const [deleteIp, { isLoading: deleteLoading }] = useDeleteIpMutation();
 
-  // useEffect(() => {
-  //   if (whitelistData?.data) {
-  //     console.log("Number of whitelisted IPs:", whitelistData.data.length);
-  //   }
-  // }, [whitelistData]);
+  useEffect(() => {
+    if (whitelistData?.data) {
+      console.log("Number of whitelisted IPs:", whitelistData.data.length);
+    }
+  }, [whitelistData]);
 
   const handleDelete = async (ipAddressId: string) => {
     try {
       await deleteIp(ipAddressId);
       refetch();
-      // message.success("IP address deleted from whitelist successfully");
+      message.success("IP address deleted from whitelist successfully");
     } catch (error) {
-      // console.error("Error deleting IP address from whitelist:", error);
+      console.error("Error deleting IP address from whitelist:", error);
       message.error("Failed to delete IP address from whitelist");
     }
   };
