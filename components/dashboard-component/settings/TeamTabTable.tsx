@@ -48,12 +48,8 @@ const TeamTabTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
       title: "Name",
       dataIndex: "first_name",
       sorter: true,
-      // sorter: (a: TeamMembersType, b: TeamMembersType) =>
-      //   `${a.first_name} ${a.last_name}`.localeCompare(
-      //     `${b.first_name} ${b.last_name}`
-      //   ),
-      render: (_: string, record: TeamMembersType) =>
-        `${record.first_name} ${record.last_name}`,
+      render: (firstName: string | null, record: TeamMembersType) =>
+        firstName ? `${record.first_name} ${record.last_name}` : "N/A",
     },
     {
       title: "Role",

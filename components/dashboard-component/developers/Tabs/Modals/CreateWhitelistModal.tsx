@@ -32,7 +32,7 @@ const CreateWhitelistModal: React.FC<{ onWhitelistCreated: () => void }> = ({
 
       if ("data" in response) {
         if (response.data.status === "success") {
-          message.success("IP whitelisted successfully");
+          // message.success("IP whitelisted successfully");
           onWhitelistCreated(); // Call the callback function
           handleOk();
         } else {
