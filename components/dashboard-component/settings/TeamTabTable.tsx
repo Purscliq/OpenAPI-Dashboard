@@ -31,12 +31,6 @@ const TeamTabTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
     }
   }, [shouldRefresh, refetch]);
 
-  // Function to format the date
-  const formatCreatedAt = (createdAt: string) => {
-    const date = new Date(createdAt);
-    return date.toLocaleString(); // Adjust this method according to your preferred date format
-  };
-
   const idToRole: { [key: number]: string } = {
     1: "Biller",
     2: "Owner",
@@ -66,8 +60,16 @@ const TeamTabTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
       title: "Date Created",
       dataIndex: "created_at",
       sorter: true,
-      render: (createdAt: string) => formatCreatedAt(createdAt),
+      render: (created_at: any) => {
+        const formattedDate = new Date(created_at).toLocaleDateString("en-US", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
+        return formattedDate;
+      },
     },
+
     {
       title: <span className="flex items-center space-x-2">Action</span>,
       render: () => {
