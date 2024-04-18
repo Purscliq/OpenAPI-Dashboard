@@ -43,7 +43,7 @@ const APIKeyTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
     try {
       await deleteApiKey(apiKeyId);
       refetch();
-      message.success("API Key deleted successfully");
+      // message.success("API Key deleted successfully");
     } catch (error) {
       console.error("Error deleting API key:", error);
       message.error("Failed to delete API key");
