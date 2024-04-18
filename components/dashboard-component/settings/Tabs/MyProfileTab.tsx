@@ -28,7 +28,7 @@ const MyProfileTab = () => {
     useChangePasswordMutation();
   const [is2FAEnabled, setIs2FAEnabled] = useState(false);
   useEffect(() => {
-    setIs2FAEnabled(user?.data?.two_fa_enabled || false);
+    setIs2FAEnabled(user?.data?.two_fa_validated  || false);
   }, [user]);
 
   const handleDisable2FA = () => {

@@ -1,10 +1,11 @@
+"use client"
 import React from "react";
 import LoanAccountTable from "./LoanAccountTable";
-import Link from "next/link";
 import AllLoansIcon from "@/assets/svg/AllLoansIcon";
 import RunningLoansIcon from "@/assets/svg/RunningLoansIcon";
 import PaidLoansIcon from "@/assets/svg/PaidLoansIcon";
 import PastDueLoansIcon from "@/assets/svg/PastDueLoansIcon";
+import { useGetAllLoansQuery } from "@/services/business/index.service";
 
 const data = [
   {
@@ -42,6 +43,7 @@ const data = [
 ];
 
 const LoanAccount = () => {
+  const { data: loan } = useGetAllLoansQuery({});
   return (
     <section className="max-w-[1640px] flex flex-col p-4 space-y-6  h-screen overflow-y-scroll">
       <h2 className="text-[24px] font-bold block">Loan Account</h2>

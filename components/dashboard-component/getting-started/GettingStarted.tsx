@@ -43,7 +43,7 @@ const GettingStarted = () => {
               sure you comply with regulations
             </p>
 
-            {user?.data?.two_fa_enabled ? (
+            {user?.data?.two_fa_validated ? (
               <p className="text-[#1AD48E] text-[14px] font-medium pt-4">
                 Success
               </p>

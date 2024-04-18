@@ -12,7 +12,7 @@ import Link from "next/link";
 
 const TwoFA = ({ QRcode }: { QRcode: string }) => {
   const [validate2FA, { isLoading }] = useValidate2faMutation({});
-  const { replace, back, push } = useRouter();
+  const {  push } = useRouter();
   const { refetch: refetchUser } = useProfileQuery({});
   const [otp, setOtp] = useState("");
   const handleSubmit = () => {

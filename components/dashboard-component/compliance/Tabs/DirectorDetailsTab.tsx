@@ -98,6 +98,8 @@ const DirectorDetailsTab = () => {
             legal_last_name: validatedData.lastname,
             phone_number: validatedData.phone,
             gender: validatedData.gender,
+            dob: validatedData.birthdate,
+
           }));
           message.success("BVN validated successfully");
         })
@@ -169,7 +171,6 @@ const DirectorDetailsTab = () => {
         proof_of_add_url: "",
       });
     }
-    router.back();
   };
   const [createUploadFile] = useCreateUploadFileMutation();
 
@@ -302,7 +303,17 @@ const DirectorDetailsTab = () => {
               <label className="block text-gray-700 text-sm font-semibold mb-2">
                 Date of Birth
               </label>
-              <DatePicker
+              <Input
+                value={formData.dob}
+                onChange={handleChange}
+                name="dob"
+                required
+                placeholder="date of birth"
+                disabled={!!director?.data?.dob}
+                className="!w-full"
+              />
+
+              {/* <DatePicker
                 onChange={(value, date) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -311,7 +322,7 @@ const DirectorDetailsTab = () => {
                 }
                 required
                 disabled={!!director?.data?.dob}
-              />
+              /> */}
             </div>
 
             <div className="flex flex-col gap-[0.1rem]">
