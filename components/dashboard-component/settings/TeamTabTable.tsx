@@ -53,7 +53,9 @@ const TeamTabTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
       //     `${b.first_name} ${b.last_name}`
       //   ),
       render: (_: string, record: TeamMembersType) =>
-        `${record.first_name} ${record.last_name}`,
+        record.first_name !== null && record.last_name !== null
+          ? `${record.first_name} ${record.last_name}`
+          : "Unknown",
     },
     {
       title: "Role",
