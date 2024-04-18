@@ -9,8 +9,10 @@ import { Button, Dropdown, Space } from "antd";
 import FilterIcon from "@/assets/svg/FilterIcon";
 import TableIcon from "@/assets/svg/TableIcon";
 import LoanAccountDrawer from "./LoanAccountDrawer";
+import { useGetAllLoansQuery } from "@/services/business/index.service";
 
 const LoanAccountTable = () => {
+  const { data: loanData, isLoading } = useGetAllLoansQuery({});
   const [open, setOpen] = useState(false);
 
   const showDrawer = () => {
@@ -42,29 +44,67 @@ const LoanAccountTable = () => {
   const columns = [
     {
       title: "Customer Name",
-      dataIndex: "name",
+      dataIndex: "customer_name",
+      sorter: true,
+    },
+    // {
+    //   title: "Count",
+    //   dataIndex: "count",
+    //   sorter: true,
+    // },
+    {
+      title: "Amount",
+      dataIndex: "total_amount",
+      render: (total_amount: any) => {
+        return <div>₦{total_amount}</div>;
+      },
       sorter: true,
     },
     {
-      title: "Count",
-      dataIndex: "count",
-      sorter: true,
-    },
-    {
-      title: "Disbursed",
-      dataIndex: "disbursed",
+      title: "Disbursement Method",
+      dataIndex: "disbursement_method",
       sorter: true,
     },
     {
       title: "Initiated On",
-      dataIndex: "initiated",
+      dataIndex: "created_at",
       sorter: true,
+      render: (created_at: any) => {
+        const formattedDate = new Date(created_at).toLocaleDateString("en-US", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
+        return formattedDate;
+      },
     },
     {
       title: "Status",
       dataIndex: "status",
       sorter: true,
+      render: (status: string) => {
+        let color = "";
+        switch (status) {
+          case "paid":
+            color = "green";
+            break;
+          case "past-due":
+            color = "red";
+            break;
+          case "running":
+            color = "orange";
+            break;
+          default:
+            color = "black";
+        }
+        return <div style={{ color }}>{status}</div>;
+      },
     },
+    // {
+    //   title: "Status",
+    //   dataIndex: "status",
+    //   sorter: true,
+    // },
     {
       title: "Action",
       render: () => {
@@ -94,7 +134,11 @@ const LoanAccountTable = () => {
         </div>
       </div>
       <div className="relative overflow-x-auto  sm:rounded-lg w-full">
-        <Table columns={columns} dataSource={data} />
+        <Table
+          columns={columns}
+          dataSource={loanData?.data || []}
+          loading={isLoading}
+        />
       </div>
       <LoanAccountDrawer onClose={onClose} open={open} />
     </div>
