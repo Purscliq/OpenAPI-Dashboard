@@ -66,7 +66,7 @@ const CreateAPIKeyModal: React.FC<{ onApiKeyCreated: () => void }> = ({
       if ("data" in response) {
         // Check if the API key creation was successful
         if (response.data.status === "success") {
-          message.success("API key created successfully");
+          // message.success("API key created successfully");
           onApiKeyCreated(); // Call the callback function
           setIsModalOpen(false);
         } else {
