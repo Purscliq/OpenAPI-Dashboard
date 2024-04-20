@@ -33,12 +33,6 @@ const APIKeyTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
     }
   }, [apiKeysData]);
 
-  // Function to format the date
-  const formatCreatedAt = (createdAt: string) => {
-    const date = new Date(createdAt);
-    return date.toLocaleString(); // Adjust this method according to your preferred date format
-  };
-
   const handleDelete = async (apiKeyId: string) => {
     try {
       await deleteApiKey(apiKeyId);
@@ -70,7 +64,14 @@ const APIKeyTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
       title: "Date Created",
       dataIndex: "created_at",
       sorter: true,
-      render: (createdAt: string) => formatCreatedAt(createdAt),
+      render: (created_at: any) => {
+        const formattedDate = new Date(created_at).toLocaleDateString("en-US", {
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        });
+        return formattedDate;
+      },
     },
     {
       title: "Actions",
