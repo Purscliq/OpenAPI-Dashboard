@@ -385,12 +385,12 @@ const Dashbord = () => {
                 </span>
               </article>
               <div className="flex justify-end items-center space-x-2">
-                <button
+                {/* <button
                   onClick={() => setIsFundModalOpen(true)}
                   className="font-semibold"
                 >
                   + Fund
-                </button>
+                </button> */}
                 <button
                   onClick={() => setWithdraw(true)}
                   className="font-semibold"

@@ -28,24 +28,14 @@ const WebhookTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
     }
   }, [shouldRefresh, refetch]);
 
-  // deleting a webhook
-  const [deleteWebhook, { isLoading: deleteLoading }] =
+  const [deleteWebhook] =
     useDeleteWebhookMutation();
 
-  // Log the number of webhooks to the console if data is available
-  useEffect(() => {
-    if (webhooksData?.data) {
-      console.log("Number of webhooks:", webhooksData.data.length);
-    }
-  }, [webhooksData]);
-
-  // Function to handle deleting a webhook
   const handleDelete = async (webhookId: string) => {
     try {
       await deleteWebhook(webhookId);
-      // If successful, refetch the webhooks data to update the table
       refetch();
-      message.success("Webhook deleted successfully");
+      // message.success("Webhook deleted successfully");
     } catch (error) {
       console.error("Error deleting webhook:", error);
       message.error("Failed to delete webhook");
@@ -76,25 +66,18 @@ const WebhookTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
         return formattedDate;
       },
     },
-    // {
-    //   title: "Expiry Date",
-    //   dataIndex: "date",
-    //   sorter: true,
-    // },
+
     {
       title: "Actions",
       render: (record: WebhookType) => (
         <span className="flex items-center space-x-4">
-          {/* <button type="button" title="Edit" className="">
-            Edit
-          </button> */}
           <button
             type="button"
             title="Delete"
             className=""
             onClick={() => handleDelete(record.id)}
           >
-            {deleteLoading ? "Deleting..." : <DeleteIcon />}
+            <DeleteIcon />
           </button>
         </span>
       ),

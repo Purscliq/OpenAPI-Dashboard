@@ -90,7 +90,7 @@ const GettingStarted = () => {
             </button>
           </span>
         </div>
-        <div className="bg-white py-4 px-8 border border-[#E9EBEB] rounded-md shadow-sm md:flex justify-between gap-6 space-y-4 md:space-y-0">
+        {/* <div className="bg-white py-4 px-8 border border-[#E9EBEB] rounded-md shadow-sm md:flex justify-between gap-6 space-y-4 md:space-y-0">
           <span className="flex flex-col gap-2">
             <p className=" font-semibold text-[#181336]">
               Set up your preference
@@ -112,7 +112,7 @@ const GettingStarted = () => {
               <GoArrowRight className="w-6 h-6" />
             </button>
           </span>
-        </div>
+        </div> */}
       </div>
     </section>
   );

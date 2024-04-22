@@ -4,33 +4,30 @@ import AttachIcon from "@/assets/svg/AttachIcon";
 import type { UploadProps, UploadFile } from "antd";
 import { useCreateUploadFileMutation } from "@/services/business/index.service";
 import { useRouter } from "next/navigation";
+import { UploadChangeParam } from "antd/es/upload";
 
 const { Dragger } = Upload;
 
 const BusinessDocumentUploadTab = () => {
   const router = useRouter();
 
-  const [createUploadFile, { isLoading }] = useCreateUploadFileMutation();
+  const [createUploadFile] = useCreateUploadFileMutation();
 
-  const handleUpload = async ({ file }: { file: UploadFile }) => {
-    try {
-      if (file.originFileObj) {
-        const formData = new FormData();
-        formData.append("file", file.originFileObj);
-
-        const response = await createUploadFile(formData);
-
-        if ("data" in response) {
-          // message.success(`${file.name} uploaded successfully.`);
-        } else {
-          message.error(`Failed to upload ${file.name}.`);
-        }
-      } else {
-        message.error(`No file selected.`);
-      }
-    } catch (error) {
-      console.error("Error uploading file:", error);
-      message.error(`Failed to upload ${file.name}.`);
+  const handleUpload = (
+    info: UploadChangeParam<UploadFile>,
+    fieldName: string
+  ) => {
+    if (info.file.originFileObj) {
+      const formData = new FormData();
+      formData.append("file", info.file.originFileObj);
+      createUploadFile(formData)
+        .unwrap()
+        .then((res) => {
+          const uploadedUrl = res.data.upload_url;
+        })
+        .catch((error) => {
+          console.error("Error uploading file:", error);
+        });
     }
   };
 
@@ -57,9 +54,9 @@ const BusinessDocumentUploadTab = () => {
               <Dragger
                 name="CAC"
                 multiple
-                accept="application/pdf"
+                accept="application/pdf, image/jpeg"
                 action="/api/v1/business/image-upload"
-                onChange={handleUpload}
+                onChange={(info) => handleUpload(info, "CAC")}
                 className="flex items-center text-center  gap-[0.3rem]"
               >
                 <p className="ant-upload-text flex gap-4">
@@ -80,9 +77,9 @@ const BusinessDocumentUploadTab = () => {
                 id="memorandum"
                 name="memorandum"
                 multiple
-                accept="application/pdf"
+                accept="application/pdf, image/jpeg"
                 action="/api/v1/business/image-upload"
-                onChange={handleUpload}
+                onChange={(info) => handleUpload(info, "memorandum")}
                 className="flex items-center text-center  gap-[0.3rem]"
               >
                 <p className="ant-upload-text flex gap-4">
@@ -105,7 +102,7 @@ const BusinessDocumentUploadTab = () => {
                 multiple
                 accept="application/pdf, image/jpeg"
                 action="/api/v1/business/image-upload"
-                onChange={handleUpload}
+                onChange={(info) => handleUpload(info, "TIN")}
                 className="flex items-center text-center gap-[0.3rem]"
               >
                 <p className="ant-upload-text flex gap-4">

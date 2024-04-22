@@ -13,8 +13,6 @@ const WhitelistTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
   const {
     data: whitelistData,
     isLoading,
-    isError,
-    error,
     refetch,
   } = useGetAllIpsQuery([]);
 
@@ -24,19 +22,14 @@ const WhitelistTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
     }
   }, [shouldRefresh, refetch]);
 
-  const [deleteIp, { isLoading: deleteLoading }] = useDeleteIpMutation();
+  const [deleteIp] = useDeleteIpMutation();
 
-  useEffect(() => {
-    if (whitelistData?.data) {
-      console.log("Number of whitelisted IPs:", whitelistData.data.length);
-    }
-  }, [whitelistData]);
 
   const handleDelete = async (ipAddressId: string) => {
     try {
       await deleteIp(ipAddressId);
       refetch();
-      message.success("IP address deleted from whitelist successfully");
+      // message.success("IP address deleted from whitelist successfully");
     } catch (error) {
       console.error("Error deleting IP address from whitelist:", error);
       message.error("Failed to delete IP address from whitelist");
@@ -58,29 +51,20 @@ const WhitelistTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
       title: "Actions",
       render: (record: any) => (
         <span className="flex items-center space-x-4">
-          {/* <button type="button" title="Edit" className="">
-            Edit
-          </button> */}
+        
           <button
             type="button"
             title="Delete"
             className=""
             onClick={() => handleDelete(record.id)}
           >
-            {deleteLoading ? "Deleting..." : <DeleteIcon />}
+         <DeleteIcon />
           </button>
         </span>
       ),
     },
   ];
 
-  // if (isLoading) {
-  //   return (
-  //     <div className="bg-white flex flex-col justify-center items-center h-[30vh]">
-  //       <LoadingOutlined style={{ fontSize: 24 }} spin />
-  //     </div>
-  //   );
-  // }
 
   return (
     <div className="bg-white flex flex-col gap-[1rem] px-4">

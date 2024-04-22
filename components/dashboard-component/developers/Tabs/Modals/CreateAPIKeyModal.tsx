@@ -64,7 +64,6 @@ const CreateAPIKeyModal: React.FC<{ onApiKeyCreated: () => void }> = ({
       });
 
       if ("data" in response) {
-        // Check if the API key creation was successful
         if (response.data.status === "success") {
           // message.success("API key created successfully");
           onApiKeyCreated(); // Call the callback function
@@ -81,14 +80,7 @@ const CreateAPIKeyModal: React.FC<{ onApiKeyCreated: () => void }> = ({
     }
   };
 
-  // if (servicesLoading) {
-  //   return <div>Loading...</div>;
-  // }
-
-  // if (error) {
-  //   return <div>Error: {error.message}</div>;
-  // }
-
+ 
   return (
     <>
       <div className="flex md:justify-end">

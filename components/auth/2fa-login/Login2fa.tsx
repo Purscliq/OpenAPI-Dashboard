@@ -1,56 +1,42 @@
 "use client";
-
-import React, { ChangeEventHandler, useState } from "react";
-import Link from "next/link";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  CustomInput as Input,
-  CustomPasswordInput as PasswordInput,
-} from "@/lib/AntdComponents";
-import Image from "next/image";
+
 import GradientBg from "@/assets/png/side-left.png";
 import Hands from "@/assets/png/handshake-img.png";
 import { BiChevronLeft } from "react-icons/bi";
 import InfoIcon from "@/assets/svg/InfoIcon";
 import { BsArrowRight } from "react-icons/bs";
-import { Form, message } from "antd";
-import { useLoginMutation } from "@/services/auth/index.service";
+
+import OTPInput from "react-otp-input";
+import Image from "next/image";
+import Link from "next/link";
+import { useProfileQuery } from "@/services/users/index.service";
+import { message } from "antd";
+import { useValidate2faMutation } from "@/services/auth/index.service";
 import { LoadingOutlined } from "@ant-design/icons";
-import { useLazyProfileQuery } from "@/services/users/index.service";
 
-const initailState = {
-  email: "",
-  password: "",
-};
-const Login = () => {
-  const { replace } = useRouter();
-  const [login, { isLoading }] = useLoginMutation();
-  const [getUser, { isLoading: isGettingUser }] = useLazyProfileQuery({});
-  const [formData, setFormData] = useState(initailState);
+const Login2fa = () => {
+  const {replace} = useRouter()
+  const { refetch: refetchUser } = useProfileQuery({});
+  const [validate2FA, { isLoading }] = useValidate2faMutation({});
 
-  const handleSubmit = async () => {
-    try {
-      await login({ ...formData }).unwrap();
-      const res = await getUser({});
-      message.success("Login successful");
-      if (res?.data?.data?.two_fa_validated === true) {
-        console.log("ook")
-        replace("/login-2fa");
-      } else {
-        replace("/getting-started");
-      }
-    } catch (err: any) {
-      console.log(err);
-      message.error(err?.data?.message || "something went wrong");
-    }
+  const [otp, setOtp] = useState("");
+  const handleSubmit = () => {
+    validate2FA({ code: otp })
+      .unwrap()
+      .then((res) => {
+        message.success("2FA Activated");
+        return refetchUser();
+      })
+      .then(() => {
+        replace("/dashboard");
+      })
+      .catch((err) => {
+        message.error(err?.data?.message || "Something went wrong");
+      });
   };
 
-  const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      [e.target?.name]: e.target?.value,
-    }));
-  };
   return (
     <section className="bg-white">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
@@ -118,67 +104,47 @@ const Login = () => {
 
               <div className="text-center mt-10 lg:mt-0 space-y-2">
                 <h2 className="text-3xl uppercase font-semibold">
-                  WELCOME BACK EXCLUSIVE MEMBER
+                  ENTER YOUR 2FA AUTHENTICATION CODE
                 </h2>
-                <p className="text-2xl uppercase">LOG IN TO CONTINUE</p>
+                <p className="text-xl uppercase">LOG IN TO CONTINUE</p>
               </div>
-              <Form
-                onFinish={handleSubmit}
-                className="!mt-12 !grid !grid-cols-6 !gap-5"
-              >
-                <div className="col-span-6 flex flex-col items-start justify-start gap-[0.3rem]">
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-semibold text-gray-700"
-                  >
-                    Work Email
-                  </label>
+              <div className="p-2 col-span-5 md:mr-10 lg:mr-20">
+                <div className="flex flex-col justify-between gap-4 h-full">
+                  <div className="flex flex-col gap-4">
+                    <p className="font-semibold text-base">Enter OTP Code</p>
+                    {/* OTP field */}
+                    <OTPInput
+                      value={otp}
+                      onChange={(otp) => setOtp(otp)}
+                      numInputs={6}
+                      renderSeparator={
+                        <span className="md:mx-2 mx-0.5">-</span>
+                      }
+                      placeholder="000000"
+                      renderInput={(props) => (
+                        <input
+                          {...props}
+                          required
+                          className="md:!w-[58px] md:h-[58px] !w-[38px] h-[38px] rounded-lg border focus:border-black outline-none text-center text:xl md:text-2xl"
+                        />
+                      )}
+                    />
+                  </div>
 
-                  <Input
-                    id="email"
-                    required
-                    value={formData.email}
-                    onChange={handleChange}
-                    type="email"
-                    placeholder="Enter your email"
-                    name="email"
-                    className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
-                  />
-                </div>
-
-                <div className="col-span-6 flex flex-col items-start justify-start gap-[0.3rem]">
-                  <label
-                    htmlFor="password"
-                    className="block text-sm font-semibold text-gray-700"
-                  >
-                    Password
-                  </label>
-
-                  <PasswordInput
-                    id="password"
-                    placeholder="Enter Password"
-                    type="password"
-                    required
-                    value={formData.password}
-                    name="password"
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="col-span-6 space-y-2 sm:items-center sm:gap-4">
-                  <button className="flex justify-between  w-full  bg-black px-12 text-left py-6 text-md font-medium text-white focus:outline-none">
-                    Proceed to my Account
-                    <span>
-                      {isLoading || isGettingUser ? (
+                  <div className="col-span-6 space-y-2 sm:items-center sm:gap-4">
+                    <button onClick={handleSubmit} className="flex justify-between  w-full  bg-black px-12 text-left py-6 text-md font-medium text-white focus:outline-none">
+                      Proceed to my Account
+                      <span>
+                        {isLoading  ? (
                         <LoadingOutlined style={{ fontSize: 24 }} spin />
                       ) : (
                         <BsArrowRight className="h-5 w-5" />
-                      )}
-                    </span>{" "}
-                  </button>
+                         )}
+                      </span>
+                    </button>
+                  </div>
                 </div>
-              </Form>
-
+              </div>
               <div className="text-center mt-10">
                 <Link href="/forgot-password" className="hover:underline">
                   Having Issues with your Password?
@@ -206,4 +172,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Login2fa;

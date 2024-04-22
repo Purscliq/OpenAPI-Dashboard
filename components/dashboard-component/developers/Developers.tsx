@@ -32,11 +32,9 @@ const Developers = () => {
         <h2 className="text-[24px] font-bold mb-1"> Developers </h2>
       </span>
 
-      <section className="space-y-4">
         <div className="">
           <Tabs defaultActiveKey="1" items={items} tabBarGutter={15} />
         </div>
-      </section>
     </section>
   );
 };

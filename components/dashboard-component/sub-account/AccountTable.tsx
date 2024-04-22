@@ -18,9 +18,9 @@ const AccountTable = () => {
     },
     {
       title: "Sub-account Id",
-      dataIndex: "business_id",
+      dataIndex: "",
       sorter: true,
-    },
+      render: (text: any, _record: any, index: number) => index + 1    },
     {
       title: "Current Balance",
       dataIndex: "current_balance",

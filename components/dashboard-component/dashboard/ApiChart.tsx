@@ -12,7 +12,6 @@ const ApiChart = () => {
   let data = [];
 
   if (ApiCallsData?.data?.monthly && ApiCallsData.data.monthly.length > 0) {
-    // If monthly data is available, use it
     data = ApiCallsData.data.monthly.map((item: MonthlyData) => ({
       month: item.month,
       calls: item.calls,

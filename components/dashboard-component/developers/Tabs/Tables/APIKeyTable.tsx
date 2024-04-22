@@ -10,13 +10,7 @@ import {
 } from "@/services/apikeys/index.service";
 
 const APIKeyTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
-  const {
-    data: apiKeysData,
-    isLoading,
-    isError,
-    error,
-    refetch,
-  } = useGetApiKeysQuery([]);
+  const { data: apiKeysData, isLoading, refetch } = useGetApiKeysQuery([]);
 
   useEffect(() => {
     if (shouldRefresh) {
@@ -24,20 +18,12 @@ const APIKeyTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
     }
   }, [shouldRefresh, refetch]);
 
-  const [deleteApiKey, { isLoading: deleteLoading }] =
-    useDeleteApiKeyMutation();
-
-  useEffect(() => {
-    if (apiKeysData?.data) {
-      console.log("Number of API Keys:", apiKeysData.data.length);
-    }
-  }, [apiKeysData]);
+  const [deleteApiKey] = useDeleteApiKeyMutation();
 
   const handleDelete = async (apiKeyId: string) => {
     try {
       await deleteApiKey(apiKeyId);
       refetch();
-      message.success("API Key deleted successfully");
     } catch (error) {
       console.error("Error deleting API key:", error);
       message.error("Failed to delete API key");
@@ -55,11 +41,7 @@ const APIKeyTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
       dataIndex: "service_id",
       sorter: true,
     },
-    // {
-    //   title: "Source IP",
-    //   dataIndex: "sourceIP",
-    //   sorter: true,
-    // },
+
     {
       title: "Date Created",
       dataIndex: "created_at",
@@ -77,29 +59,18 @@ const APIKeyTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
       title: "Actions",
       render: (record: any) => (
         <span className="flex items-center space-x-4">
-          <button type="button" title="Edit" className="">
-            Edit
-          </button>
           <button
             type="button"
             title="Delete"
             className=""
             onClick={() => handleDelete(record.id)}
           >
-            {deleteLoading ? "Deleting..." : <DeleteIcon />}
+            <DeleteIcon />
           </button>
         </span>
       ),
     },
   ];
-
-  // if (isLoading) {
-  //   return (
-  //     <div className="bg-white flex flex-col justify-center items-center h-[30vh]">
-  //       <LoadingOutlined style={{ fontSize: 24 }} spin />
-  //     </div>
-  //   );
-  // }
 
   return (
     <div className="bg-white flex flex-col gap-[1rem] px-4">
