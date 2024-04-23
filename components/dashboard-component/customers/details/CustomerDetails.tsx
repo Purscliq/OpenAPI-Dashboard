@@ -7,6 +7,7 @@ import { Tabs } from "antd";
 import type { TabsProps } from "antd";
 import KYCTab from "./KYCTab";
 import InfoTab from "./InfoTab";
+import TransactionsTab from "./TransactionsTab";
 import { BsArrowLeft } from "react-icons/bs";
 
 const items: TabsProps["items"] = [
@@ -19,6 +20,11 @@ const items: TabsProps["items"] = [
     key: "2",
     label: "KYC",
     children: <KYCTab />,
+  },
+  {
+    key: "3",
+    label: "Transactions",
+    children: <TransactionsTab />,
   },
 ];
 
