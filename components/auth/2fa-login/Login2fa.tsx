@@ -26,7 +26,7 @@ const Login2fa = () => {
     validate2FA({ code: otp })
       .unwrap()
       .then((res) => {
-        message.success("2FA Activated");
+        message.success("2FA Validated");
         return refetchUser();
       })
       .then(() => {

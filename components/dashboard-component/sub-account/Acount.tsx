@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import AccountTable from "./AccountTable";
-import AccountModal from "./AccountModal";
+import AccountModal from "./modal/AccountModal";
 
 const Acount = () => {
   const [ModalOpen, setIsModalOpen] = useState(false);

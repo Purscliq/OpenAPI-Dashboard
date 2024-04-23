@@ -1,4 +1,4 @@
-import { DatePicker } from "antd";
+import { DatePicker, Dropdown, Menu, Modal } from "antd";
 import {
   CustomInput as Input,
   CustomTable as Table,
@@ -6,9 +6,19 @@ import {
 import FilterIcon from "@/assets/svg/FilterIcon";
 import TableIcon from "@/assets/svg/TableIcon";
 import { useGetSubaccountQuery } from "@/services/business/index.service";
+import { useState } from "react";
+import FundModal from "./modal/FundModal";
+import WithdrawalModal from "./modal/WithdrawalModal";
 
 const AccountTable = () => {
   const { data: subaccounts, isLoading } = useGetSubaccountQuery({});
+  const [openFundsModal, setOpenFundsModal] = useState(false);
+  const [openWithdrawalModal, setOpenWithdrawalModal] = useState(false);
+
+  const handleOpenWithdrawalModal = () => {
+    setOpenFundsModal(false); // Close the first modal
+    setOpenWithdrawalModal(true); // Open the second withdrawal modal
+  };
 
   const columns = [
     {
@@ -20,12 +30,13 @@ const AccountTable = () => {
       title: "Sub-account Id",
       dataIndex: "",
       sorter: true,
-      render: (text: any, _record: any, index: number) => index + 1    },
+      render: (text: any, _record: any, index: number) => index + 1,
+    },
     {
       title: "Current Balance",
       dataIndex: "current_balance",
       sorter: true,
-      render: (current_balance:number) => `NGN ${current_balance?.toFixed(2)}`, // Prepend "NGN" format
+      render: (current_balance: number) => `NGN ${current_balance?.toFixed(2)}`, // Prepend "NGN" format
     },
     {
       title: "Date",
@@ -41,14 +52,27 @@ const AccountTable = () => {
       },
     },
     {
-      title: (
-        <span className="flex items-center uppercase space-x-2">
-          <p>Action</p>
-          <TableIcon className="ml-4" />
-        </span>
-      ),
+      title: "Action",
       render: () => {
-        return <span className="cursor-pointer">...</span>;
+        return (
+          <>
+            <Dropdown
+              overlay={
+                <Menu>
+                  <Menu.Item key="1">
+                    <button onClick={() => setOpenFundsModal(true)}>
+                      Details
+                    </button>
+                  </Menu.Item>
+                </Menu>
+              }
+            >
+              <button type="button" className="text-base font-semibold">
+                ...
+              </button>
+            </Dropdown>
+          </>
+        );
       },
     },
   ];
@@ -69,8 +93,14 @@ const AccountTable = () => {
         </div>
       </div>
       <div className="relative overflow-x-auto  sm:rounded-lg w-[22rem] md:w-full">
-        <Table columns={columns} dataSource={subaccounts?.data || []} loading={isLoading} />
+        <Table
+          columns={columns}
+          dataSource={subaccounts?.data || []}
+          loading={isLoading}
+        />
       </div>
+     <FundModal openFundsModal={openFundsModal} close={()=>setOpenFundsModal(false)} handleOpenWithdrawalModal={handleOpenWithdrawalModal} />
+     <WithdrawalModal openWithdrawalModal={openWithdrawalModal} close={()=>setOpenWithdrawalModal(false)} />
     </div>
   );
 };
