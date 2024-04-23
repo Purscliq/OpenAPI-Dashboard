@@ -61,7 +61,7 @@ const AccountTable = () => {
                 <Menu>
                   <Menu.Item key="1">
                     <button onClick={() => setOpenFundsModal(true)}>
-                      Details
+                      View account details
                     </button>
                   </Menu.Item>
                 </Menu>
