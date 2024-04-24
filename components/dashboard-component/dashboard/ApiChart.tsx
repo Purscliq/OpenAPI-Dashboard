@@ -1,25 +1,24 @@
 import { Column, ColumnConfig } from "@ant-design/plots";
-import { useGetApiCallsQuery } from "@/services/business/index.service";
 
 interface MonthlyData {
   month: string;
   calls: number;
 }
+interface ApiCallsData {
+  monthly: MonthlyData[];
+  total_calls: number;
+}
 
-const ApiChart = () => {
-  const { data: ApiCallsData } = useGetApiCallsQuery({});
+const ApiChart: React.FC<{ data: ApiCallsData }> = ({ data }) => {
+  const { monthly } = data;
 
-  let data = [];
-
-  if (ApiCallsData?.data?.monthly && ApiCallsData.data.monthly.length > 0) {
-    data = ApiCallsData.data.monthly.map((item: MonthlyData) => ({
-      month: item.month,
-      calls: item.calls,
-    }));
-  }
+  const api = monthly.map((item: MonthlyData) => ({
+    month: item.month,
+    calls: item.calls,
+  }));
 
   const config: ColumnConfig = {
-    data,
+    data: api,
     xField: "month",
     yField: "calls",
     isStack: true,

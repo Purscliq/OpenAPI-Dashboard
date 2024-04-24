@@ -34,7 +34,6 @@ const Login = () => {
       const res = await getUser({});
       message.success("Login successful");
       if (res?.data?.data?.two_fa_validated === true) {
-        console.log("ook")
         replace("/login-2fa");
       } else {
         replace("/getting-started");

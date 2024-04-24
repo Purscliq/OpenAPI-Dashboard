@@ -1,88 +1,38 @@
-"use client";
-import { useEffect, useLayoutEffect } from "react";
-import { updateUser } from "@/slice/userSlice";
+"use client"
+import React, { useEffect, useLayoutEffect } from "react";
+import Image from "next/image";
+import logo from "@/assets/svg/logo.svg";
 import { useAppDispatch } from "@/context/store";
 import { useLazyProfileQuery } from "@/services/users/index.service";
-import logo from "@/assets/svg/logo.svg";
+import { useLazyGetDashboardQuery } from "@/services/business/index.service";
+// import { updateUser } from "@/slice/userSlice";
 
-import {
-  useLazyGetMainAccountQuery,
-  // useLazyGetSubaccountQuery,
-  // useLazyGetTotalCollectionQuery,
-  // useLazyGetTotalDisbursementQuery,
-  // useLazyGetTotalTransactionsQuery,
-  // useLazyGetTotalTransferQuery,
-} from "@/services/business/index.service";
-import Image from "next/image";
-
-const Template = ({ children }: { children: React.ReactNode }) => {
-  const dispatch = useAppDispatch();
-  let token: unknown = null;
-
-  if (typeof window !== "undefined") {
-    token = localStorage.getItem("token");
-  }
-  const [getUser, { isLoading }] = useLazyProfileQuery();
-  const [getMaindata, { isLoading: isgetmaindata }] =
-    useLazyGetMainAccountQuery();
-  // const [getToatalcollection, { isLoading: isgetColletion }] =
-  //   useLazyGetTotalCollectionQuery();
-  // const [getDisembursment, { isLoading: isgetDisemburs }] =
-  //   useLazyGetTotalDisbursementQuery();
-  // const [getTransfer, { isLoading: isgetTransfer }] =
-  //   useLazyGetTotalTransferQuery();
-  // const [getTransaction, { isLoading: isgetTransaction }] =
-  //   useLazyGetTotalTransactionsQuery();
-  // const [getSubaccount, { isLoading: isgetSubaacount }] =
-  //   useLazyGetSubaccountQuery();
+const Template: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // const dispatch = useAppDispatch();
+  const [getUser, { isLoading: isProfileLoading }] = useLazyProfileQuery();
+  const [getDashboard, { isLoading: isDashboardLoading, isSuccess }] =
+    useLazyGetDashboardQuery();
 
   useEffect(() => {
-    if (token) {
-      const fetchData = async () => {
-        try {
-          const [
-            userData,
-            mainData,
-            // collectionData,
-            // disbursementData,
-            // transferData,
-            // transactionData,
-            // subaccountData,
-          ] = await Promise.all([
-            getUser({}).unwrap(),
-            getMaindata({}).unwrap(),
-            // getToatalcollection({}).unwrap(),
-            // getDisembursment({}).unwrap(),
-            // getTransfer({}).unwrap(),
-            // getTransaction({}).unwrap(),
-            // getSubaccount({}).unwrap(),
-          ]);
+    const fetchData = async () => {
+      try {
+        await Promise.all([getUser({}).unwrap(), getDashboard({}).unwrap()]);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-          dispatch(updateUser(userData?.data?.data));
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      };
-
-      fetchData();
-    }
-  }, [token]);
+    fetchData();
+  }, []);
 
   useLayoutEffect(() => {
+    const token = localStorage.getItem("token");
     if (!token) {
       window.location.href = "/";
     }
-  }, [token]);
+  }, []);
 
-  if (
-    isLoading ||
-    isgetmaindata
-    // isgetColletion ||
-    // isgetDisemburs ||
-    // isgetTransfer ||
-    // isgetTransaction ||
-    // isgetSubaacount
-  ) {
+  if (isProfileLoading || isDashboardLoading || !isSuccess) {
     return (
       <div className="relative h-screen flex items-center justify-center bg-[#FAFAFA]">
         <div className="fixed top-0 left-0 px-6 py-4">

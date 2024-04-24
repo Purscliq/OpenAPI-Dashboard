@@ -115,45 +115,15 @@ export const businessApi = createApi({
         method: "GET",
       }),
     }),
-    getMainAccount: builder.query({
-      query: () => ({
-        url: "/api/v1/business/account",
-        method: "GET",
-      }),
-    }),
-    getTotalCollection: builder.query({
-      query: () => ({
-        url: "/api/v1/business/total-collections",
-        method: "GET",
-      }),
-    }),
-    getTotalDisbursement: builder.query({
-      query: () => ({
-        url: "/api/v1/business/total-disbursements",
-        method: "GET",
-      }),
-    }),
-    getTotalTransfer: builder.query({
-      query: () => ({
-        url: "/api/v1/business/total-transfer",
-        method: "GET",
-      }),
-    }),
-    getTotalTransactions: builder.query({
-      query: () => ({
-        url: "/api/v1/business/total-transactions",
-        method: "GET",
-      }),
-    }),
-    getApiCalls: builder.query({
-      query: () => ({
-        url: "/api/v1/business/api-calls",
-        method: "GET",
-      }),
-    }),
     getAllLoans: builder.query({
       query: () => ({
         url: "/api/v1/business/loans",
+        method: "GET",
+      }),
+    }),
+    getDashboard: builder.query({
+      query: () => ({
+        url: "/api/v1/business/dashboard",
         method: "GET",
       }),
     }),
@@ -170,7 +140,6 @@ export const {
   useUpdatebusinessMutation,
   useGetSubaccountQuery,
   useLazyGetSubaccountQuery,
-  useLazyGetTotalTransactionsQuery,
   useCreateSubaccountMutation,
   useUpdateDirectorMutation,
   useGetDirectorQuery,
@@ -178,16 +147,8 @@ export const {
   useGetTeamMembersQuery,
   useCreateUploadFileMutation,
   useGetServicesQuery,
-  useGetMainAccountQuery,
+  useGetDashboardQuery,
+  useLazyGetDashboardQuery,
   useVerifyTinMutation,
-  useGetTotalCollectionQuery,
-  useLazyGetTotalCollectionQuery,
-  useLazyGetTotalTransferQuery,
-  useLazyGetTotalDisbursementQuery,
-  useLazyGetMainAccountQuery,
-  useGetTotalDisbursementQuery,
-  useGetTotalTransferQuery,
-  useGetTotalTransactionsQuery,
-  useGetApiCallsQuery,
   useGetAllLoansQuery,
 } = businessApi;

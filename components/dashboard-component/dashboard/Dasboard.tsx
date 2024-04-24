@@ -11,28 +11,13 @@ import Line from "@/assets/svg/Line";
 import { CustomTooltip as Tooltip } from "@/lib/AntdComponents";
 import FundModal from "./modal/FundModal";
 
-import {
-  useGetMainAccountQuery,
-  useGetSubaccountQuery,
-  useGetTotalCollectionQuery,
-  useGetTotalDisbursementQuery,
-  useGetTotalTransferQuery,
-  useGetTotalTransactionsQuery,
-  useGetApiCallsQuery,
-} from "@/services/business/index.service";
+import { useGetDashboardQuery } from "@/services/business/index.service";
 
 const Dashbord = () => {
   const [toogleTooltip, setToogleTooltip] = useState(false);
   const [isFundModalOpen, setIsFundModalOpen] = useState(false);
   const [withdraw, setWithdraw] = useState(false);
-
-  const { data: mainAccountData, isLoading } = useGetMainAccountQuery({});
-  const { data: totalCollectionData } = useGetTotalCollectionQuery({});
-  const { data: totalDisbursementData } = useGetTotalDisbursementQuery({});
-  const { data: totalTransferData } = useGetTotalTransferQuery({});
-  const { data: totalTransactionData } = useGetTotalTransactionsQuery({});
-  const { data: subAccountData } = useGetSubaccountQuery({});
-  const { data: ApiCallsData } = useGetApiCallsQuery({});
+  const { data } = useGetDashboardQuery({});
 
   return (
     <>
@@ -69,14 +54,14 @@ const Dashbord = () => {
                           fill="#31D3A3"
                         />
                       </svg>
-                      {totalTransactionData?.data?.percentage_difference} %
-                      compared with last month
+                      {data?.data?.all_transactions?.pf} % compared with last
+                      month
                     </p>
                   </div>
                 </div>
 
                 <p className="text-2xl font-semibold text-white/90 flex items-center justify-between">
-                  NGN {totalTransactionData?.data?.total}
+                  NGN {data?.data?.all_transactions?.total}
                   <svg
                     width="25"
                     height="24"
@@ -137,14 +122,13 @@ const Dashbord = () => {
                           fill="#FE3766"
                         />
                       </svg>
-                      {totalCollectionData?.data?.percentage_difference} %
-                      compared with last month
+                      {data?.data?.collections?.pf} % compared with last month
                     </p>
                   </div>
                 </div>
 
                 <p className="text-2xl font-semibold  flex items-center justify-between">
-                  NGN {totalCollectionData?.data?.total}
+                  NGN {data?.data?.collections?.total}
                   <svg
                     width="24"
                     height="24"
@@ -205,14 +189,13 @@ const Dashbord = () => {
                           fill="#F9BA33"
                         />
                       </svg>
-                      {totalTransferData?.data?.percentage_difference} %
-                      compared with last month
+                      {data?.data?.transfers?.pf} % compared with last month
                     </p>
                   </div>
                 </div>
 
                 <p className="text-2xl font-semibold  flex items-center justify-between">
-                  NGN {totalTransferData?.data?.total}
+                  NGN {data?.data?.transfers?.total}
                   <svg
                     width="24"
                     height="24"
@@ -273,14 +256,13 @@ const Dashbord = () => {
                           fill="#1775E4"
                         />
                       </svg>
-                      {totalDisbursementData?.data?.percentage_difference} %
-                      compared with last month
+                      {data?.data?.disbursements?.pf} % compared with last month
                     </p>
                   </div>
                 </div>
 
                 <p className="text-2xl font-semibold  flex items-center justify-between">
-                  NGN {totalDisbursementData?.data?.total}
+                  NGN {data?.data?.disbursements?.total}
                   <svg
                     width="24"
                     height="24"
@@ -345,7 +327,7 @@ const Dashbord = () => {
                         setToogleTooltip(true);
                         navigator.clipboard
                           .writeText(
-                            `Bank Name: ${mainAccountData?.data?.bank_name} \n Account Name: ${mainAccountData?.data?.account_name} \n Account Number: ${mainAccountData?.data?.account_number}`
+                            `Bank Name: ${data?.data?.main_account?.details?.bank_name} \n Account Name: ${data?.data?.main_account?.details?.account_name} \n Account Number: ${data?.data?.main_account?.details?.account_number}`
                           )
                           .finally(() => {
                             setTimeout(() => {
@@ -362,35 +344,29 @@ const Dashbord = () => {
                 <span className="flex justify-between items-center">
                   <p className="text-gray-500 ">Bank Name</p>
                   <p className="text-black font-semibold">
-                    {mainAccountData?.data?.bank_name}
+                    {data?.data?.main_account?.details?.bank_name}{" "}
                   </p>
                 </span>
-                <span className="flex gap-[0.2rem] justify-between items-center">
+                <span className="flex justify-between items-center">
                   <p className="text-gray-500 ">Account Name</p>
                   <p className="text-black font-semibold">
-                    {mainAccountData?.data?.account_name}
+                    {data?.data?.main_account?.details?.account_name}{" "}
                   </p>
                 </span>
                 <span className="flex justify-between items-center">
                   <p className="text-gray-500 ">Account Number</p>
                   <p className="text-black font-semibold">
-                    {mainAccountData?.data?.account_number}
+                    {data?.data?.main_account?.details?.account_number}
                   </p>
                 </span>
                 <span className="flex justify-between items-center">
                   <p className="text-gray-500 ">Account Alias</p>
                   <p className="text-black font-semibold">
-                    {mainAccountData?.data?.account_type}
+                    {data?.data?.main_account?.details?.account_type}
                   </p>
                 </span>
               </article>
               <div className="flex justify-end items-center space-x-2">
-                {/* <button
-                  onClick={() => setIsFundModalOpen(true)}
-                  className="font-semibold"
-                >
-                  + Fund
-                </button> */}
                 <button
                   onClick={() => setWithdraw(true)}
                   className="font-semibold"
@@ -399,67 +375,6 @@ const Dashbord = () => {
                 </button>
               </div>
             </div>
-            {/* <article className="flex flex-col space-y-4">
-              <div className="flex flex-col space-y-4 bg-white p-[2%]">
-                <div className="flex justify-end items-end mb-3">
-                  <Tooltip
-                    title="copied!"
-                    trigger={"click"}
-                    open={toogleTooltip}
-                  >
-                    <Button
-                      onClick={() => {
-                        setToogleTooltip(true);
-                        navigator.clipboard
-                          .writeText(
-                            `Bank Name:" \n Account Name:" \n Account Number:"`
-                          )
-                          .finally(() => {
-                            setTimeout(() => {
-                              setToogleTooltip(false);
-                            }, 2000);
-                          });
-                      }}
-                      className="text-lg font-semibold !border-none"
-                    >
-                      + copy
-                    </Button>
-                  </Tooltip>
-                </div>{" "}
-                <span className="flex justify-between items-center">
-                  <p className="text-gray-500 ">First Bank</p>
-                  <p className="text-black font-semibold">John Doe </p>
-                </span>
-                <span className="flex gap-[0.2rem] justify-between items-center">
-                  <p className="text-gray-500 ">Account Name</p>
-                  <p className="text-black font-semibold">John David Doe</p>
-                </span>
-                <span className="flex justify-between items-center">
-                  <p className="text-gray-500 ">Account Number</p>
-                  <p className="text-black font-semibold">45677564567</p>
-                </span>
-                <span className="flex justify-between items-center">
-                  <p className="text-gray-500 ">Account allas</p>
-                  <p className="text-black font-semibold">
-                    PursFinance main account
-                  </p>
-                </span>
-              </div>
-              <div className="flex justify-end items-center space-x-2">
-                <button
-                  onClick={() => setIsFundModalOpen(true)}
-                  className=" font-semibold"
-                >
-                  + Fund
-                </button>
-                <button
-                  onClick={() => setWithdraw(true)}
-                  className=" font-semibold"
-                >
-                  + Withdraw
-                </button>
-              </div>
-            </article> */}
 
             <article className="p-4 bg-white rounded-[20px] space-y-2 border border-gray-200">
               <div className="flex items-center space-x-2 border-b-[0.5px] border-b-gray-300 py-2">
@@ -493,7 +408,7 @@ const Dashbord = () => {
               </div>
 
               <p className="text-2xl font-semibold  flex items-center justify-between">
-                NGN {mainAccountData?.data?.current_balance}
+                NGN {data?.data?.main_account?.details?.current_balance}
                 <svg
                   width="24"
                   height="24"
@@ -571,7 +486,9 @@ const Dashbord = () => {
                   <p className="font-semibold text-slate-400 text-lg">
                     Main Account
                   </p>
-                  <p className="font-semibold  text-lg">1</p>
+                  <p className="font-semibold  text-lg">
+                    {data?.data?.main_account?.count}
+                  </p>
                   <p className="inline-flex items-center text-lg text-green-500">
                     <svg
                       className="mr-1"
@@ -586,7 +503,7 @@ const Dashbord = () => {
                         fill="#71DD37"
                       />
                     </svg>
-                    0%
+                    % {data?.data?.main_account?.pf}
                   </p>
                 </span>
                 <span className="flex flex-col space-y-2">
@@ -594,7 +511,7 @@ const Dashbord = () => {
                     Sub Account
                   </p>
                   <p className="font-semibold  text-lg">
-                    {subAccountData?.data?.length}
+                    {data?.data?.sub_account?.count}
                   </p>
                   <p className="inline-flex items-center text-lg text-green-500">
                     <svg
@@ -610,7 +527,7 @@ const Dashbord = () => {
                         fill="#71DD37"
                       />
                     </svg>
-                    0%
+                    % {data?.data?.sub_account?.pf}
                   </p>
                 </span>
               </div>
@@ -628,77 +545,17 @@ const Dashbord = () => {
                     Total Api Calls
                   </p>
                   <p className="font-semibold  text-lg">
-                    {ApiCallsData?.data?.total_calls}
+                    {data?.data?.api_calls?.total_calls}
                   </p>
                 </span>
                 <Line />
               </div>
             </article>
-            {/* <article className=" border border-[#D6DDEB] w-full bg-white p-3 rounded-[20px]">
-            <span className="w-full flex justify-between items-center  py-3 border-b ">
-              <p className="font-semibold text-lg">Customers</p>
-              <p className="text-blue-500">View all</p>
-            </span>
-            <div className="flex flex-col space-y-6 mt-4">
-              <div className="flex space-x-2 items-center">
-                <Avatar
-                  style={{ backgroundColor: "#CDA4FF" }}
-                  size={35}
-                  className="!text-sm text-black relative"
-                >
-                  AM{" "}
-                </Avatar>
-                <span className="text-sm">
-                  <p className=" text-[16px] font-semibold">Ayomide Mayo</p>
-                  <p className="text-gray-500 text-xs">August 20, 2022</p>
-                </span>
-              </div>
-              <div className="flex space-x-2 items-center">
-                <Avatar
-                  style={{ backgroundColor: "#CDA4FF" }}
-                  size={35}
-                  className="!text-sm text-black relative"
-                >
-                  AM{" "}
-                </Avatar>
-                <span className="text-sm">
-                  <p className=" text-[16px] font-semibold">Ayomide Mayo</p>
-                  <p className="text-gray-500 text-xs">August 20, 2022</p>
-                </span>
-              </div>
-              <div className="flex space-x-2 items-center">
-                <Avatar
-                  style={{ backgroundColor: "#CDA4FF" }}
-                  size={35}
-                  className="!text-sm text-black relative"
-                >
-                  AM{" "}
-                </Avatar>
-                <span className="text-sm">
-                  <p className=" text-[16px] font-semibold">Ayomide Mayo</p>
-                  <p className="text-gray-500 text-xs">August 20, 2022</p>
-                </span>
-              </div>
-              <div className="flex space-x-2 items-center">
-                <Avatar
-                  style={{ backgroundColor: "#CDA4FF" }}
-                  size={35}
-                  className="!text-sm text-black relative"
-                >
-                  AM{" "}
-                </Avatar>
-                <span className="text-sm">
-                  <p className=" text-[16px] font-semibold">Ayomide Mayo</p>
-                  <p className="text-gray-500 text-xs">August 20, 2022</p>
-                </span>
-              </div>
-            </div>
-          </article> */}
           </section>
         </div>
         <article className="border border-gray-200 p-4 rounded-[20px]  flex flex-col gap-6  bg-white w-full overflow-x-auto overflow-hidden">
           <p className="text-[20px] font-bold">API Calls</p>
-          <ApiChart />{" "}
+          <ApiChart data={data?.data?.api_calls} />{" "}
         </article>
       </div>
       <FundModal open={isFundModalOpen} setOpen={setIsFundModalOpen} />

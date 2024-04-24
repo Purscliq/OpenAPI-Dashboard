@@ -16,7 +16,6 @@ export const userApi = createApi({
       onQueryStarted(id, { dispatch, queryFulfilled }) {
         queryFulfilled
           .then((apiResponse) => {
-            console.log(apiResponse);
             dispatch(updateUser(apiResponse?.data?.data));
           })
           .catch(() => {
