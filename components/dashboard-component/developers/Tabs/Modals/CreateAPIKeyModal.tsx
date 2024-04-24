@@ -23,9 +23,9 @@ const CreateAPIKeyModal: React.FC<{ onApiKeyCreated: () => void }> = ({
   } = useGetServicesQuery({});
 
   // Log the content of services array
-  useEffect(() => {
-    console.log("Services:", services);
-  }, [services]);
+  // useEffect(() => {
+  //   console.log("Services:", services);
+  // }, [services]);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -49,7 +49,7 @@ const CreateAPIKeyModal: React.FC<{ onApiKeyCreated: () => void }> = ({
 
       const response = await createApiKey({
         name,
-        service_id: selectedService.id, 
+        service_id: selectedService.id,
         permission_payload: [
           {
             service: "loan service",
@@ -80,7 +80,6 @@ const CreateAPIKeyModal: React.FC<{ onApiKeyCreated: () => void }> = ({
     }
   };
 
- 
   return (
     <>
       <div className="flex md:justify-end">

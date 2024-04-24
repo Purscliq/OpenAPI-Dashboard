@@ -38,7 +38,7 @@ const APIKeyTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
     },
     {
       title: "Service",
-      dataIndex: "service_id",
+      dataIndex: "service_name",
       sorter: true,
     },
 

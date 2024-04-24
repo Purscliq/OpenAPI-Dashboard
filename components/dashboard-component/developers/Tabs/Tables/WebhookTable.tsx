@@ -28,8 +28,7 @@ const WebhookTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
     }
   }, [shouldRefresh, refetch]);
 
-  const [deleteWebhook] =
-    useDeleteWebhookMutation();
+  const [deleteWebhook] = useDeleteWebhookMutation();
 
   const handleDelete = async (webhookId: string) => {
     try {
@@ -49,7 +48,8 @@ const WebhookTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
       sorter: true,
     },
     {
-      title: "Source IP",
+      // title: "Source IP",
+      title: "URL",
       dataIndex: "url",
       sorter: true,
     },

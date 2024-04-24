@@ -4,15 +4,23 @@ import React, { useState } from "react";
 import { CustomInput, CustomModal as Modal } from "@/lib/AntdComponents";
 import { message } from "antd";
 import { useCreateWebhookMutation } from "@/services/apikeys/index.service";
+import { useGetServicesQuery } from "@/services/business/index.service";
 
 const CreateWebhookModal: React.FC<{ onWebhookCreated: () => void }> = ({
   onWebhookCreated,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [name, setName] = useState("");
+  const [service, setService] = useState("");
   const [url, setUrl] = useState("");
   const [authHeader, setAuthHeader] = useState("");
   const [createWebhook, { isLoading }] = useCreateWebhookMutation();
+
+  const {
+    data: services = [],
+    error,
+    isLoading: servicesLoading,
+  } = useGetServicesQuery({});
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -30,7 +38,27 @@ const CreateWebhookModal: React.FC<{ onWebhookCreated: () => void }> = ({
     e.preventDefault();
 
     try {
-      const response = await createWebhook({ name, url, authHeader });
+      const selectedService = services.data.find(
+        (s: { name: string }) => s.name === service
+      );
+
+      const response = await createWebhook({
+        name,
+        url,
+        authHeader,
+        service_id: selectedService.id,
+        permission_payload: [
+          {
+            service: "loan service",
+            models_permission: [
+              {
+                model: "transactions",
+                permissions: ["read", "create"],
+              },
+            ],
+          },
+        ],
+      });
 
       if ("data" in response) {
         if (response.data.status === "success") {
@@ -113,7 +141,30 @@ const CreateWebhookModal: React.FC<{ onWebhookCreated: () => void }> = ({
                 className="w-full px-3 py-2 resize-none appearance-none bg-transparent outline-none border focus:border-black shadow-sm rounded-lg"
               />
             </div>
-
+            <div className="space-y-1">
+              <label
+                htmlFor="service"
+                className="text-[#25324B] text-base font-semibold"
+              >
+                Service
+              </label>
+              <select
+                id="service"
+                value={service}
+                onChange={(e) => setService(e.target.value)}
+                required
+                className="w-full px-3 py-2 resize-none appearance-none bg-transparent outline-none border focus:border-black shadow-sm rounded-lg"
+              >
+                <option value="">Select a service</option>
+                {services.data &&
+                  services.data.map &&
+                  services.data.map((service: { id: number; name: string }) => (
+                    <option key={service.id} value={service.name}>
+                      {service.name}
+                    </option>
+                  ))}
+              </select>
+            </div>
             <div className="space-y-1">
               <label
                 htmlFor="authHeader"
