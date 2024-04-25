@@ -127,6 +127,12 @@ export const businessApi = createApi({
         method: "GET",
       }),
     }),
+    getComplainceStat: builder.query({
+      query: () => ({
+        url: "/api/v1/business/compliance_status",
+        method: "GET",
+      }),
+    }),
   }),
 });
 
@@ -151,4 +157,5 @@ export const {
   useLazyGetDashboardQuery,
   useVerifyTinMutation,
   useGetAllLoansQuery,
+  useGetComplainceStatQuery
 } = businessApi;
