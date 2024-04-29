@@ -1,14 +1,16 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { Tabs } from "antd";
+import { message, Tabs } from "antd";
 import type { TabsProps } from "antd";
 import KYCTab from "./KYCTab";
 import InfoTab from "./InfoTab";
 import TransactionsTab from "./TransactionsTab";
 import { BsArrowLeft } from "react-icons/bs";
+import { useActivateCustomerMutation, useDeactivateCustomerMutation, useGetSingleCustomerQuery } from "@/services/business/index.service";
+import { Switch } from 'antd';
 
 const items: TabsProps["items"] = [
   {
@@ -30,7 +32,53 @@ const items: TabsProps["items"] = [
 
 const CustomerDetails = () => {
   const router = useRouter();
+  const id = sessionStorage.getItem("customer_id")
+  const {data: customerStatus, isLoading, refetch} = useGetSingleCustomerQuery(id)
+  const [activateCustomer] = useActivateCustomerMutation(); // Destructure to get the mutation function
+  const [deactivateCustomer] = useDeactivateCustomerMutation(); // Destructure to get the mutation function
+  const [checked, setChecked] = useState(false);
+  const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (customerStatus?.data.status === "active") {
+      setChecked(true);
+      console.log(customerStatus?.data.status)
+    } else {
+      setChecked(false);
+      console.log(customerStatus?.data.status)
+    }
+  }, [customerStatus, isLoading]);
+
+  const onChange = async (checked: boolean) => {
+    console.log(`switch to ${checked}`);
+    setLoading(true)
+    if (checked) {
+      refetch()
+      
+      try {
+        await activateCustomer(id);
+        console.log("Customer activated successfully");
+        message.success("activation successful")
+        // Handle successful activation (e.g., show a success message)
+      } catch (error) {
+        console.error("Error activating customer:", error);
+        // Handle activation error (e.g., show an error message)
+      }
+    } else {
+      try {
+        await deactivateCustomer(id);
+        console.log("Customer deactivated successfully");
+        message.success("deactivation successful")
+        // Handle successful deactivation (e.g., show a success message)
+      } catch (error) {
+        console.error("Error deactivating customer:", error);
+        // Handle deactivation error (e.g., show an error message)
+      }
+    }
+    setLoading(false)
+  };
+
+ 
   return (
     <section className="max-w-[1640px] flex flex-col p-4 space-y-6  h-screen overflow-y-scroll text-[#25324B]">
       <div className="flex flex-wrap md:flex-nowrap gap-4 justify-between">
@@ -44,21 +92,13 @@ const CustomerDetails = () => {
           </span>
         </div>
         <div className="flex flex-col gap-2">
-          <p className="text-[#0AA07B] text-[14px]">Activate account</p>
+          <p className={customerStatus?.data?.status === "active" ? "text-red-400 text-[14px]" : "text-[#0AA07B] text-[14px]"}>
+            {customerStatus?.data?.status === "active" ? "Deactive account" : "Activate account"}
+            </p>
           <span className="flex md:justify-end">
-            <label
-              htmlFor="ActivateAccount"
-              className="relative h-8 w-14 cursor-pointer rounded-full bg-gray-300 transition [-webkit-tap-highlight-color:_transparent] has-[:checked]:bg-green-500"
-            >
-              <input
-                type="checkbox"
-                id="ActivateAccount"
-                name="ActivateAccount"
-                title="Activate Account"
-                className="peer sr-only"
-              />
-              <span className="absolute inset-y-0 start-0 m-1 size-6 rounded-full bg-white transition-all peer-checked:start-6"></span>
-            </label>
+           
+              <Switch checked={checked} loading={loading}  onChange={onChange} className="peer sr-only"/>
+             
           </span>
         </div>
       </div>
