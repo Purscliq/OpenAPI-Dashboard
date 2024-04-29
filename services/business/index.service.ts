@@ -103,10 +103,10 @@ export const businessApi = createApi({
       }),
     }),
     createUploadFile: builder.mutation({
-      query: (body) => ({
-        url: "/api/v1/business/image-upload",
-        method: "POST",
-        body,
+      query: (formData) => ({
+          url: "/api/v1/business/image-upload",
+          method: "POST",
+          body: formData,
       }),
     }),
     getServices: builder.query({
@@ -136,6 +136,12 @@ export const businessApi = createApi({
     getAllCustomers: builder.query({
       query: () => ({
         url: "/api/v1/business/customers",
+        method: "GET",
+      }),
+    }),
+    getBankList: builder.query({
+      query: () => ({
+        url: "/api/v1/business/transactions/bank-list",
         method: "GET",
       }),
     }),
@@ -197,5 +203,6 @@ export const {
   useCreateCustomerMutation,
   useGetSingleCustomerQuery,
   useActivateCustomerMutation,
-  useDeactivateCustomerMutation
+  useDeactivateCustomerMutation,
+  useGetBankListQuery
 } = businessApi;

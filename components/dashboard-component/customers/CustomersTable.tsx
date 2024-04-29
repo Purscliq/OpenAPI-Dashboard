@@ -11,6 +11,7 @@ import type { MenuProps } from "antd";
 
 import FilterIcon from "@/assets/svg/FilterIcon";
 import { useGetAllCustomersQuery } from "@/services/business/index.service";
+import { formatDate } from "@/helpers/dateFormat";
 
 
 
@@ -52,7 +53,7 @@ const CustomersTable = () => {
     if (customers && !isLoading && !isError && customers.data) {
     const mappedData = customers.data.map((customer: any) => ({
     name: customer.firstName + ' ' + customer.lastName,
-    created_at: customer.created_at,
+    created_at: formatDate(customer.CreatedAt),
     customer_type: customer.userType,
     status: customer.status,
     action: customer._id,
@@ -140,7 +141,7 @@ const CustomersTable = () => {
         </div>
       </div>
       <div className="relative overflow-x-auto  sm:rounded-lg w-full">
-        <Table columns={columns} dataSource={data} />
+        <Table columns={columns} dataSource={data} loading={isLoading} />
       </div>
     </div>
   );

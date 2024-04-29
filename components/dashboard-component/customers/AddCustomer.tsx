@@ -87,41 +87,62 @@ const AddCustomer = () => {
 
  
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await createCustomer(formData).unwrap(); // unwrap() is used to access the actual response data
-      message.success("Customer Created")
-      // Handle success
-    } catch (error) {
-      message.error("Failed to create customer")
-      // Handle error
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  try {
+    await createCustomer(formData).then(() => {
+      message.success("Customer Created");
+    });
+    // Handle success
+  } catch (error) {
+    message.error("Failed to create customer");
+    // Handle error
+  }
+};
+
+const customRequest = async (option: { file: any; onSuccess?: any; onError?: any; }) => {
+  const { file, onSuccess, onError } = option;
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  try {
+    const response = await createFileUpload({ File: file, formData }); // Check if 'createFileUpload' returns a valid response
+
+    if (response) {
+      if (onSuccess) {
+        onSuccess(file);
+      }
+      message.success(`${file.name} file uploaded successfully.`);
+    } else {
+      if (onError) {
+        onError(response); // Handle errors from RTK query
+      }
+      message.error(`${file.name} file upload failed.`);
     }
-  };
+  } catch (error) {
+    if (onError) {
+      onError(error); // Handle unexpected errors
+    }
+    message.error('An error occurred during upload.');
+  }
+};
 
-  
-  const props: UploadProps = {
-    name: "file",
-    multiple: true,
-    action:"",
-    onChange(info) {
-      const { status } = info.file;
-      if (status !== "uploading") {
-        console.log(info.file, info.fileList);
-        createFileUpload(info.file.name)
-      }
-      if (status === "done" ) {
-        //handleFileUpload( info.file, info.file.name === 'idCard' ? 'idCard' : 'utilityBill'),
-        message.success(`${info.file.name} file uploaded successfully.`);
-      } else if (status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
-    onDrop(e) {
-      console.log("Dropped files", e.dataTransfer.files);
-    },
-  };
+const props: UploadProps = {
+  name: "file",
+  multiple: true,
+  customRequest, // Use the customRequest function here
+  onChange(info) {
+    const { status } = info.file;
+    if (status !== "uploading") {
+      console.log(info.file, info.fileList);
+    }
 
+  },
+  onDrop(e) {
+    console.log("Dropped files", e.dataTransfer.files);
+  },
+};
   const test = async (e: React.FormEvent) => {
     e.preventDefault();
    console.log(formData)
@@ -158,8 +179,8 @@ const AddCustomer = () => {
                   onChange={(value) => handleSelectChange(value, "userType")}
                   options={[
                     { value: "", label: "Select an option" },
-                    { value: "Type1", label: "Type1" },
-                    { value: "Type2", label: "Type2" },
+                    { value: "Business", label: "Business" },
+                    { value: "Individual", label: "Individual" },
                   ]}
                   className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-none"
                 />
@@ -349,8 +370,8 @@ const AddCustomer = () => {
 
                 <Input
                   type="text"
-                  id="city"
-                  name="city"
+                  id="street"
+                  name="street"
                   placeholder="Street Name"
                   value={formData.street}
                   onChange={handleChange}

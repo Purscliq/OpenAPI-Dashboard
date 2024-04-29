@@ -97,7 +97,7 @@ const CustomerDetails = () => {
             </p>
           <span className="flex md:justify-end">
            
-              <Switch checked={checked} loading={loading}  onChange={onChange} className="peer sr-only"/>
+              <Switch checked={checked} loading={loading}  onChange={onChange} className="peer sr-only !bg-green-600"/>
              
           </span>
         </div>

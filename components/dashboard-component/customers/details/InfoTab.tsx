@@ -1,21 +1,14 @@
 import React from "react";
 import { Skeleton } from 'antd';
 import { useGetSingleCustomerQuery } from "@/services/business/index.service";
+import { formatDate } from "@/helpers/dateFormat";
 
 const InfoTab = () => {
   const id = sessionStorage.getItem("customer_id")
   const {data: customerData, isLoading} = useGetSingleCustomerQuery(id)
   
   // Function to format date of birth
-  const formatDateOfBirth = (dob: string) => {
-    const date = new Date(dob);
-    const options: Intl.DateTimeFormatOptions = {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    };
-    return date.toLocaleDateString('en-US', options);
-  };
+ 
 
   return (
     <div className="p-4 border-y grid grid-cols-2 md:grid-cols-3 gap-x-12 gap-y-4">
@@ -37,7 +30,7 @@ const InfoTab = () => {
       </span>
       <span className="flex flex-col gap-2 text-[14px]">
         <p className="text-[#7C88B1]">Date of Birth</p>
-        <p className="text-[#25324B] text-base font-bold">{formatDateOfBirth(customerData?.data?.dob)}</p>
+        <p className="text-[#25324B] text-base font-bold">{formatDate(customerData?.data?.dob)}</p>
       </span>
       <span className="flex flex-col gap-2 text-[14px]">
         <p className="text-[#7C88B1]">Phone</p>
