@@ -11,11 +11,17 @@ import TableIcon from "@/assets/svg/TableIcon";
 import LoanAccountDrawer from "./LoanAccountDrawer";
 import { useGetAllLoansQuery } from "@/services/business/index.service";
 
-const LoanAccountTable = () => {
-  const { data: loanData, isLoading } = useGetAllLoansQuery({});
-  const [open, setOpen] = useState(false);
+interface LoanAccountTableProps<T> {
+  data: T[];
+}
 
-  const showDrawer = () => {
+const LoanAccountTable: React.FC<LoanAccountTableProps<any>> = ({
+  data: loanTable,
+}) => {
+  const [open, setOpen] = useState(false);
+  const [selectedRecord, setSelectedRecord] = useState<any>(null);
+  const showDrawer = (record: any) => {
+    setSelectedRecord(record);
     setOpen(true);
   };
 
@@ -23,23 +29,12 @@ const LoanAccountTable = () => {
     setOpen(false);
   };
 
-  const items: MenuProps["items"] = [
-    {
-      key: "1",
-      label: <button onClick={showDrawer}>Details</button>,
-    },
-  ];
-
-  const data = [
-    {
-      id: 1,
-      name: "John Doe",
-      count: 1,
-      disbursed: "April 4th, 2024",
-      initiated: "April 3rd, 2024",
-      status: "Past due loan",
-    },
-  ];
+  // const items: MenuProps["items"] = [
+  //   {
+  //     key: "1",
+  //     label: <button onClick={showDrawer}>Details</button>,
+  //   },
+  // ];
 
   const columns = [
     {
@@ -47,11 +42,7 @@ const LoanAccountTable = () => {
       dataIndex: "customer_name",
       sorter: true,
     },
-    // {
-    //   title: "Count",
-    //   dataIndex: "count",
-    //   sorter: true,
-    // },
+
     {
       title: "Amount",
       dataIndex: "total_amount",
@@ -100,22 +91,18 @@ const LoanAccountTable = () => {
         return <div style={{ color }}>{status}</div>;
       },
     },
-    // {
-    //   title: "Status",
-    //   dataIndex: "status",
-    //   sorter: true,
-    // },
+
     {
       title: "Action",
-      render: () => {
+      render: (_: any, record:any) => {
         return (
           <>
-            <Dropdown menu={{ items }}>
-              {/* placement="topRight" */}
-              <button type="button" className="text-base font-semibold">
-                ...
-              </button>
-            </Dropdown>
+            <button
+              onClick={() => showDrawer(record)}
+              className="text-base font-semibold"
+            >
+              ...
+            </button>
           </>
         );
       },
@@ -134,13 +121,9 @@ const LoanAccountTable = () => {
         </div>
       </div>
       <div className="relative overflow-x-auto  sm:rounded-lg w-full">
-        <Table
-          columns={columns}
-          dataSource={loanData?.data || []}
-          loading={isLoading}
-        />
+        <Table columns={columns} dataSource={loanTable || []} />
       </div>
-      <LoanAccountDrawer onClose={onClose} open={open} />
+      <LoanAccountDrawer onClose={onClose} open={open} data={selectedRecord} />
     </div>
   );
 };

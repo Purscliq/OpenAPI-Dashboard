@@ -4,37 +4,37 @@ const data = [
   {
     time: "Sun",
     value: 10000,
-    category: "Label 1",
+    category: "Inflow",
   },
   {
     time: "Mon",
     value: 5000,
-    category: "Label 2",
+    category: "Outflow",
   },
   {
     time: "Tues",
     value: 15000,
-    category: "Label 1",
+    category: "Inflow",
   },
   {
     time: "Wed",
     value: 20000,
-    category: "Label 2",
+    category: "Outflow",
   },
   {
     time: "Thurs",
     value: 1000,
-    category: "Label 1",
+    category: "Inflow",
   },
   {
     time: "Fri",
     value: 20000,
-    category: "Label 2",
+    category: "Outflow",
   },
   {
     time: "Sat",
     value: 18000,
-    category: "Label 1",
+    category: "Inflow",
   },
 ];
 
