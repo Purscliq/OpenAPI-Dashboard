@@ -1,18 +1,65 @@
-import React from "react";
-import { Modal } from "antd";
+import React, { useState } from "react";
+import { message, Modal } from "antd";
 import { CustomSelect as Select } from "@/lib/AntdComponents";
-import { useGetBankListQuery } from "@/services/business/index.service";
+import { useGetBankListQuery, useInitiateWithdrawalMutation } from "@/services/business/index.service";
+import { LoadingOutlined } from "@ant-design/icons";
 interface ModalProps {
   openWithdrawalModal: boolean;
   close: () => void;
+  accountData: { id: number; account_name: string }[];
 }
 
 const WithdrawalModal: React.FC<ModalProps> = ({
   openWithdrawalModal,
   close,
+  accountData
 }) => {
 
   const { data: bankList } = useGetBankListQuery({})
+  const [initiateWithdrawal, { isLoading, data: response}] = useInitiateWithdrawalMutation()
+
+  const [formData, setFormData] = useState({
+    source_account_id: '',
+    bank_code: "",
+    account_number: "",
+    amount: 0,
+    narration: ""
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+     const newValue = name === 'amount' ? parseFloat(value) : value;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: newValue,
+    }));
+  };
+  const handleSelectChange = (value: string, fieldName: string) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [fieldName]: value,
+    }));
+  };
+
+  const handleWithdrawal = async (e: React.FormEvent) => {
+    e.preventDefault();
+   // console.log(formData)
+    
+    try {
+      await initiateWithdrawal(formData).unwrap().then(() => {
+        message.success("Withdrawal successful");
+      });
+      // Handle success
+    } catch (error: any) {
+      message.error(`Withdrawal failed: ${error?.data?.message}` );
+      console.log(error?.data?.message);
+      // Handle error
+    }
+    
+  };
+  
+
+
   return (
     <Modal
       open={openWithdrawalModal}
@@ -30,23 +77,24 @@ const WithdrawalModal: React.FC<ModalProps> = ({
           </p>
         </span>
 
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleWithdrawal}>
           <span className="flex flex-col gap-1">
             <label
               htmlFor="account"
               className="text-[#24272C] text-base font-bold"
             >
-              Transfer to{" "}
+              Transfer from{" "}
             </label>
             <Select
               placeholder=""
               className="!w-full !h-[40px]"
               id="account"
-              options={[
-                { value: "account1", label: "Account1" },
-                { value: "account2", label: "Account2" },
-                { value: "account3", label: "Account3" },
-              ]}
+              value={formData.source_account_id}
+              onChange={(value) => handleSelectChange(value, "source_account_id")}
+              options={accountData?.map((bank: any) => ({
+                value: bank.id,
+                label: bank.account_name,
+              }))}
             />
           </span>
           <span className="flex flex-col gap-1">
@@ -60,6 +108,8 @@ const WithdrawalModal: React.FC<ModalProps> = ({
               placeholder=""
               className="!w-full !h-[40px]"
               id="bank"
+              value={formData.bank_code}
+              onChange={(value) => handleSelectChange(value, "bank_code")}
               options={bankList?.data?.map((bank: any) => ({
                 value: bank.bank_code,
                 label: bank.bank_name,
@@ -74,8 +124,11 @@ const WithdrawalModal: React.FC<ModalProps> = ({
               Account Number
             </label>
             <input
+              name="account_number"
               type="number"
               id="accountNo"
+              value={formData.account_number}
+              onChange={handleChange}
               className="w-full rounded-[5px] px-[8px] pr-[16px] h-[50px] text-[14px] border border-[#E9EBEB]"
               required
             />
@@ -89,8 +142,11 @@ const WithdrawalModal: React.FC<ModalProps> = ({
               Amount
             </label>
             <input
+              name="amount"
               type="number"
               id="amount"
+              value={formData.amount}
+              onChange={handleChange}
               className="w-full rounded-[5px] px-[8px] pr-[16px] h-[50px] text-[14px] border border-[#E9EBEB]"
               required
             />
@@ -103,8 +159,11 @@ const WithdrawalModal: React.FC<ModalProps> = ({
               Narration
             </label>
             <input
+              name="narration"
               type="text"
               id="narration"
+              value={formData.narration}
+              onChange={handleChange}
               className="w-full rounded-[5px] px-[8px] pr-[16px] h-[50px] text-[14px] border border-[#E9EBEB]"
               required
             />
@@ -114,7 +173,11 @@ const WithdrawalModal: React.FC<ModalProps> = ({
               type="submit"
               className="bg-[#010101] text-white px-[24px] py-[12px] rounded-[5px]"
             >
-              Withdraw
+             { isLoading ? 
+             <LoadingOutlined style={{ fontSize: 24 }} spin />
+             :
+             "Withdraw"
+             }
             </button>
           </span>
         </form>

@@ -152,6 +152,13 @@ export const businessApi = createApi({
       }),
       providesTags: ["Customer"]
     }),
+    getSingleCustomerTransaction: builder.query({
+      query: (id) => ({
+        url: `/api/v1/business/customers/${id}/transactions`,
+        method: "GET",
+      }),
+      providesTags: ["Customer"]
+    }),
     activateCustomer: builder.mutation({
       query: (id) => ({
         url: `/api/v1/business/customers/${id}/activate`,
@@ -176,11 +183,10 @@ export const businessApi = createApi({
     }),
     initiateWithdrawal: builder.mutation({
       query: (body) => ({
-        url: "/api/v1/business/customers",
+        url: "/api/v1/business/transactions/withdraw",
         method: "POST",
         body,
       }),
-      invalidatesTags: ["Customer"]
     }),
   }),
 });
@@ -212,5 +218,7 @@ export const {
   useGetSingleCustomerQuery,
   useActivateCustomerMutation,
   useDeactivateCustomerMutation,
-  useGetBankListQuery
+  useGetBankListQuery,
+  useInitiateWithdrawalMutation,
+  useGetSingleCustomerTransactionQuery
 } = businessApi;
