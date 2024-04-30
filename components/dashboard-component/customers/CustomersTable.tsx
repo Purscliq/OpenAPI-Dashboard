@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   CustomInput as Input,
@@ -10,6 +10,11 @@ import { DatePicker, Avatar, Typography, Dropdown } from "antd";
 import type { MenuProps } from "antd";
 
 import FilterIcon from "@/assets/svg/FilterIcon";
+import { useGetAllCustomersQuery } from "@/services/business/index.service";
+import { formatDate } from "@/helpers/dateFormat";
+
+
+
 
 interface CustomersType {
   id: string;
@@ -38,6 +43,27 @@ const InitialAvatar: React.FC<InitialAvatarProps> = ({ name }) => {
 };
 
 const CustomersTable = () => {
+  const [data, setData] = useState([]);
+
+
+  const { data: customers, isLoading, isError } = useGetAllCustomersQuery({})
+
+ 
+  useEffect(() => {
+    if (customers && !isLoading && !isError && customers.data) {
+    const mappedData = customers.data.map((customer: any) => ({
+    name: customer.firstName + ' ' + customer.lastName,
+    created_at: formatDate(customer.CreatedAt),
+    customer_type: customer.userType,
+    status: customer.status,
+    action: customer._id,
+    }));
+    setData(mappedData);
+    }
+    }, [customers, isLoading, isError]); // Add dependencies to useEffect
+ 
+
+ 
   const items: MenuProps["items"] = [
     {
       label: <Link href="/customers/details">View Details</Link>,
@@ -45,32 +71,11 @@ const CustomersTable = () => {
     },
   ];
 
-  const data = [
-    {
-      name: "Cruise Tech",
-      created_at: "Feb 9th, 2024",
-      customer_type: "Individual",
-      status: "Active",
-    },
-    {
-      name: "Cruise Tech",
-      created_at: "Feb 9th, 2024",
-      customer_type: "Individual",
-      status: "Active",
-    },
-    {
-      name: "Cruise Tech",
-      created_at: "Feb 9th, 2024",
-      customer_type: "Individual",
-      status: "Inactive",
-    },
-    {
-      name: "Cruise Tech",
-      created_at: "Feb 9th, 2024",
-      customer_type: "Individual",
-      status: "Active",
-    },
-  ];
+  const set_id = (id: string) =>{
+    sessionStorage.setItem("customer_id",id )
+  }
+
+ 
 
   const columns = [
     {
@@ -99,20 +104,22 @@ const CustomersTable = () => {
       dataIndex: "status",
       sorter: true,
       render: (text: string) => (
-        <span className={`text-${text === "Active" ? "green" : "red"}-500`}>
+        <span className={`text-${text === "active" ? "green" : "red"}-500`}>
           {text}
         </span>
       ),
     },
     {
       title: "Actions",
-      render: () => (
+      dataIndex: "action",
+      render: (text: string) => (
         <span className="flex items-center">
           <Dropdown menu={{ items }} trigger={["click"]}>
             <button
               type="button"
               title="Details"
               className="font-bold text-2xl"
+              onClick={() => set_id(text)}
             >
               ...
             </button>
@@ -134,7 +141,7 @@ const CustomersTable = () => {
         </div>
       </div>
       <div className="relative overflow-x-auto  sm:rounded-lg w-full">
-        <Table columns={columns} dataSource={data} />
+        <Table columns={columns} dataSource={data} loading={isLoading} />
       </div>
     </div>
   );

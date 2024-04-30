@@ -5,7 +5,7 @@ export const businessApi = createApi({
   reducerPath: "business",
   refetchOnReconnect: true,
   refetchOnMountOrArgChange: true,
-  tagTypes: ["account"],
+  tagTypes: ["account", "Customer"],
   baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
     createTransaction: builder.mutation({
@@ -103,10 +103,10 @@ export const businessApi = createApi({
       }),
     }),
     createUploadFile: builder.mutation({
-      query: (body) => ({
-        url: "/api/v1/business/image-upload",
-        method: "POST",
-        body,
+      query: (formData) => ({
+          url: "/api/v1/business/image-upload",
+          method: "POST",
+          body: formData,
       }),
     }),
     getServices: builder.query({
@@ -133,6 +133,47 @@ export const businessApi = createApi({
         method: "GET",
       }),
     }),
+    getAllCustomers: builder.query({
+      query: () => ({
+        url: "/api/v1/business/customers",
+        method: "GET",
+      }),
+    }),
+    getBankList: builder.query({
+      query: () => ({
+        url: "/api/v1/business/transactions/bank-list",
+        method: "GET",
+      }),
+    }),
+    getSingleCustomer: builder.query({
+      query: (id) => ({
+        url: `/api/v1/business/customers/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["Customer"]
+    }),
+    activateCustomer: builder.mutation({
+      query: (id) => ({
+        url: `/api/v1/business/customers/${id}/activate`,
+        method: "POST",
+      }),
+      invalidatesTags: ["Customer"]
+    }),
+    deactivateCustomer: builder.mutation({
+      query: (id) => ({
+        url: `/api/v1/business/customers/${id}/deactivate`,
+        method: "POST",
+      }),
+      invalidatesTags: ["Customer"]
+    }),
+    createCustomer: builder.mutation({
+      query: (body) => ({
+        url: "/api/v1/business/customers",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Customer"]
+    }),
   }),
 });
 
@@ -157,5 +198,11 @@ export const {
   useLazyGetDashboardQuery,
   useVerifyTinMutation,
   useGetAllLoansQuery,
-  useGetComplainceStatQuery
+  useGetComplainceStatQuery,
+  useGetAllCustomersQuery,
+  useCreateCustomerMutation,
+  useGetSingleCustomerQuery,
+  useActivateCustomerMutation,
+  useDeactivateCustomerMutation,
+  useGetBankListQuery
 } = businessApi;

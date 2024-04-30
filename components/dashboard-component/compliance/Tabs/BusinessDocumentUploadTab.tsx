@@ -1,12 +1,8 @@
-import React, { FormEventHandler, useEffect, useState } from "react";
+import React from "react";
 import { message, Upload } from "antd";
 import AttachIcon from "@/assets/svg/AttachIcon";
 import type { UploadProps, UploadFile } from "antd";
-import {
-  useCreateUploadFileMutation,
-  useGetbusinessQuery,
-  useUpdatebusinessMutation,
-} from "@/services/business/index.service";
+import { useCreateUploadFileMutation } from "@/services/business/index.service";
 import { useRouter } from "next/navigation";
 import { UploadChangeParam } from "antd/es/upload";
 
@@ -14,11 +10,8 @@ const { Dragger } = Upload;
 
 const BusinessDocumentUploadTab = () => {
   const router = useRouter();
-  const [createUploadFile] = useCreateUploadFileMutation();
-  const [update, { isLoading }] = useUpdatebusinessMutation();
-  const { data: business, refetch } = useGetbusinessQuery({});
 
-  const [upload_url, setUploadUrl] = useState("");
+  const [createUploadFile] = useCreateUploadFileMutation();
 
   const handleUpload = (
     info: UploadChangeParam<UploadFile>,
@@ -31,27 +24,11 @@ const BusinessDocumentUploadTab = () => {
         .unwrap()
         .then((res) => {
           const uploadedUrl = res.data.upload_url;
-          setUploadUrl(uploadedUrl);
         })
         .catch((error) => {
           console.error("Error uploading file:", error);
         });
     }
-  };
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
-    e.preventDefault();
-    update({
-      cac_url: upload_url,
-      tin_url: upload_url,
-    })
-      .unwrap()
-      .then((res) => {
-        refetch();
-        message.success("BusinessDocument updated successfully");
-      })
-      .catch((error) => {
-        console.error("Error updating director:", error);
-      });
   };
 
   return (
@@ -65,22 +42,21 @@ const BusinessDocumentUploadTab = () => {
         </div>
 
         <div className="p-2 col-span-5 md:mr-10 lg:mr-20">
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form className="space-y-4">
             <div className="flex flex-col gap-[0.3rem]">
               <label
-                htmlFor="cac_url"
+                htmlFor="CAC"
                 className="block text-sm font-semibold text-gray-700"
               >
                 Attach your CAC
               </label>
 
               <Dragger
-                name="cac_url"
+                name="CAC"
                 multiple
                 accept="application/pdf, image/jpeg"
                 action="/api/v1/business/image-upload"
-                disabled={!!business?.data?.cac_url}
-                onChange={(info) => handleUpload(info, "cac_url")}
+                onChange={(info) => handleUpload(info, "CAC")}
                 className="flex items-center text-center  gap-[0.3rem]"
               >
                 <p className="ant-upload-text flex gap-4">
@@ -122,12 +98,11 @@ const BusinessDocumentUploadTab = () => {
               </label>
               <Dragger
                 id="TIN"
-                name=" tin_url"
+                name="TIN"
                 multiple
                 accept="application/pdf, image/jpeg"
                 action="/api/v1/business/image-upload"
-                onChange={(info) => handleUpload(info, " tin_url")}
-                disabled={!!business?.data?.tin_url}
+                onChange={(info) => handleUpload(info, "TIN")}
                 className="flex items-center text-center gap-[0.3rem]"
               >
                 <p className="ant-upload-text flex gap-4">
@@ -143,12 +118,12 @@ const BusinessDocumentUploadTab = () => {
                   type="submit"
                   className="w-full bg-black text-center text-md rounded-md px-4 py-2 font-medium text-white focus:outline-none"
                 >
-                  {isLoading ? "Saving..." : "Save"}
+                  Save
                 </button>
                 <button
                   type="button"
                   // onClick={() => router.push("/about")}
-                  // onClick={() => router.back()}
+                  onClick={() => router.back()}
                   className="w-full text-center text-md rounded-md px-4 py-2 font-medium text-black focus:outline-none"
                 >
                   Cancel
