@@ -15,11 +15,17 @@ const AccountTable = () => {
   const [openFundsModal, setOpenFundsModal] = useState(false);
   const [openWithdrawalModal, setOpenWithdrawalModal] = useState(false);
 
-  const handleOpenWithdrawalModal = () => {
-    setOpenFundsModal(false); // Close the first modal
-    setOpenWithdrawalModal(true); // Open the second withdrawal modal
+  const [selectedRecord, setSelectedRecord] = useState<any>(null);
+
+  const handleOpenFunds = (record: any) => {
+    setSelectedRecord(record);
+    setOpenFundsModal(true);
   };
 
+  const handleOpenWithdrawal = () => {
+    setOpenFundsModal(false);
+    setOpenWithdrawalModal(true);
+  };
   const columns = [
     {
       title: "Account name",
@@ -36,7 +42,7 @@ const AccountTable = () => {
       title: "Current Balance",
       dataIndex: "current_balance",
       sorter: true,
-      render: (current_balance: number) => `NGN ${current_balance?.toFixed(2)}`, // Prepend "NGN" format
+      render: (current_balance: number) => `NGN ${current_balance?.toFixed(2)}`,
     },
     {
       title: "Date",
@@ -53,14 +59,14 @@ const AccountTable = () => {
     },
     {
       title: "Action",
-      render: () => {
+      render: (_: any, record: any) => {
         return (
           <>
             <Dropdown
               overlay={
                 <Menu>
                   <Menu.Item key="1">
-                    <button onClick={() => setOpenFundsModal(true)}>
+                    <button onClick={() => handleOpenFunds(record)}>
                       View account details
                     </button>
                   </Menu.Item>
@@ -99,8 +105,17 @@ const AccountTable = () => {
           loading={isLoading}
         />
       </div>
-     <FundModal openFundsModal={openFundsModal} close={()=>setOpenFundsModal(false)} handleOpenWithdrawalModal={handleOpenWithdrawalModal} />
-     <WithdrawalModal openWithdrawalModal={openWithdrawalModal} close={()=>setOpenWithdrawalModal(false)} />
+      <FundModal
+        openFundsModal={openFundsModal}
+        close={() => setOpenFundsModal(false)}
+        handleOpenWithdrawal={handleOpenWithdrawal}
+        data={selectedRecord}
+      />
+
+      <WithdrawalModal
+        openWithdrawalModal={openWithdrawalModal}
+        close={() => setOpenWithdrawalModal(false)}
+      />
     </div>
   );
 };
