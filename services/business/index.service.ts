@@ -141,7 +141,7 @@ export const businessApi = createApi({
     }),
     getBankList: builder.query({
       query: () => ({
-        url: "/api/v1/business/transactions/bank-list",
+        url: "/api/v1/business/transactions/utils/bank-list",
         method: "GET",
       }),
     }),
@@ -167,6 +167,14 @@ export const businessApi = createApi({
       invalidatesTags: ["Customer"]
     }),
     createCustomer: builder.mutation({
+      query: (body) => ({
+        url: "/api/v1/business/customers",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Customer"]
+    }),
+    initiateWithdrawal: builder.mutation({
       query: (body) => ({
         url: "/api/v1/business/customers",
         method: "POST",

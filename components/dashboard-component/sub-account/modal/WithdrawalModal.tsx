@@ -12,7 +12,7 @@ const WithdrawalModal: React.FC<ModalProps> = ({
   close,
 }) => {
 
-  const {data:bankLList} = useGetBankListQuery({})
+  const { data: bankList } = useGetBankListQuery({})
   return (
     <Modal
       // title="Withdrawal"
@@ -60,11 +60,10 @@ const WithdrawalModal: React.FC<ModalProps> = ({
               placeholder=""
               className="!w-full !h-[40px]"
               id="bank"
-              options={[
-                { value: "bank1", label: "Bank1" },
-                { value: "bank2", label: "Bank2" },
-                { value: "bank3", label: "Bank3" },
-              ]}
+              options={bankList?.data?.map((bank: any) => ({
+                value: bank.bank_code,
+                label: bank.bank_name,
+              }))}
             />
           </span>
           <span className="flex flex-col gap-1">
