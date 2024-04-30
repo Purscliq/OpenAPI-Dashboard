@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal } from "antd";
 import { CustomSelect as Select } from "@/lib/AntdComponents";
+import { useGetBankListQuery } from "@/services/business/index.service";
 interface ModalProps {
   openWithdrawalModal: boolean;
   close: () => void;
@@ -10,6 +11,8 @@ const WithdrawalModal: React.FC<ModalProps> = ({
   openWithdrawalModal,
   close,
 }) => {
+
+  const {data:bankLList} = useGetBankListQuery({})
   return (
     <Modal
       open={openWithdrawalModal}

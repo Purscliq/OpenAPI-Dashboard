@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   CustomInput as Input,
   CustomDatePicker as DatePicker,
@@ -11,6 +11,8 @@ import { message, Upload } from "antd";
 
 import ImageIcon from "@/assets/svg/ImageIcon";
 import AttachIcon from "@/assets/svg/AttachIcon";
+import { useCreateCustomerMutation, useCreateUploadFileMutation } from "@/services/business/index.service";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 const { Dragger } = Upload;
@@ -22,27 +24,129 @@ const selectBefore = (
   </Select>
 );
 
+
+
+
+
+const AddCustomer = () => {
+  const [accessToken, setAccessToken] = useState<string>()
+  const [formData, setFormData] = useState({
+    userType: "",
+    firstName: "",
+    lastName: "",
+    phone: "",
+    email: "",
+    dob: null,
+    postalCode: "",
+    country: "",
+    state: "",
+    city: "",
+    street: "",
+    address: "",
+    kycType: "",
+    bvn: "",
+    idCard: null,
+    utilityBill: null,
+  });
+  const [createCustomer, { isLoading }] = useCreateCustomerMutation()
+  const [createFileUpload, { isLoading: loading }] = useCreateUploadFileMutation()
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      setAccessToken(token)
+    }
+  }, [])
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+  const handleSelectChange = (value: string, fieldName: string) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [fieldName]: value,
+    }));
+  };
+
+  const handleDateChange = (date:any) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      dob: date ? date.toDate() : null, // Convert moment object to Date object
+    }));
+  };
+  const handleFileUpload = (file: any, name: string) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: file,
+    }));
+    message.success(`${file.name} file uploaded successfully.`);
+  };
+
+ 
+
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  try {
+    await createCustomer(formData).then(() => {
+      message.success("Customer Created");
+    });
+    // Handle success
+  } catch (error) {
+    message.error("Failed to create customer");
+    // Handle error
+  }
+};
+
+const customRequest = async (option: { file: any; onSuccess?: any; onError?: any; }) => {
+  const { file, onSuccess, onError } = option;
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  try {
+    const response = await createFileUpload({ File: file, formData }); // Check if 'createFileUpload' returns a valid response
+
+    if (response) {
+      if (onSuccess) {
+        onSuccess(file);
+      }
+      message.success(`${file.name} file uploaded successfully.`);
+    } else {
+      if (onError) {
+        onError(response); // Handle errors from RTK query
+      }
+      message.error(`${file.name} file upload failed.`);
+    }
+  } catch (error) {
+    if (onError) {
+      onError(error); // Handle unexpected errors
+    }
+    message.error('An error occurred during upload.');
+  }
+};
+
 const props: UploadProps = {
   name: "file",
   multiple: true,
-  action: "https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188",
+  customRequest, // Use the customRequest function here
   onChange(info) {
     const { status } = info.file;
     if (status !== "uploading") {
       console.log(info.file, info.fileList);
     }
-    if (status === "done") {
-      message.success(`${info.file.name} file uploaded successfully.`);
-    } else if (status === "error") {
-      message.error(`${info.file.name} file upload failed.`);
-    }
+
   },
   onDrop(e) {
     console.log("Dropped files", e.dataTransfer.files);
   },
 };
-
-const AddCustomer = () => {
+  const test = async (e: React.FormEvent) => {
+    e.preventDefault();
+   console.log(formData)
+  };
   return (
     <section className="max-w-[1640px] flex flex-col p-4 space-y-6  h-screen overflow-y-scroll">
       <span className="">
@@ -59,7 +163,7 @@ const AddCustomer = () => {
           </div>
 
           <div className="p-2 col-span-5 md:mr-10 lg:mr-20">
-            <form className="space-y-4">
+            <form className="space-y-4" onSubmit={handleSubmit}>
               <div className="flex flex-col items-start justify-start gap-[0.3rem]">
                 <label
                   htmlFor="customerType"
@@ -69,12 +173,14 @@ const AddCustomer = () => {
                 </label>
 
                 <Select
-                  id="customerType"
+                  id="userType"
                   defaultValue=""
+                  value={formData.userType} // Value from formData
+                  onChange={(value) => handleSelectChange(value, "userType")}
                   options={[
                     { value: "", label: "Select an option" },
-                    { value: "Type1", label: "Type1" },
-                    { value: "Type2", label: "Type2" },
+                    { value: "Business", label: "Business" },
+                    { value: "Individual", label: "Individual" },
                   ]}
                   className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-none"
                 />
@@ -91,8 +197,10 @@ const AddCustomer = () => {
                 <Input
                   type="text"
                   id="FirstName"
-                  name="first_name"
+                  name="firstName"
                   placeholder="John"
+                  value={formData.firstName}
+                  onChange={handleChange}
                   required
                   className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
                 />
@@ -109,8 +217,10 @@ const AddCustomer = () => {
                 <Input
                   type="text"
                   id="LastName"
-                  name="first_name"
+                  name="lastName"
                   placeholder="Doe"
+                  value={formData.lastName}
+                  onChange={handleChange}
                   required
                   className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
                 />
@@ -129,8 +239,10 @@ const AddCustomer = () => {
                   defaultValue=""
                   type="tel"
                   id="phone"
-                  name="phone number"
+                  name="phone"
                   placeholder="801234567890"
+                  value={formData.phone}
+                  onChange={handleChange}
                   required
                 />
               </div>
@@ -148,6 +260,8 @@ const AddCustomer = () => {
                   id="email"
                   name="email"
                   placeholder="John.doe@mail"
+                  value={formData.email}
+                  onChange={handleChange}
                   required
                   className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
                 />
@@ -160,7 +274,7 @@ const AddCustomer = () => {
                 >
                   Date of Birth
                 </label>
-                <DatePicker className="w-full" />
+                <DatePicker className="w-full" onChange={handleDateChange}/>
               </div>
 
               <div className="flex flex-col items-start justify-start gap-[0.3rem]">
@@ -174,8 +288,10 @@ const AddCustomer = () => {
                 <Input
                   type="number"
                   id="postalCode"
-                  name="Postal code"
+                  name="postalCode"
                   placeholder="This is placeholder"
+                  value={formData.postalCode}
+                  onChange={handleChange}
                   required
                   className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
                 />
@@ -192,6 +308,8 @@ const AddCustomer = () => {
                 <Select
                   id="Country"
                   defaultValue=""
+                  value={formData.country} // Value from formData
+                  onChange={(value) => handleSelectChange(value, "country")}
                   options={[
                     { value: "", label: "Select an option" },
                     { value: "Nigeria", label: "Nigeria" },
@@ -212,6 +330,8 @@ const AddCustomer = () => {
                 <Select
                   id="state"
                   defaultValue=""
+                  value={formData.state} // Value from formData
+                  onChange={(value) => handleSelectChange(value, "state")}
                   options={[
                     { value: "", label: "Select an option" },
                     { value: "Lagos", label: "Lagos" },
@@ -234,6 +354,27 @@ const AddCustomer = () => {
                   id="city"
                   name="city"
                   placeholder="This is placeholder"
+                  value={formData.city}
+                  onChange={handleChange}
+                  required
+                  className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
+                />
+              </div>
+              <div className="flex flex-col items-start justify-start gap-[0.3rem]">
+                <label
+                  htmlFor="city"
+                  className="block text-sm font-semibold text-gray-700"
+                >
+                  Street
+                </label>
+
+                <Input
+                  type="text"
+                  id="street"
+                  name="street"
+                  placeholder="Street Name"
+                  value={formData.street}
+                  onChange={handleChange}
                   required
                   className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
                 />
@@ -252,6 +393,8 @@ const AddCustomer = () => {
                   id="Address"
                   name="address"
                   placeholder="This is placeholder"
+                  value={formData.address}
+                  onChange={handleChange}
                   required
                   className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
                 />
@@ -268,8 +411,10 @@ const AddCustomer = () => {
                 <Input
                   type="text"
                   id="KYC"
-                  name="KYC"
+                  name="kycType"
                   placeholder="This is placeholder"
+                  value={formData.kycType}
+                  onChange={handleChange}
                   required
                   className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
                 />
@@ -285,9 +430,11 @@ const AddCustomer = () => {
 
                 <Input
                   type="text"
-                  id="bankVerification"
-                  name="bank verification"
+                  id="bvn"
+                  name="bvn"
                   placeholder="This is placeholder"
+                  value={formData.bvn}
+                  onChange={handleChange}
                   required
                   className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
                 />
@@ -304,6 +451,7 @@ const AddCustomer = () => {
                 <Dragger
                   {...props}
                   id="IDCard"
+                  name="idCard"
                   className="flex items-center text-center  gap-[0.3rem]"
                 >
                   <p className="ant-upload-text flex gap-4">
@@ -323,6 +471,7 @@ const AddCustomer = () => {
                 <Dragger
                   {...props}
                   id="utilityBill"
+                  name="utilityBill"
                   className="flex items-center text-center  gap-[0.3rem]"
                 >
                   <p className="ant-upload-text flex gap-4">
@@ -338,7 +487,11 @@ const AddCustomer = () => {
                     type="submit"
                     className="w-full bg-black text-center text-md rounded-md px-4 py-2 font-medium text-white focus:outline-none"
                   >
-                    Save
+                    {
+                      !isLoading ? " Save" :  <LoadingOutlined style={{ fontSize: 24 }} spin />
+                    }
+                   
+                   
                   </button>
                   <button
                     type="button"
