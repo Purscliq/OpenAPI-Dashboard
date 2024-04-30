@@ -53,7 +53,7 @@ const CustomersTable = () => {
     if (customers && !isLoading && !isError && customers.data) {
     const mappedData = customers.data.map((customer: any) => ({
     name: customer.firstName + ' ' + customer.lastName,
-    created_at: formatDate(customer.CreatedAt),
+    created_at: formatDate(customer.createdAt),
     customer_type: customer.userType,
     status: customer.status,
     action: customer._id,
