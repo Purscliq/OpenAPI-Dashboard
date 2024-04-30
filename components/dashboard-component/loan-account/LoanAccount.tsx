@@ -6,9 +6,9 @@ import RunningLoansIcon from "@/assets/svg/RunningLoansIcon";
 import PaidLoansIcon from "@/assets/svg/PaidLoansIcon";
 import PastDueLoansIcon from "@/assets/svg/PastDueLoansIcon";
 import { useGetAllLoansQuery } from "@/services/business/index.service";
-
+import { Spin } from "antd";
 const LoanAccount = () => {
-  const { data } = useGetAllLoansQuery({});
+  const { data, isLoading } = useGetAllLoansQuery({});
 
   return (
     <section className="max-w-[1640px] flex flex-col p-4 space-y-6 h-screen overflow-y-scroll">

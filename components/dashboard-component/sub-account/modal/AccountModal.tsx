@@ -1,4 +1,4 @@
-import { Button, Modal } from "antd";
+import { Button, Modal, message } from "antd";
 import { useState } from "react";
 import { CustomInput as Input } from "@/lib/AntdComponents";
 import { useCreateSubaccountMutation } from "@/services/business/index.service";
@@ -23,10 +23,9 @@ const AccountModal = ({
         setSubaccountName("");
       })
       .catch((error) => {
-        console.error("Error creating subaccount:", error);
+        message.error("Maximum subaccount reached" || error?.message);
       });
   };
-
   return (
     <Modal open={open} onCancel={setOpen} footer={null}>
       <div className="flex justify-center items-center flex-col">

@@ -37,7 +37,7 @@ const DashboardSider = () => {
                 label: (
                   <Link href="/compliance">
                     Compliance
-                    <span style={{ color: textColor }}>
+                    <span style={{ color: textColor }} className="ml-1">
                       ({data?.data?.status})
                     </span>
                   </Link>

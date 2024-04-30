@@ -2,9 +2,12 @@
 import React, { useState } from "react";
 import AccountTable from "./AccountTable";
 import AccountModal from "./modal/AccountModal";
+import { useGetSubaccountQuery } from "@/services/business/index.service";
 
 const Acount = () => {
   const [ModalOpen, setIsModalOpen] = useState(false);
+  const { data: subaccounts } = useGetSubaccountQuery({});
+  const existingSubaccountsCount = subaccounts?.data?.length || 0;
 
   return (
     <div className="max-w-[1640px] flex flex-col p-4 space-y-12 overflow-y-scroll">
@@ -14,7 +17,8 @@ const Acount = () => {
         <div className="flex justify-center items-center space-x-5">
           <button
             onClick={() => setIsModalOpen(true)}
-            className="btn btn-sm  bg-black hover:bg-black text-white font-light text-sm normal-case"
+            disabled={existingSubaccountsCount >= 2}
+            className="btn btn-sm  disabled:bg-gray-400 bg-black hover:bg-black text-white font-light text-sm normal-case"
           >
             <span className="text-lg font-semibold"> +</span> Sub-Account
           </button>

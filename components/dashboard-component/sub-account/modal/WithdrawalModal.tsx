@@ -12,10 +12,10 @@ const WithdrawalModal: React.FC<ModalProps> = ({
 }) => {
   return (
     <Modal
-      // title="Withdrawal"
       open={openWithdrawalModal}
       onCancel={close}
       footer={null}
+      centered={true}
     >
       <div className="pt-5 space-y-6">
         <span className="flex flex-col justify-center">
@@ -33,7 +33,7 @@ const WithdrawalModal: React.FC<ModalProps> = ({
               htmlFor="account"
               className="text-[#24272C] text-base font-bold"
             >
-              Select Account
+              Transfer to{" "}
             </label>
             <Select
               placeholder=""
