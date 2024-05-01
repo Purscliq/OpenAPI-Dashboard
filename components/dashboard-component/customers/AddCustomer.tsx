@@ -50,7 +50,7 @@ const AddCustomer = () => {
     utilityBill: null,
   });
   const [createCustomer, { isLoading }] = useCreateCustomerMutation()
-  const [createFileUpload, { isLoading: loading}] = useCreateUploadFileMutation()
+  const [createFileUpload, { isLoading: loading }] = useCreateUploadFileMutation()
   useEffect(() => {
     const token = localStorage.getItem('token')
     if (token) {
@@ -72,7 +72,7 @@ const AddCustomer = () => {
     }));
   };
 
-  const handleDateChange = (date:any) => {
+  const handleDateChange = (date: any) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       dob: date ? date.toDate() : null, // Convert moment object to Date object
@@ -86,47 +86,64 @@ const AddCustomer = () => {
     message.success(`${file.name} file uploaded successfully.`);
   };
 
- 
-
- const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  try {
-    await createCustomer(formData).then(() => {
-      message.success("Customer Created");
-    });
-    // Handle success
-  } catch (error) {
-    message.error("Failed to create customer");
-    // Handle error
-  }
-};
 
 
-
-
-const customRequest = async ({ file, onSuccess, onError }: { file: File, onSuccess: Function, onError: Function }) => {
-  try {
-    const formData = new FormData();
-    formData.append('file', file);
-
-    // Make the RTK Query mutation call to upload the file
-    const response = await createFileUpload(formData);
-
-    // Handle success
-    if ('data' in response) {
-      onSuccess(response.data); // Notify Ant Design that the file has been successfully uploaded
-    } else {
-      onError(new Error('File upload failed')); // Notify Ant Design about the error
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await createCustomer(formData).then(() => {
+        message.success("Customer Created");
+      });
+      // Handle success
+    } catch (error) {
+      message.error("Failed to create customer");
+      // Handle error
     }
-  } catch (error) {
-    onError(error); // Notify Ant Design about the error
-  }
-};
+  };
 
 
+
+
+  const customRequest = async ({ file, onSuccess, onError }: { file: RcFile, onSuccess: Function, onError: Function}) => {
+    
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+  
+      // Define onProgress function here
+      const onProgress = (progressEvent: any) => {
+        // Update progress bar UI based on progressEvent.percent
+        const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        // Notify about progress
+        console.log(`Upload progress: ${percentCompleted}%`);
+      };
+    
+      // Make the RTK Query mutation call to upload the file
+      const response = await createFileUpload(formData);
+    
+      // Handle success
+      if ('data' in response) {
+        onSuccess(file); // Notify Ant Design that the file has been successfully uploaded
+        message.success(`${file.name} uploaded successfully`);
+      } else {
+        onError(new Error('File upload failed')); // Notify Ant Design about the error
+        message.error('File upload failed');
+      }
+    } catch (error) {
+      onError(error); // Notify Ant Design about the error
+      message.error('File upload failed');
+    }
+  };
+  
+  
+  const onProgress = (progressEvent: any) => {
+    // Update progress bar UI based on progressEvent.percent
+    const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+  };
+  
   const test = async (e: React.FormEvent) => {
     e.preventDefault();
-   console.log(formData)
+    console.log(formData)
   };
   return (
     <section className="max-w-[1640px] flex flex-col p-4 space-y-6  h-screen overflow-y-scroll">
@@ -255,7 +272,7 @@ const customRequest = async ({ file, onSuccess, onError }: { file: File, onSucce
                 >
                   Date of Birth
                 </label>
-                <DatePicker className="w-full" onChange={handleDateChange}/>
+                <DatePicker className="w-full" onChange={handleDateChange} />
               </div>
 
               <div className="flex flex-col items-start justify-start gap-[0.3rem]">
@@ -430,13 +447,12 @@ const customRequest = async ({ file, onSuccess, onError }: { file: File, onSucce
                 </label>
 
                 <Dragger
-                 
                   id="IDCard"
                   name="idCard"
-                  customRequest={()=>customRequest }
-      //onChange={(info) => handleUploadFile(info, "idCard")}
-      onDrop={(e) => console.log("Dropped files", e.dataTransfer.files)} // Optional drop handling
-                  className="flex items-center text-center  gap-[0.3rem]"
+                  customRequest={({ file }) => customRequest({ file: file as RcFile, onSuccess: (file: UploadFile) => { file.status = 'done' }, onError: () => { } })}
+                 
+                  onDrop={(e) => console.log("Dropped files", e.dataTransfer.files)} // Optional drop handling
+                  className="flex items-center text-center gap-[0.3rem]"
                 >
                   <p className="ant-upload-text flex gap-4">
                     <AttachIcon />
@@ -472,10 +488,10 @@ const customRequest = async ({ file, onSuccess, onError }: { file: File, onSucce
                     className="w-full bg-black text-center text-md rounded-md px-4 py-2 font-medium text-white focus:outline-none"
                   >
                     {
-                      !isLoading ? " Save" :  <LoadingOutlined style={{ fontSize: 24 }} spin />
+                      !isLoading ? " Save" : <LoadingOutlined style={{ fontSize: 24 }} spin />
                     }
-                   
-                   
+
+
                   </button>
                   <button
                     type="button"
