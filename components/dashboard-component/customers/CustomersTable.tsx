@@ -60,7 +60,7 @@ const CustomersTable = () => {
     }));
     setData(mappedData);
     }
-    }, [customers, isLoading, isError]); // Add dependencies to useEffect
+    }, [customers, isLoading, isError]); 
  
 
  

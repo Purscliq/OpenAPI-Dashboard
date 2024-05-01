@@ -103,10 +103,10 @@ export const businessApi = createApi({
       }),
     }),
     createUploadFile: builder.mutation({
-      query: (formData) => ({
+      query: (body) => ({
           url: "/api/v1/business/image-upload",
           method: "POST",
-          body: formData,
+          body
       }),
     }),
     getServices: builder.query({

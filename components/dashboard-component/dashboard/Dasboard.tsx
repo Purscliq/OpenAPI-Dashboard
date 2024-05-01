@@ -11,18 +11,20 @@ import Line from "@/assets/svg/Line";
 import { CustomTooltip as Tooltip } from "@/lib/AntdComponents";
 import FundModal from "./modal/FundModal";
 
-import { useGetDashboardQuery } from "@/services/business/index.service";
+import { useGetDashboardQuery, useGetSubaccountQuery } from "@/services/business/index.service";
+import WithdrawalModal from "../sub-account/modal/WithdrawalModal";
 
 const Dashbord = () => {
   const [toogleTooltip, setToogleTooltip] = useState(false);
   const [isFundModalOpen, setIsFundModalOpen] = useState(false);
   const [withdraw, setWithdraw] = useState(false);
   const { data } = useGetDashboardQuery({});
+  const { data: subaccounts, isLoading } = useGetSubaccountQuery({});
 
   return (
     <>
       <div className="max-w-[1640px] flex flex-col p-4 space-y-6 overflow-y-scroll">
-        <div className="grid lg:grid-cols-[716px_1fr] grid-cols-1 gap-[35px] h-full p-3">
+        <div className="grid lg:grid-cols-[650px_1fr] grid-cols-1 gap-[35px] h-full p-3">
           <section className="flex flex-col space-y-4">
             <h2 className="font-semibold text-lg">Overview</h2>
             <div className="grid md:grid-cols-2 grid-cols-1 gap-[30px]">
@@ -314,8 +316,8 @@ const Dashbord = () => {
             </article>
           </section>
           <section className="w-full space-y-5">
-            <div className="flex flex-col gap-4">
-              <article className="flex flex-col space-y-4 bg-white p-[2%]">
+            <div className="flex flex-col gap-4 bg-white border-gray-200 rounded-[20px]">
+              <article className="flex flex-col space-y-4 p-[2%]">
                 <div className="flex justify-end items-end mb-3">
                   <Tooltip
                     title="copied!"
@@ -341,38 +343,40 @@ const Dashbord = () => {
                     </Button>
                   </Tooltip>
                 </div>
+                <div className="bg-gray-50 p-1">
                 <span className="flex justify-between items-center">
                   <p className="text-gray-500 ">Bank Name</p>
-                  <p className="text-black font-semibold">
+                  <p className="text-black font-semibold text-md">
                     {data?.data?.main_account?.details?.bank_name}{" "}
                   </p>
                 </span>
                 <span className="flex justify-between items-center">
                   <p className="text-gray-500 ">Account Name</p>
-                  <p className="text-black font-semibold">
+                  <p className="text-black font-semibold text-md">
                     {data?.data?.main_account?.details?.account_name}{" "}
                   </p>
                 </span>
                 <span className="flex justify-between items-center">
                   <p className="text-gray-500 ">Account Number</p>
-                  <p className="text-black font-semibold">
+                  <p className="text-black font-semibold text-md">
                     {data?.data?.main_account?.details?.account_number}
                   </p>
                 </span>
                 <span className="flex justify-between items-center">
                   <p className="text-gray-500 ">Account Alias</p>
-                  <p className="text-black font-semibold">
+                  <p className="text-black font-semibold text-md">
                     {data?.data?.main_account?.details?.account_type}
                   </p>
                 </span>
+                </div>
               </article>
-              <div className="flex justify-end items-center space-x-2">
-                <button
+              <div className="flex justify-end items-center space-x-2 p-2">
+                <Button
                   onClick={() => setWithdraw(true)}
-                  className="font-semibold"
+                  className="font-semibold !border-none"
                 >
                   + Withdraw
-                </button>
+                </Button>
               </div>
             </div>
 
@@ -559,6 +563,11 @@ const Dashbord = () => {
         </article>
       </div>
       <FundModal open={isFundModalOpen} setOpen={setIsFundModalOpen} />
+      <WithdrawalModal 
+       openWithdrawalModal={withdraw}
+       close={() => setWithdraw(false)}
+       accountData={subaccounts?.data || []}
+      />
     </>
   );
 };

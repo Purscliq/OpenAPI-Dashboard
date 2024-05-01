@@ -6,13 +6,14 @@ import {
   CustomDatePicker as DatePicker,
 } from "@/lib/AntdComponents";
 import { Select } from "antd";
-import type { UploadProps } from "antd";
+import type { UploadFile, UploadProps } from "antd";
 import { message, Upload } from "antd";
 
 import ImageIcon from "@/assets/svg/ImageIcon";
 import AttachIcon from "@/assets/svg/AttachIcon";
 import { useCreateCustomerMutation, useCreateUploadFileMutation } from "@/services/business/index.service";
 import { LoadingOutlined } from "@ant-design/icons";
+import { RcFile, UploadChangeParam } from "antd/es/upload";
 
 const { Option } = Select;
 const { Dragger } = Upload;
@@ -49,7 +50,7 @@ const AddCustomer = () => {
     utilityBill: null,
   });
   const [createCustomer, { isLoading }] = useCreateCustomerMutation()
-  const [createFileUpload, { isLoading: loading }] = useCreateUploadFileMutation()
+  const [createFileUpload, { isLoading: loading}] = useCreateUploadFileMutation()
   useEffect(() => {
     const token = localStorage.getItem('token')
     if (token) {
@@ -100,49 +101,29 @@ const AddCustomer = () => {
   }
 };
 
-const customRequest = async (option: { file: any; onSuccess?: any; onError?: any; }) => {
-  const { file, onSuccess, onError } = option;
 
-  const formData = new FormData();
-  formData.append('file', file);
 
+
+const customRequest = async ({ file, onSuccess, onError }: { file: File, onSuccess: Function, onError: Function }) => {
   try {
-    const response = await createFileUpload({ File: file, formData }); // Check if 'createFileUpload' returns a valid response
+    const formData = new FormData();
+    formData.append('file', file);
 
-    if (response) {
-      if (onSuccess) {
-        onSuccess(file);
-      }
-      message.success(`${file.name} file uploaded successfully.`);
+    // Make the RTK Query mutation call to upload the file
+    const response = await createFileUpload(formData);
+
+    // Handle success
+    if ('data' in response) {
+      onSuccess(response.data); // Notify Ant Design that the file has been successfully uploaded
     } else {
-      if (onError) {
-        onError(response); // Handle errors from RTK query
-      }
-      message.error(`${file.name} file upload failed.`);
+      onError(new Error('File upload failed')); // Notify Ant Design about the error
     }
   } catch (error) {
-    if (onError) {
-      onError(error); // Handle unexpected errors
-    }
-    message.error('An error occurred during upload.');
+    onError(error); // Notify Ant Design about the error
   }
 };
 
-const props: UploadProps = {
-  name: "file",
-  multiple: true,
-  customRequest, // Use the customRequest function here
-  onChange(info) {
-    const { status } = info.file;
-    if (status !== "uploading") {
-      console.log(info.file, info.fileList);
-    }
 
-  },
-  onDrop(e) {
-    console.log("Dropped files", e.dataTransfer.files);
-  },
-};
   const test = async (e: React.FormEvent) => {
     e.preventDefault();
    console.log(formData)
@@ -449,9 +430,12 @@ const props: UploadProps = {
                 </label>
 
                 <Dragger
-                  {...props}
+                 
                   id="IDCard"
                   name="idCard"
+                  customRequest={()=>customRequest }
+      //onChange={(info) => handleUploadFile(info, "idCard")}
+      onDrop={(e) => console.log("Dropped files", e.dataTransfer.files)} // Optional drop handling
                   className="flex items-center text-center  gap-[0.3rem]"
                 >
                   <p className="ant-upload-text flex gap-4">
@@ -469,7 +453,7 @@ const props: UploadProps = {
                   Utility Bill (Optional)
                 </label>
                 <Dragger
-                  {...props}
+                  //{...props}
                   id="utilityBill"
                   name="utilityBill"
                   className="flex items-center text-center  gap-[0.3rem]"

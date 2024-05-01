@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   CustomInput as Input,
@@ -11,12 +11,36 @@ import { DatePicker, Dropdown } from "antd";
 import type { MenuProps } from "antd";
 
 import FilterIcon from "@/assets/svg/FilterIcon";
+import { useGetSingleCustomerTransactionQuery } from "@/services/business/index.service";
+import { formatDate, formatMoney } from "@/helpers/dateFormat";
 
 interface TransactionsType {
   id: string;
 }
 
 const TransactionsTable = () => {
+  
+const tid = "6630eeeb9681d30727781f70"
+  const {data:transactions} = useGetSingleCustomerTransactionQuery(tid)
+
+  const [data, setData] = useState<any[]>([]);
+
+  useEffect(() => {
+    // Update the data when transactions change
+    if (transactions) {
+      const formattedTransactions = transactions?.data?.map((transaction: any) => ({
+        created_on: formatDate(transaction.createdAt), // Assuming this field exists in transactions
+        transID: transaction.txRef, // Assuming this field exists in transactions
+        name: transaction.customerName, // Adjust this according to your actual data structure
+        currency: transaction.currency, // Assuming this field exists in transactions
+        amount: formatMoney(transaction.amount), // Assuming this field exists in transactions
+      }));
+
+      setData(formattedTransactions);
+    }
+  }, [transactions]);
+
+  
   const items: MenuProps["items"] = [
     {
       label: <Link href="">View Details</Link>,
@@ -24,50 +48,7 @@ const TransactionsTable = () => {
     },
   ];
 
-  const data = [
-    {
-      created_on: "12/02/24",
-      transID: "10011",
-      name: "Temitope Williams",
-      currency: "NGN",
-      amount: "NGN 150,000.00",
-    },
-    {
-      created_on: "12/02/24",
-      transID: "10011",
-      name: "Temitope Williams",
-      currency: "NGN",
-      amount: "NGN 150,000.00",
-    },
-    {
-      created_on: "12/02/24",
-      transID: "10011",
-      name: "Temitope Williams",
-      currency: "NGN",
-      amount: "NGN 150,000.00",
-    },
-    {
-      created_on: "12/02/24",
-      transID: "10011",
-      name: "Temitope Williams",
-      currency: "NGN",
-      amount: "NGN 150,000.00",
-    },
-    {
-      created_on: "12/02/24",
-      transID: "10011",
-      name: "Temitope Williams",
-      currency: "NGN",
-      amount: "NGN 150,000.00",
-    },
-    {
-      created_on: "12/02/24",
-      transID: "10011",
-      name: "Temitope Williams",
-      currency: "NGN",
-      amount: "NGN 150,000.00",
-    },
-  ];
+
 
   const columns = [
     {
