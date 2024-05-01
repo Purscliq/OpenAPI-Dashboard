@@ -11,9 +11,13 @@ import { message, Upload } from "antd";
 
 import ImageIcon from "@/assets/svg/ImageIcon";
 import AttachIcon from "@/assets/svg/AttachIcon";
-import { useCreateCustomerMutation, useCreateUploadFileMutation } from "@/services/business/index.service";
+import {
+  useCreateCustomerMutation,
+  useCreateUploadFileMutation,
+} from "@/services/business/index.service";
 import { LoadingOutlined } from "@ant-design/icons";
 import { RcFile, UploadChangeParam } from "antd/es/upload";
+import { useRouter } from "next/navigation";
 
 const { Option } = Select;
 const { Dragger } = Upload;
@@ -25,12 +29,8 @@ const selectBefore = (
   </Select>
 );
 
-
-
-
-
 const AddCustomer = () => {
-  const [accessToken, setAccessToken] = useState<string>()
+  // const [accessToken, setAccessToken] = useState<string>()
   const [formData, setFormData] = useState({
     userType: "",
     firstName: "",
@@ -49,16 +49,20 @@ const AddCustomer = () => {
     idCard: null,
     utilityBill: null,
   });
-  const [createCustomer, { isLoading }] = useCreateCustomerMutation()
-  const [createFileUpload, { isLoading: loading }] = useCreateUploadFileMutation()
-  useEffect(() => {
-    const token = localStorage.getItem('token')
-    if (token) {
-      setAccessToken(token)
-    }
-  }, [])
+  const [createCustomer, { isLoading }] = useCreateCustomerMutation();
+  const [createFileUpload, { isLoading: loading }] =
+    useCreateUploadFileMutation();
+  const route = useRouter();
+  // useEffect(() => {
+  //   const token = localStorage.getItem('token')
+  //   if (token) {
+  //     setAccessToken(token)
+  //   }
+  // }, [])
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -86,13 +90,12 @@ const AddCustomer = () => {
     message.success(`${file.name} file uploaded successfully.`);
   };
 
-
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await createCustomer(formData).then(() => {
         message.success("Customer Created");
+        route.push("customers");
       });
       // Handle success
     } catch (error) {
@@ -101,49 +104,56 @@ const AddCustomer = () => {
     }
   };
 
-
-
-
-  const customRequest = async ({ file, onSuccess, onError }: { file: RcFile, onSuccess: Function, onError: Function}) => {
-    
+  const customRequest = async ({
+    file,
+    onSuccess,
+    onError,
+  }: {
+    file: RcFile;
+    onSuccess: Function;
+    onError: Function;
+  }) => {
     try {
       const formData = new FormData();
-      formData.append('file', file);
-  
+      formData.append("file", file);
+
       // Define onProgress function here
       const onProgress = (progressEvent: any) => {
         // Update progress bar UI based on progressEvent.percent
-        const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        const percentCompleted = Math.round(
+          (progressEvent.loaded * 100) / progressEvent.total
+        );
         // Notify about progress
         console.log(`Upload progress: ${percentCompleted}%`);
       };
-    
+
       // Make the RTK Query mutation call to upload the file
       const response = await createFileUpload(formData);
-    
+
       // Handle success
-      if ('data' in response) {
+      if ("data" in response) {
         onSuccess(file); // Notify Ant Design that the file has been successfully uploaded
         message.success(`${file.name} uploaded successfully`);
       } else {
-        onError(new Error('File upload failed')); // Notify Ant Design about the error
-        message.error('File upload failed');
+        onError(new Error("File upload failed")); // Notify Ant Design about the error
+        message.error("File upload failed");
       }
     } catch (error) {
       onError(error); // Notify Ant Design about the error
-      message.error('File upload failed');
+      message.error("File upload failed");
     }
   };
-  
-  
+
   const onProgress = (progressEvent: any) => {
     // Update progress bar UI based on progressEvent.percent
-    const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+    const percentCompleted = Math.round(
+      (progressEvent.loaded * 100) / progressEvent.total
+    );
   };
-  
+
   const test = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData)
+    console.log(formData);
   };
   return (
     <section className="max-w-[1640px] flex flex-col p-4 space-y-6  h-screen overflow-y-scroll">
@@ -449,9 +459,18 @@ const AddCustomer = () => {
                 <Dragger
                   id="IDCard"
                   name="idCard"
-                  customRequest={({ file }) => customRequest({ file: file as RcFile, onSuccess: (file: UploadFile) => { file.status = 'done' }, onError: () => { } })}
-                 
-                  onDrop={(e) => console.log("Dropped files", e.dataTransfer.files)} // Optional drop handling
+                  customRequest={({ file }) =>
+                    customRequest({
+                      file: file as RcFile,
+                      onSuccess: (file: UploadFile) => {
+                        file.status = "done";
+                      },
+                      onError: () => {},
+                    })
+                  }
+                  onDrop={(e) =>
+                    console.log("Dropped files", e.dataTransfer.files)
+                  } // Optional drop handling
                   className="flex items-center text-center gap-[0.3rem]"
                 >
                   <p className="ant-upload-text flex gap-4">
@@ -487,11 +506,11 @@ const AddCustomer = () => {
                     type="submit"
                     className="w-full bg-black text-center text-md rounded-md px-4 py-2 font-medium text-white focus:outline-none"
                   >
-                    {
-                      !isLoading ? " Save" : <LoadingOutlined style={{ fontSize: 24 }} spin />
-                    }
-
-
+                    {!isLoading ? (
+                      " Save"
+                    ) : (
+                      <LoadingOutlined style={{ fontSize: 24 }} spin />
+                    )}
                   </button>
                   <button
                     type="button"
