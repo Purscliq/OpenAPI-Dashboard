@@ -13,7 +13,8 @@ import ImageIcon from "@/assets/svg/ImageIcon";
 import AttachIcon from "@/assets/svg/AttachIcon";
 import { useCreateCustomerMutation, useCreateUploadFileMutation } from "@/services/business/index.service";
 import { LoadingOutlined } from "@ant-design/icons";
-import { RcFile, UploadChangeParam } from "antd/es/upload";
+import { RcFile } from "antd/es/upload";
+import { useRouter } from "next/navigation";
 
 const { Option } = Select;
 const { Dragger } = Upload;
@@ -30,7 +31,6 @@ const selectBefore = (
 
 
 const AddCustomer = () => {
-  const [accessToken, setAccessToken] = useState<string>()
   const [formData, setFormData] = useState({
     userType: "",
     firstName: "",
@@ -46,18 +46,16 @@ const AddCustomer = () => {
     address: "",
     kycType: "",
     bvn: "",
-    idCard: null,
-    utilityBill: null,
+    idCard: "",
+    utilityBill: "",
   });
   const [createCustomer, { isLoading }] = useCreateCustomerMutation()
   const [createFileUpload, { isLoading: loading }] = useCreateUploadFileMutation()
-  useEffect(() => {
-    const token = localStorage.getItem('token')
-    if (token) {
-      setAccessToken(token)
-    }
-  }, [])
 
+  const router = useRouter()
+
+
+  //handle text input change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
@@ -65,81 +63,110 @@ const AddCustomer = () => {
       [name]: value,
     }));
   };
+  //handle selection input change
   const handleSelectChange = (value: string, fieldName: string) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       [fieldName]: value,
     }));
   };
-
+// Handle date change
   const handleDateChange = (date: any) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       dob: date ? date.toDate() : null, // Convert moment object to Date object
     }));
   };
-  const handleFileUpload = (file: any, name: string) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: file,
-    }));
-    message.success(`${file.name} file uploaded successfully.`);
-  };
 
-
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      await createCustomer(formData).then(() => {
-        message.success("Customer Created");
-      });
-      // Handle success
-    } catch (error) {
-      message.error("Failed to create customer");
-      // Handle error
-    }
-  };
-
-
-
-
-  const customRequest = async ({ file, onSuccess, onError }: { file: RcFile, onSuccess: Function, onError: Function}) => {
+  //Clear out form fields and redirect back
+  const clearFields = () =>{
+    setFormData({
+      userType: "",
+      firstName: "",
+      lastName: "",
+      phone: "",
+      email: "",
+      dob: null,
+      postalCode: "",
+      country: "",
+      state: "",
+      city: "",
+      street: "",
+      address: "",
+      kycType: "",
+      bvn: "",
+      idCard: "",
+      utilityBill: "",
+    });
     
+    // Redirect back to the previous page
+    router.back();
+    
+  }
+ 
+//Handle Form submit
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log(formData);
+    createCustomer(formData)
+      .then((res) => {
+        // Check if 'status' property exists in the response
+        if ('status' in res) {
+          if (res.status === 400) {
+            message.error("Email exists");
+            return;
+          }
+        }
+        message.success("Customer Created");
+        clearFields()
+      })
+      .catch((error) => {
+        message.error("Failed to create customer");
+        // Handle error
+      });
+    console.log(formData);
+  };
+
+
+
+  const customRequest = async ({ file, name, onSuccess, onError }: { file: RcFile, name: string, onSuccess: Function, onError: Function }) => {
     try {
+      console.log('Uploading file:', file);
+      
       const formData = new FormData();
       formData.append('file', file);
-  
-      // Define onProgress function here
-      const onProgress = (progressEvent: any) => {
-        // Update progress bar UI based on progressEvent.percent
-        const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-        // Notify about progress
-        console.log(`Upload progress: ${percentCompleted}%`);
-      };
     
       // Make the RTK Query mutation call to upload the file
-      const response = await createFileUpload(formData);
-    
-      // Handle success
-      if ('data' in response) {
-        onSuccess(file); // Notify Ant Design that the file has been successfully uploaded
-        message.success(`${file.name} uploaded successfully`);
-      } else {
-        onError(new Error('File upload failed')); // Notify Ant Design about the error
-        message.error('File upload failed');
+     createFileUpload(formData).unwrap()
+     .then((res)=> {
+      console.log(res.data.upload_url)
+      onSuccess(res.data.upload_url); // Notify Ant Design that the file has been successfully uploaded and pass the URL
+      message.success(`${file.name} uploaded successfully`);
+      if (name === 'idCard') {
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          idCard: res.data.upload_url,
+        }));
+      } else if (name === 'utilityBill') {
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          utilityBill: res.data.upload_url,
+        }));
       }
-    } catch (error) {
+
+     }).catch((error) => {
+      console.error('File upload error:', error);
+      
       onError(error); // Notify Ant Design about the error
+      message.error('File upload failed');
+     });
+    
+    } catch (error) {
       message.error('File upload failed');
     }
   };
   
-  
-  const onProgress = (progressEvent: any) => {
-    // Update progress bar UI based on progressEvent.percent
-    const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-  };
+ 
   
   const test = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -448,9 +475,7 @@ const AddCustomer = () => {
 
                 <Dragger
                   id="IDCard"
-                  name="idCard"
-                  customRequest={({ file }) => customRequest({ file: file as RcFile, onSuccess: (file: UploadFile) => { file.status = 'done' }, onError: () => { } })}
-                 
+                  customRequest={({ file }) => customRequest({ file: file as RcFile, name: "idCard", onSuccess: () => { }, onError: () => { } })}
                   onDrop={(e) => console.log("Dropped files", e.dataTransfer.files)} // Optional drop handling
                   className="flex items-center text-center gap-[0.3rem]"
                 >
@@ -471,7 +496,8 @@ const AddCustomer = () => {
                 <Dragger
                   //{...props}
                   id="utilityBill"
-                  name="utilityBill"
+                  customRequest={({ file }) => customRequest({ file: file as RcFile,name: "utilityBill", onSuccess: () => { }, onError: () => { } })}
+                  onDrop={(e) => console.log("Dropped files", e.dataTransfer.files)} // Optional drop handling
                   className="flex items-center text-center  gap-[0.3rem]"
                 >
                   <p className="ant-upload-text flex gap-4">
@@ -496,6 +522,7 @@ const AddCustomer = () => {
                   <button
                     type="button"
                     className="w-full text-center text-md rounded-md px-4 py-2 font-medium text-black focus:outline-none"
+                    onClick={clearFields}
                   >
                     Cancel
                   </button>

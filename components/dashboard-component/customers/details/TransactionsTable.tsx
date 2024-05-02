@@ -21,7 +21,7 @@ interface TransactionsType {
 const TransactionsTable = () => {
   
 const tid = "6630eeeb9681d30727781f70"
-  const {data:transactions} = useGetSingleCustomerTransactionQuery(tid)
+  const {data:transactions, isLoading} = useGetSingleCustomerTransactionQuery(tid)
 
   const [data, setData] = useState<any[]>([]);
 
@@ -31,7 +31,7 @@ const tid = "6630eeeb9681d30727781f70"
       const formattedTransactions = transactions?.data?.map((transaction: any) => ({
         created_on: formatDate(transaction.createdAt), // Assuming this field exists in transactions
         transID: transaction.txRef, // Assuming this field exists in transactions
-        name: transaction.customerName, // Adjust this according to your actual data structure
+        name: transaction.customerId.firstName + ' ' + transaction.customerId.lastName, // Adjust this according to your actual data structure
         currency: transaction.currency, // Assuming this field exists in transactions
         amount: formatMoney(transaction.amount), // Assuming this field exists in transactions
       }));
@@ -115,7 +115,7 @@ const tid = "6630eeeb9681d30727781f70"
         </div>
       </div>
       <div className="relative overflow-x-auto  sm:rounded-lg w-full">
-        <Table columns={columns} dataSource={data} />
+        <Table columns={columns} dataSource={data} loading={isLoading}/>
       </div>
     </div>
   );

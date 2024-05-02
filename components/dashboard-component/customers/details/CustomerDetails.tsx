@@ -12,23 +12,7 @@ import { BsArrowLeft } from "react-icons/bs";
 import { useActivateCustomerMutation, useDeactivateCustomerMutation, useGetSingleCustomerQuery } from "@/services/business/index.service";
 import { Switch } from 'antd';
 
-const items: TabsProps["items"] = [
-  {
-    key: "1",
-    label: "Basic Info",
-    children: <InfoTab />,
-  },
-  {
-    key: "2",
-    label: "KYC",
-    children: <KYCTab />,
-  },
-  {
-    key: "3",
-    label: "Transactions",
-    children: <TransactionsTab />,
-  },
-];
+
 
 const CustomerDetails = () => {
   const router = useRouter();
@@ -38,6 +22,24 @@ const CustomerDetails = () => {
   const [deactivateCustomer] = useDeactivateCustomerMutation(); // Destructure to get the mutation function
   const [checked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const items: TabsProps["items"] = [
+    {
+      key: "1",
+      label: "Basic Info",
+      children: <InfoTab />,
+    },
+    {
+      key: "2",
+      label: "KYC",
+      children: <KYCTab kycData={customerStatus?.data} />,
+    },
+    {
+      key: "3",
+      label: "Transactions",
+      children: <TransactionsTab />,
+    },
+  ];
 
   useEffect(() => {
     if (customerStatus?.data.status === "active") {
