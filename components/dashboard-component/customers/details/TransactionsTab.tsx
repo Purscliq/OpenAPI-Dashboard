@@ -1,10 +1,13 @@
 import React from "react";
 import TransactionsTable from "./TransactionsTable";
 
-const TransactionsTab = () => {
+interface props {
+  id: string | null
+}
+const TransactionsTab = ({id}: props) => {
   return (
     <div className="py-4 border-y">
-      <TransactionsTable />
+      <TransactionsTable id={id} />
     </div>
   );
 };

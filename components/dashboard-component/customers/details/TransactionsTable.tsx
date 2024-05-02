@@ -15,13 +15,13 @@ import { useGetSingleCustomerTransactionQuery } from "@/services/business/index.
 import { formatDate, formatMoney } from "@/helpers/dateFormat";
 
 interface TransactionsType {
-  id: string;
+  id: string | null;
 }
 
-const TransactionsTable = () => {
+const TransactionsTable = ({id}: TransactionsType) => {
   
-const tid = "6630eeeb9681d30727781f70"
-  const {data:transactions, isLoading} = useGetSingleCustomerTransactionQuery(tid)
+//const tid = "6630eeeb9681d30727781f70"
+  const {data:transactions, isLoading} = useGetSingleCustomerTransactionQuery(id)
 
   const [data, setData] = useState<any[]>([]);
 

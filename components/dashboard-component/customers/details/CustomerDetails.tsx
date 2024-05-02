@@ -37,7 +37,7 @@ const CustomerDetails = () => {
     {
       key: "3",
       label: "Transactions",
-      children: <TransactionsTab />,
+      children: <TransactionsTab id={id} />,
     },
   ];
 
