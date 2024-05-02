@@ -11,7 +11,10 @@ import { message, Upload } from "antd";
 
 import ImageIcon from "@/assets/svg/ImageIcon";
 import AttachIcon from "@/assets/svg/AttachIcon";
-import { useCreateCustomerMutation, useCreateUploadFileMutation } from "@/services/business/index.service";
+import {
+  useCreateCustomerMutation,
+  useCreateUploadFileMutation,
+} from "@/services/business/index.service";
 import { LoadingOutlined } from "@ant-design/icons";
 import { RcFile } from "antd/es/upload";
 import { useRouter } from "next/navigation";
@@ -25,10 +28,6 @@ const selectBefore = (
     <Option value="+233">+233</Option>
   </Select>
 );
-
-
-
-
 
 const AddCustomer = () => {
   const [formData, setFormData] = useState({
@@ -170,7 +169,7 @@ const AddCustomer = () => {
   
   const test = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData)
+    console.log(formData);
   };
   return (
     <section className="max-w-[1640px] flex flex-col p-4 space-y-6  h-screen overflow-y-scroll">
@@ -513,11 +512,11 @@ const AddCustomer = () => {
                     type="submit"
                     className="w-full bg-black text-center text-md rounded-md px-4 py-2 font-medium text-white focus:outline-none"
                   >
-                    {
-                      !isLoading ? " Save" : <LoadingOutlined style={{ fontSize: 24 }} spin />
-                    }
-
-
+                    {!isLoading ? (
+                      " Save"
+                    ) : (
+                      <LoadingOutlined style={{ fontSize: 24 }} spin />
+                    )}
                   </button>
                   <button
                     type="button"
