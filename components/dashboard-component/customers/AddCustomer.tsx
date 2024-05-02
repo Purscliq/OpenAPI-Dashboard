@@ -18,6 +18,7 @@ import {
 import { LoadingOutlined } from "@ant-design/icons";
 import { RcFile } from "antd/es/upload";
 import { useRouter } from "next/navigation";
+//import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
 
 const { Option } = Select;
 const { Dragger } = Upload;
@@ -104,28 +105,29 @@ const AddCustomer = () => {
   }
  
 //Handle Form submit
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log(formData);
-    createCustomer(formData)
-      .then((res) => {
-        // Check if 'status' property exists in the response
-        if ('status' in res) {
-          if (res.status === 400) {
-            message.error("Email exists");
-            return;
-          }
+const handleSubmit = (e: React.FormEvent) => {
+  e.preventDefault();
+  createCustomer(formData)
+    .then((res) => {
+      // Check if 'status' property exists in the response data
+      if ('data' in res) {
+        const { data } = res;
+        if ('status' in data && data.status === 400) {
+          message.error("Email already exists");
+          console.log(data)
+          return;
         }
-        message.success("Customer Created");
-        clearFields()
-      })
-      .catch((error) => {
-        message.error("Failed to create customer");
-        // Handle error
-      });
-    console.log(formData);
-  };
-
+        
+      }
+      
+      message.success("Customer Created");
+      clearFields();
+    })
+    .catch((error) => {
+      message.error("Failed to create customer");
+      // Handle error
+    });
+};
 
 
   const customRequest = async ({ file, name, onSuccess, onError }: { file: RcFile, name: string, onSuccess: Function, onError: Function }) => {
