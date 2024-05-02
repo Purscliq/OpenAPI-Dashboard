@@ -65,7 +65,7 @@ const TeamTabModal: React.FC<{ onTeamMemberAdded: () => void }> = ({
           );
         }
       } else {
-        message.error("An error occurred. Please try again later.");
+        message.error("email already exist.");
       }
     } catch (error) {
       console.error("Error sending invitation:", error);
