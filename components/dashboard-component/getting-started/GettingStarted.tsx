@@ -22,7 +22,7 @@ const GettingStarted = () => {
     try {
       await enabled2Fa({}).unwrap();
       const res = await generate2FA({});
-      localStorage.setItem("qr", res?.data?.data?.upload_url);
+      sessionStorage.setItem("qr", res?.data?.data?.upload_url);
       const url = `/2fa?qr=${encodeURIComponent(res?.data?.data?.upload_url)}`;
       replace(url);
     } catch (err) {

@@ -2,13 +2,12 @@
 import React, { useEffect, useLayoutEffect } from "react";
 import Image from "next/image";
 import logo from "@/assets/svg/logo.svg";
-import { useAppDispatch } from "@/context/store";
 import { useLazyProfileQuery } from "@/services/users/index.service";
 import { useLazyGetDashboardQuery } from "@/services/business/index.service";
-// import { updateUser } from "@/slice/userSlice";
+
+const SESSION_TIMEOUT = 5 * 60 * 1000; 
 
 const Template: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // const dispatch = useAppDispatch();
   const [getUser, { isLoading: isProfileLoading }] = useLazyProfileQuery();
   const [getDashboard, { isLoading: isDashboardLoading, isSuccess }] =
     useLazyGetDashboardQuery();
@@ -29,8 +28,39 @@ const Template: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const token = localStorage.getItem("token");
     if (!token) {
       window.location.href = "/";
+    } else {
+      const handleUserActivity = () => {
+        clearTimeout(sessionTimeoutTimer);
+        resetSessionTimeout();
+      };
+      document.addEventListener("mousemove", handleUserActivity);
+      document.addEventListener("mousedown", handleUserActivity);
+      document.addEventListener("keypress", handleUserActivity);
+      document.addEventListener("touchstart", handleUserActivity);
+
+      return () => {
+        document.removeEventListener("mousemove", handleUserActivity);
+        document.removeEventListener("mousedown", handleUserActivity);
+        document.removeEventListener("keypress", handleUserActivity);
+        document.removeEventListener("touchstart", handleUserActivity);
+      };
     }
   }, []);
+
+  // Session timeout logic
+  let sessionTimeoutTimer: string | number | NodeJS.Timeout | undefined;
+  const resetSessionTimeout = () => {
+    clearTimeout(sessionTimeoutTimer);
+    sessionTimeoutTimer = setTimeout(() => {
+      handleLogout(); 
+    }, SESSION_TIMEOUT);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("refresh");
+    window.location.href = "/"; 
+  };
 
   if (isProfileLoading || isDashboardLoading || !isSuccess) {
     return (

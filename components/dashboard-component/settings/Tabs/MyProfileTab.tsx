@@ -91,7 +91,7 @@ const MyProfileTab = () => {
   let qrCode;
 
   if (typeof window !== "undefined") {
-    qrCode = localStorage.getItem("qr") || "";
+    qrCode = sessionStorage.getItem("qr") || "";
   }
 
   return (

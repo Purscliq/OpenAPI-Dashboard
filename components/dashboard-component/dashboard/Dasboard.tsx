@@ -9,14 +9,12 @@ import ApiChart from "./ApiChart";
 import { Button } from "antd";
 import Line from "@/assets/svg/Line";
 import { CustomTooltip as Tooltip } from "@/lib/AntdComponents";
-import FundModal from "./modal/FundModal";
 
 import { useGetDashboardQuery, useGetSubaccountQuery } from "@/services/business/index.service";
-import WithdrawalModal from "../sub-account/modal/WithdrawalModal";
+import WithdrawalModal from "./modal/WithdrawalModal";
 
 const Dashbord = () => {
   const [toogleTooltip, setToogleTooltip] = useState(false);
-  const [isFundModalOpen, setIsFundModalOpen] = useState(false);
   const [withdraw, setWithdraw] = useState(false);
   const { data } = useGetDashboardQuery({});
   const { data: subaccounts, isLoading } = useGetSubaccountQuery({});
@@ -562,7 +560,6 @@ const Dashbord = () => {
           <ApiChart data={data?.data?.api_calls} />{" "}
         </article>
       </div>
-      <FundModal open={isFundModalOpen} setOpen={setIsFundModalOpen} />
       <WithdrawalModal 
        openWithdrawalModal={withdraw}
        close={() => setWithdraw(false)}

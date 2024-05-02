@@ -125,7 +125,6 @@ const DashNav = () => {
               className="hover:cursor-pointer"
             >
               <a onClick={(e) => e.preventDefault()}>
-                {/* <Image alt="Avatar" src={avatar} className="w-12 h-12" /> */}
                 {fullName.trim() ? (
                   <InitialAvatar name={fullName} />
                 ) : (
