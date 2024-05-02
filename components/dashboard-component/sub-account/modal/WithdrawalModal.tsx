@@ -7,57 +7,64 @@ interface ModalProps {
   openWithdrawalModal: boolean;
   close: () => void;
   accountData: { id: number; account_name: string }[];
+  accountId: number
 }
 
 const WithdrawalModal: React.FC<ModalProps> = ({
   openWithdrawalModal,
   close,
-  accountData
+  accountData,
+  accountId
 }) => {
 
   const { data: bankList } = useGetBankListQuery({})
-  const [initiateWithdrawal, { isLoading, data: response}] = useInitiateWithdrawalMutation()
+  const [initiateWithdrawal, { isLoading, data: response }] = useInitiateWithdrawalMutation()
 
   const [formData, setFormData] = useState({
-    source_account_id: '',
+    source_account_id: accountId,
     bank_code: "",
     account_number: "",
     amount: 0,
     narration: ""
   });
+  const [transferFrom, setTransferFrom] = useState("Main account");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-     const newValue = name === 'amount' ? parseFloat(value) : value;
+    const newValue = name === 'amount' ? parseFloat(value) : value;
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: newValue,
     }));
   };
   const handleSelectChange = (value: string, fieldName: string) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [fieldName]: value,
-    }));
+    if (fieldName === "source_account") {
+      setTransferFrom(value);
+    } else {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [fieldName]: value,
+      }));
+    }
   };
 
   const handleWithdrawal = async (e: React.FormEvent) => {
     e.preventDefault();
-   // console.log(formData)
-    
+    // console.log(formData)
+
     try {
       await initiateWithdrawal(formData).unwrap().then(() => {
         message.success("Withdrawal successful");
       });
       // Handle success
     } catch (error: any) {
-      message.error(`Withdrawal failed: ${error?.data?.message}` );
+      message.error(`Withdrawal failed: ${error?.data?.message}`);
       console.log(error?.data?.message);
       // Handle error
     }
-    
+
   };
-  
+
 
 
   return (
@@ -83,20 +90,43 @@ const WithdrawalModal: React.FC<ModalProps> = ({
               htmlFor="account"
               className="text-[#24272C] text-base font-bold"
             >
-              Transfer from{" "}
+              Transfer to{" "}
             </label>
             <Select
               placeholder=""
               className="!w-full !h-[40px]"
               id="account"
-              value={formData.source_account_id}
-              onChange={(value) => handleSelectChange(value, "source_account_id")}
-              options={accountData?.map((bank: any) => ({
-                value: bank.id,
-                label: bank.account_name,
-              }))}
+              value={transferFrom}
+              onChange={(value) => handleSelectChange(value, "source_account")}
+              options={[
+                { value: "Main-account", label: "Main account" },
+                { value: "others", label: "others" },
+                // Add more options as needed
+              ]}
             />
           </span>
+          {transferFrom === "others" && (
+            <>
+            <span className="flex flex-col gap-1">
+              <label
+                htmlFor="account"
+                className="text-[#24272C] text-base font-bold"
+              >
+                Select Sub-account{" "}
+              </label>
+              <Select
+                placeholder=""
+                className="!w-full !h-[40px]"
+                id="account"
+                //value={formData.source_account_id}
+                onChange={(value) => handleSelectChange(value, "source_account_id")}
+                options={accountData?.map((bank: any) => ({
+                  value: bank.id,
+                  label: bank.account_name,
+                }))}
+              />
+            </span>
+        
           <span className="flex flex-col gap-1">
             <label
               htmlFor="bank"
@@ -134,6 +164,8 @@ const WithdrawalModal: React.FC<ModalProps> = ({
             />
             <p className="text-[#515B6F] text-[14px]">Temitope williams</p>
           </span>
+          </>
+            )}
           <span className="flex flex-col gap-1">
             <label
               htmlFor="amount"
@@ -173,11 +205,11 @@ const WithdrawalModal: React.FC<ModalProps> = ({
               type="submit"
               className="bg-[#010101] text-white px-[24px] py-[12px] rounded-[5px]"
             >
-             { isLoading ? 
-             <LoadingOutlined style={{ fontSize: 24 }} spin />
-             :
-             "Withdraw"
-             }
+              {isLoading ?
+                <LoadingOutlined style={{ fontSize: 24 }} spin />
+                :
+                "Withdraw"
+              }
             </button>
           </span>
         </form>

@@ -6,22 +6,20 @@ import { LoadingOutlined } from "@ant-design/icons";
 interface ModalProps {
   openWithdrawalModal: boolean;
   close: () => void;
-  accountData: { id: number; account_name: string }[];
-
+  accountId: number
 }
 
 const WithdrawalModal: React.FC<ModalProps> = ({
   openWithdrawalModal,
   close,
-  accountData
-
+  accountId
 }) => {
 
   const { data: bankList } = useGetBankListQuery({})
   const [initiateWithdrawal, { isLoading, data: response}] = useInitiateWithdrawalMutation()
 
   const [formData, setFormData] = useState({
-    source_account_id: '',
+    source_account_id: accountId,
     bank_code: "",
     account_number: "",
     amount: 0,
@@ -52,6 +50,7 @@ const WithdrawalModal: React.FC<ModalProps> = ({
     } catch (error: any) {
       message.error(`Withdrawal failed: ${error?.data?.message}` );
       console.log(error?.data?.message);
+      console.log("source:",accountId);
     }
     
   };
@@ -76,25 +75,6 @@ const WithdrawalModal: React.FC<ModalProps> = ({
         </span>
 
         <form className="space-y-4" onSubmit={handleWithdrawal}>
-        <span className="flex flex-col gap-1">
-            <label
-              htmlFor="account"
-              className="text-[#24272C] text-base font-bold"
-            >
-              Transfer from{" "}
-            </label>
-            <Select
-              placeholder=""
-              className="!w-full !h-[40px]"
-              id="account"
-              value={formData.source_account_id}
-              onChange={(value) => handleSelectChange(value, "source_account_id")}
-              options={accountData?.map((bank: any) => ({
-                value: bank.id,
-                label: bank.account_name,
-              }))}
-            />
-          </span>
          
           <span className="flex flex-col gap-1">
             <label

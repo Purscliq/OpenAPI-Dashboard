@@ -5,7 +5,7 @@ import {
 } from "@/lib/AntdComponents";
 import FilterIcon from "@/assets/svg/FilterIcon";
 import TableIcon from "@/assets/svg/TableIcon";
-import { useGetSubaccountQuery } from "@/services/business/index.service";
+import { useGetDashboardQuery, useGetSubaccountQuery } from "@/services/business/index.service";
 import { useState } from "react";
 import FundModal from "./modal/FundModal";
 import WithdrawalModal from "./modal/WithdrawalModal";
@@ -14,7 +14,7 @@ const AccountTable = () => {
   const { data: subaccounts, isLoading } = useGetSubaccountQuery({});
   const [openFundsModal, setOpenFundsModal] = useState(false);
   const [openWithdrawalModal, setOpenWithdrawalModal] = useState(false);
-
+  const { data } = useGetDashboardQuery({});
   const [selectedRecord, setSelectedRecord] = useState<any>(null);
 
   const handleOpenFunds = (record: any) => {
@@ -116,6 +116,7 @@ const AccountTable = () => {
         openWithdrawalModal={openWithdrawalModal}
         close={() => setOpenWithdrawalModal(false)}
         accountData={subaccounts?.data || []}
+        accountId={data?.data?.main_account?.details?.id}
       />
     </div>
   );

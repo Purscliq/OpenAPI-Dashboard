@@ -17,8 +17,6 @@ const Dashbord = () => {
   const [toogleTooltip, setToogleTooltip] = useState(false);
   const [withdraw, setWithdraw] = useState(false);
   const { data } = useGetDashboardQuery({});
-  const { data: subaccounts, isLoading } = useGetSubaccountQuery({});
-
   return (
     <>
       <div className="max-w-[1640px] flex flex-col p-4 space-y-6 overflow-y-scroll">
@@ -563,7 +561,7 @@ const Dashbord = () => {
       <WithdrawalModal 
        openWithdrawalModal={withdraw}
        close={() => setWithdraw(false)}
-       accountData={subaccounts?.data || []}
+       accountId={data?.data?.main_account?.details?.id}
       />
     </>
   );
