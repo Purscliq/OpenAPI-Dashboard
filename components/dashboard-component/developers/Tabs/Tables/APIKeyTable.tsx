@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { CustomTable as Table } from "@/lib/AntdComponents"; // Import Popover and Button from Ant Design
+import { CustomTable as Table } from "@/lib/AntdComponents"; 
 import DeleteIcon from "@/assets/svg/DeleteIcon";
 import {
   useGetApiKeysQuery,
@@ -9,7 +9,7 @@ import { Button, Popover } from "antd";
 
 const APIKeyTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
   const { data: apiKeysData, isLoading, refetch } = useGetApiKeysQuery([]);
-  const [selectedApiKey, setSelectedApiKey] = useState<any>(null); // State to store selected API key
+  const [selectedApiKey, setSelectedApiKey] = useState<any>(null); 
 
   useEffect(() => {
     if (shouldRefresh) {
