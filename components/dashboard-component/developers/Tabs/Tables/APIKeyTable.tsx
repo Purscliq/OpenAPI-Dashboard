@@ -32,13 +32,13 @@ const APIKeyTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
     setSelectedApiKey(apiKey);
   };
 
-  const content = selectedApiKey ? (
+  const content = selectedApiKey.key ? (
     <div>
       <p>API Key: {selectedApiKey.key}</p>
     </div>
   ) : (
     <div>
-      <p>No API Key selected</p>
+      <p>No API Key </p>
     </div>
   );
 
