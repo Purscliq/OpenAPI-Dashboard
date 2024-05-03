@@ -10,7 +10,7 @@ import { Button } from "antd";
 import Line from "@/assets/svg/Line";
 import { CustomTooltip as Tooltip } from "@/lib/AntdComponents";
 
-import { useGetDashboardQuery, useGetSubaccountQuery } from "@/services/business/index.service";
+import { useGetDashboardQuery } from "@/services/business/index.service";
 import WithdrawalModal from "./modal/WithdrawalModal";
 
 const Dashbord = () => {

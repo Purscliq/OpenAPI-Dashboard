@@ -101,7 +101,6 @@ const WithdrawalModal: React.FC<ModalProps> = ({
               options={[
                 { value: "Main-account", label: "Main account" },
                 { value: "others", label: "others" },
-                // Add more options as needed
               ]}
             />
           </span>
@@ -118,7 +117,6 @@ const WithdrawalModal: React.FC<ModalProps> = ({
                 placeholder=""
                 className="!w-full !h-[40px]"
                 id="account"
-                //value={formData.source_account_id}
                 onChange={(value) => handleSelectChange(value, "source_account_id")}
                 options={accountData?.map((bank: any) => ({
                   value: bank.id,
