@@ -5,7 +5,7 @@ import logo from "@/assets/svg/logo.svg";
 import { useLazyProfileQuery } from "@/services/users/index.service";
 import { useLazyGetDashboardQuery } from "@/services/business/index.service";
 
-const SESSION_TIMEOUT = 5 * 60 * 1000; 
+const SESSION_TIMEOUT = 10 * 60 * 1000; 
 
 const Template: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [getUser, { isLoading: isProfileLoading }] = useLazyProfileQuery();

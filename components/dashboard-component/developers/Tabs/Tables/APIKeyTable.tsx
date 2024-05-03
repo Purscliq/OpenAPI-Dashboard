@@ -1,16 +1,15 @@
-"use client";
-
-import React, { useEffect } from "react";
-import { CustomTable as Table } from "@/lib/AntdComponents";
+import React, { useEffect, useState } from "react";
+import { CustomTable as Table } from "@/lib/AntdComponents"; // Import Popover and Button from Ant Design
 import DeleteIcon from "@/assets/svg/DeleteIcon";
-import { message } from "antd";
 import {
   useGetApiKeysQuery,
   useDeleteApiKeyMutation,
 } from "@/services/apikeys/index.service";
+import { Button, Popover } from "antd";
 
 const APIKeyTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
   const { data: apiKeysData, isLoading, refetch } = useGetApiKeysQuery([]);
+  const [selectedApiKey, setSelectedApiKey] = useState<any>(null); // State to store selected API key
 
   useEffect(() => {
     if (shouldRefresh) {
@@ -26,9 +25,22 @@ const APIKeyTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
       refetch();
     } catch (error) {
       console.error("Error deleting API key:", error);
-      message.error("Failed to delete API key");
     }
   };
+
+  const handleView = (apiKey: any) => {
+    setSelectedApiKey(apiKey);
+  };
+
+  const content = selectedApiKey ? (
+    <div>
+      <p>API Key: {selectedApiKey.key}</p>
+    </div>
+  ) : (
+    <div>
+      <p>No API Key selected</p>
+    </div>
+  );
 
   const columns = [
     {
@@ -41,7 +53,6 @@ const APIKeyTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
       dataIndex: "service_name",
       sorter: true,
     },
-
     {
       title: "Date Created",
       dataIndex: "created_at",
@@ -59,14 +70,18 @@ const APIKeyTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
       title: "Actions",
       render: (record: any) => (
         <span className="flex items-center space-x-4">
-          <button
-            type="button"
+          <Popover content={content} title="API Key Details" trigger="click">
+            <Button type="text" onClick={() => handleView(record)}>
+              View
+            </Button>
+          </Popover>
+          <Button
+            type="text"
             title="Delete"
-            className=""
             onClick={() => handleDelete(record.id)}
           >
             <DeleteIcon />
-          </button>
+          </Button>
         </span>
       ),
     },

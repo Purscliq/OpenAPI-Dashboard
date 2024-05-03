@@ -50,17 +50,14 @@ const WithdrawalModal: React.FC<ModalProps> = ({
 
   const handleWithdrawal = async (e: React.FormEvent) => {
     e.preventDefault();
-    // console.log(formData)
-
+      
     try {
       await initiateWithdrawal(formData).unwrap().then(() => {
         message.success("Withdrawal successful");
       });
-      // Handle success
     } catch (error: any) {
       message.error(`Withdrawal failed: ${error?.data?.message}`);
       console.log(error?.data?.message);
-      // Handle error
     }
 
   };
