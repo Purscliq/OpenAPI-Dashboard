@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { CustomTable as Table } from "@/lib/AntdComponents"; 
+import { CustomTable as Table } from "@/lib/AntdComponents";
 import DeleteIcon from "@/assets/svg/DeleteIcon";
 import {
   useGetApiKeysQuery,
   useDeleteApiKeyMutation,
 } from "@/services/apikeys/index.service";
-import { Button, Popover } from "antd";
+import { Button, Tooltip, message } from "antd";
 
 const APIKeyTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
   const { data: apiKeysData, isLoading, refetch } = useGetApiKeysQuery([]);
-  const [selectedApiKey, setSelectedApiKey] = useState<any>(null); 
 
   useEffect(() => {
     if (shouldRefresh) {
@@ -18,6 +17,8 @@ const APIKeyTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
   }, [shouldRefresh, refetch]);
 
   const [deleteApiKey] = useDeleteApiKeyMutation();
+
+  const [tooltipVisibility, setTooltipVisibility] = useState<{ [key: string]: boolean }>({});
 
   const handleDelete = async (apiKeyId: string) => {
     try {
@@ -28,19 +29,12 @@ const APIKeyTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
     }
   };
 
-  const handleView = (apiKey: any) => {
-    setSelectedApiKey(apiKey);
+  const toggleTooltip = (apiKeyId: string, visible: boolean) => {
+    setTooltipVisibility(prevState => ({
+      ...prevState,
+      [apiKeyId]: visible
+    }));
   };
-
-  const content = selectedApiKey.key ? (
-    <div>
-      <p>API Key: {selectedApiKey.key}</p>
-    </div>
-  ) : (
-    <div>
-      <p>No API Key </p>
-    </div>
-  );
 
   const columns = [
     {
@@ -70,11 +64,28 @@ const APIKeyTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
       title: "Actions",
       render: (record: any) => (
         <span className="flex items-center space-x-4">
-          <Popover content={content} title="API Key Details" trigger="click">
-            <Button type="text" onClick={() => handleView(record)}>
-              View
-            </Button>
-          </Popover>
+          <div className="flex justify-end items-end mb-3">
+            <Tooltip
+              title="Copied!"
+              trigger="click"
+              visible={tooltipVisibility[record.id] || false}
+              onVisibleChange={(visible) => toggleTooltip(record.id, visible)}
+            >
+              <Button
+                onClick={() => {
+                  navigator.clipboard.writeText(record?.secret_key);
+                  toggleTooltip(record.id, true);
+                  setTimeout(() => {
+                    toggleTooltip(record.id, false);
+                  }, 2000);
+                }}
+                className="text-lg font-semibold !border-none"
+              >
+                Copy API Key
+              </Button>
+            </Tooltip>
+          </div>
+
           <Button
             type="text"
             title="Delete"
