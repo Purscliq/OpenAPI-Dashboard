@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { message, Modal } from "antd";
 import { CustomSelect as Select } from "@/lib/AntdComponents";
 import { useGetBankListQuery, useInitiateWithdrawalMutation } from "@/services/business/index.service";
@@ -19,6 +19,7 @@ const WithdrawalModal: React.FC<ModalProps> = ({
 
   const { data: bankList } = useGetBankListQuery({})
   const [initiateWithdrawal, { isLoading, data: response }] = useInitiateWithdrawalMutation()
+  //const [validate, { isLoading: vallidating }] = useValidateAccountMutation()
 
   const [formData, setFormData] = useState({
     source_account_id: accountId,
@@ -27,7 +28,32 @@ const WithdrawalModal: React.FC<ModalProps> = ({
     amount: 0,
     narration: ""
   });
+  /** 
+  const [validateData, setValidateData] = useState({
+    bank_code: formData.bank_code,
+    account_number: formData.account_number
+  });
+*/
   const [transferFrom, setTransferFrom] = useState("Main account");
+
+  /** 
+  useEffect(() => {
+    if (validateData.bank_code && validateData.account_number) {
+      // Trigger the validate mutation only if all fields in validateData are not empty
+      // Call the validate mutation here
+      validate(validateData)
+        .unwrap()
+        .then(() => {
+          // Handle success
+          console.log("Validation successful");
+        })
+        .catch((error: any) => {
+          // Handle error
+          console.error("Validation failed", error);
+        });
+    }
+  }, [validateData, validate]);
+  */
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -46,6 +72,14 @@ const WithdrawalModal: React.FC<ModalProps> = ({
         [fieldName]: value,
       }));
     }
+    /** 
+    if (fieldName === 'bank_code' ) {
+      setValidateData((prevValidateData) => ({
+        ...prevValidateData,
+        [fieldName]: value,
+      }));
+    }
+    */
   };
 
   const handleWithdrawal = async (e: React.FormEvent) => {
@@ -107,65 +141,65 @@ const WithdrawalModal: React.FC<ModalProps> = ({
           </span>
           {transferFrom === "others" && (
             <>
-            <span className="flex flex-col gap-1">
-              <label
-                htmlFor="account"
-                className="text-[#24272C] text-base font-bold"
-              >
-                Select Sub-account{" "}
-              </label>
-              <Select
-                placeholder=""
-                className="!w-full !h-[40px]"
-                id="account"
-                //value={formData.source_account_id}
-                onChange={(value) => handleSelectChange(value, "source_account_id")}
-                options={accountData?.map((bank: any) => ({
-                  value: bank.id,
-                  label: bank.account_name,
-                }))}
-              />
-            </span>
-        
-          <span className="flex flex-col gap-1">
-            <label
-              htmlFor="bank"
-              className="text-[#24272C] text-base font-bold"
-            >
-              Select Bank
-            </label>
-            <Select
-              placeholder=""
-              className="!w-full !h-[40px]"
-              id="bank"
-              value={formData.bank_code}
-              onChange={(value) => handleSelectChange(value, "bank_code")}
-              options={bankList?.data?.map((bank: any) => ({
-                value: bank.bank_code,
-                label: bank.bank_name,
-              }))}
-            />
-          </span>
-          <span className="flex flex-col gap-1">
-            <label
-              htmlFor="accountNo"
-              className="text-[#24272C] text-base font-bold"
-            >
-              Account Number
-            </label>
-            <input
-              name="account_number"
-              type="number"
-              id="accountNo"
-              value={formData.account_number}
-              onChange={handleChange}
-              className="w-full rounded-[5px] px-[8px] pr-[16px] h-[50px] text-[14px] border border-[#E9EBEB]"
-              required
-            />
-            <p className="text-[#515B6F] text-[14px]">Temitope williams</p>
-          </span>
-          </>
-            )}
+              <span className="flex flex-col gap-1">
+                <label
+                  htmlFor="account"
+                  className="text-[#24272C] text-base font-bold"
+                >
+                  Select Sub-account{" "}
+                </label>
+                <Select
+                  placeholder=""
+                  className="!w-full !h-[40px]"
+                  id="account"
+                  //value={formData.source_account_id}
+                  onChange={(value) => handleSelectChange(value, "source_account_id")}
+                  options={accountData?.map((bank: any) => ({
+                    value: bank.id,
+                    label: bank.account_name,
+                  }))}
+                />
+              </span>
+
+              <span className="flex flex-col gap-1">
+                <label
+                  htmlFor="bank"
+                  className="text-[#24272C] text-base font-bold"
+                >
+                  Select Bank
+                </label>
+                <Select
+                  placeholder=""
+                  className="!w-full !h-[40px]"
+                  id="bank"
+                  value={formData.bank_code}
+                  onChange={(value) => handleSelectChange(value, "bank_code")}
+                  options={bankList?.data?.map((bank: any) => ({
+                    value: bank.bank_code,
+                    label: bank.bank_name,
+                  }))}
+                />
+              </span>
+              <span className="flex flex-col gap-1">
+                <label
+                  htmlFor="accountNo"
+                  className="text-[#24272C] text-base font-bold"
+                >
+                  Account Number
+                </label>
+                <input
+                  name="account_number"
+                  type="number"
+                  id="accountNo"
+                  value={formData.account_number}
+                  onChange={handleChange}
+                  className="w-full rounded-[5px] px-[8px] pr-[16px] h-[50px] text-[14px] border border-[#E9EBEB]"
+                  required
+                />
+                <p className="text-[#515B6F] text-[14px]">Temitope williams</p>
+              </span>
+            </>
+          )}
           <span className="flex flex-col gap-1">
             <label
               htmlFor="amount"

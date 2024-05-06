@@ -10,7 +10,7 @@ import {
   CustomSelect as Select,
 } from "@/lib/AntdComponents";
 import GradientBg from "@/assets/png/side-left.png";
-import Hands from "@/assets/png/handshake-img.png";
+import Hands from "@/assets/png/Light-brown.svg";
 import { BiChevronLeft } from "react-icons/bi";
 import InfoIcon from "@/assets/svg/InfoIcon";
 import { BsArrowRight } from "react-icons/bs";
@@ -71,9 +71,9 @@ const Signup = () => {
   };
 
   return (
-    <section className="bg-white">
-      <div className="lg:grid lg:h-screen lg:grid-cols-12">
-        <section className="relative flex h-32 items-end bg-gray-900 lg:col-span-5 lg:h-full xl:col-span-4">
+    <section className="bg-gray-100">
+      <div className="lg:grid  lg:grid-cols-12">
+        <section className="relative flex flex-col h-32 items-end bg-gray-900 lg:col-span-4 lg:h-full xl:col-span-4 ">
           <Image
             alt="Night"
             src={GradientBg}
@@ -81,18 +81,22 @@ const Signup = () => {
             height={100}
             className="absolute inset-0 h-full w-full object-cover opacity-80"
           />
-
-          <div className="hidden lg:relative lg:block">
+           <div className=" flex justify-center w-full">
+              <h1 className=" absolute top-10 text-white sm:text-3xl md:text-6xl font-extrabold">PursFI</h1>
+              </div>
+          <div className="hidden h-full  lg:relative lg:block ">
             <Image
               alt="Night"
               src={Hands}
-              className="h-full w-full object-cover"
+              className=" object-cover "
             />
-            <div className="lg:p-12">
+            <div className="lg:p-12 absolute bottom-20">
+             
+             
               <h2 className="mt-6 text-2xl font-bold text-center text-white sm:text-3xl md:text-4xl">
                 Partnership for Business Growth
               </h2>
-              <p className="mt-4 leading-relaxed text-white/90">
+              <p className="mt-4 leading-relaxed text-white/90 text-center">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
                 eiusmod tempor incididun.
               </p>
@@ -100,9 +104,9 @@ const Signup = () => {
           </div>
         </section>
 
-        <main className="w-full max-h-screen overflow-y-auto px-8 py-6 lg:px-4 lg:py-2  lg:col-span-7 xl:col-span-8">
-          <div className="w-full flex flex-col justify-between h-full lg:max-h-screen">
-            <div className="md:flex justify-between gap-8">
+        <main className="w-full h-full   px-8 py-6 lg:px-4 lg:py-2  lg:col-span-8 xl:col-span-9">
+          <div className="w-full flex flex-col justify-between h-full ">
+            <div className="md:flex justify-between gap-8 text-sm">
               <Link href="/" className="hover:underline">
                 <span>
                   {" "}
@@ -134,7 +138,7 @@ const Signup = () => {
               </div>
 
               <div>
-                <div className="text-center mt-10 lg:mt-0 space-y-2">
+                <div className="text-center mt-5 md:mt-10 space-y-2">
                   <h2 className="text-3xl uppercase font-semibold">
                     CREATE YOUR PURSFI API ACCOUNT
                   </h2>
@@ -145,7 +149,7 @@ const Signup = () => {
 
                 <Form
                   onFinish={handleRegister}
-                  className="!mt-12 !grid !grid-cols-6 !gap-5"
+                  className="!mt-12 !grid !grid-cols-6  !gap-5 md:!px-[100px]"
                 >
                   <div className="col-span-6 sm:col-span-3 flex flex-col items-start justify-start gap-[0.3rem]">
                     <label
@@ -163,7 +167,7 @@ const Signup = () => {
                       name="first_name"
                       type="text"
                       placeholder="Enter your first name"
-                      className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
+                      className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm h-[46px]"
                     />
                   </div>
 
@@ -183,7 +187,7 @@ const Signup = () => {
                       onChange={handleChange}
                       type="text"
                       placeholder="Enter your last name"
-                      className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
+                      className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm h-[46px]"
                     />
                   </div>
 
@@ -203,7 +207,7 @@ const Signup = () => {
                       type="email"
                       placeholder="Enter your email"
                       name="email"
-                      className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
+                      className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm h-[46px]"
                     />
                   </div>
 
@@ -215,11 +219,11 @@ const Signup = () => {
                       Registration Number
                     </label>
 
-                    <div className="phone-input-container !w-full">
+                    <div className="phone-input-container !w-full !h-[46px]">
                       <PhoneInput
                         country={"ng"}
-                        containerClass="!w-full"
-                        inputClass="phone-input-input !w-full"
+                        containerClass="!w-full !h-[46px]"
+                        inputClass="phone-input-input !w-full !h-[46px]"
                         value={formData.phone_number}
                         onChange={(value) =>
                           setFormData((prev) => ({
@@ -231,7 +235,7 @@ const Signup = () => {
                     </div>
                   </div>
 
-                  <div className="col-span-6  flex flex-col items-start justify-start gap-[0.3rem]">
+                  <div className="col-span-6 sm:col-span-3  flex flex-col items-start justify-start gap-[0.3rem]">
                     <label
                       htmlFor="business_name"
                       className="block text-sm font-semibold text-gray-700"
@@ -247,9 +251,31 @@ const Signup = () => {
                       value={formData.business_name}
                       onChange={handleChange}
                       placeholder="Enter your business name"
-                      className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm"
+                      className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm h-[46px]"
                     />
                   </div>
+
+                  <div className="col-span-6 sm:col-span-3 flex flex-col items-start justify-start gap-[0.3rem]">
+                    <label
+                      htmlFor="LastName"
+                      className=" text-sm font-semibold text-gray-700 flex gap-2"
+                    >
+                     Business Name Extension 
+                     <InfoIcon />
+                    </label>
+
+                    <Input
+                      id="business_name_ext"
+                      name="business_name_ext"
+                      required
+                      value={formData.last_name}
+                      onChange={handleChange}
+                      type="text"
+                      placeholder="Enter your extension name"
+                      className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm h-[46px]"
+                    />
+                  </div>
+
 
                   <div className="col-span-6 sm:col-span-3 flex flex-col items-start justify-start gap-[0.3rem]">
                     <label
@@ -267,6 +293,7 @@ const Signup = () => {
                       value={formData.password}
                       name="password"
                       onChange={handleChange}
+                      className="h-[46px]"
                     />
 
                     {formData.password && validationError && (
@@ -290,6 +317,7 @@ const Signup = () => {
                       value={formData.password2}
                       name="password2"
                       onChange={handleChange}
+                      className=" h-[46px]"
                     />
                     {formData.password2 && confirmValidationError && (
                       <p> Password must match</p>
@@ -322,7 +350,7 @@ const Signup = () => {
                           { value: "Business", label: "Business" },
                           { value: "Personal", label: "Personal" },
                         ]}
-                        className=" !w-full rounded-md  !bg-white !text-gray-700 "
+                        className=" !w-full rounded-md  !bg-white !text-gray-700 !h-[46px]"
                       />
                     </Form.Item>
                   </div>
@@ -383,7 +411,7 @@ const Signup = () => {
             </div>
 
             {/* footer */}
-            <div className="md:flex justify-between gap-8 text-[#9E9E9E] space-y-2 md:space-y-0">
+            <div className="md:flex justify-between gap-8 text-[#9E9E9E] space-y-2 md:space-y-0 mt-5 px-4">
               <p className="text-sm">
                 Copyright 2021 - 2022 PursFI Inc. All rights Reserved
               </p>

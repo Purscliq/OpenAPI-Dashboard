@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CustomInput as Input,
   CustomTable as Table,
 } from "@/lib/AntdComponents";
-import { message, DatePicker } from "antd";
+import { message, DatePicker, Dropdown, Menu } from "antd";
 import DeleteIcon from "@/assets/svg/DeleteIcon";
 import FilterIcon from "@/assets/svg/FilterIcon";
 import TableIcon from "@/assets/svg/TableIcon";
@@ -13,6 +13,7 @@ import {
   useReadAllTransactionsQuery,
   useDeleteTransactionMutation,
 } from "@/services/business/index.service";
+import TransactionDrawer from "./transactionsDrawer";
 
 interface TransactionsType {
   id: string;
@@ -24,7 +25,7 @@ const TransactionsTable = () => {
     isLoading,
     refetch,
   } = useReadAllTransactionsQuery([]);
-
+  const [open, setOpen] = useState(false);
   const [deleteTransaction, { isLoading: deleteLoading }] =
     useDeleteTransactionMutation();
 
@@ -38,11 +39,29 @@ const TransactionsTable = () => {
       message.error("Failed to delete transaction");
     }
   };
+  const showDrawer = (record: any) => {
+    setOpen(true);
+  };
+
+  const onClose = () => {
+    setOpen(false);
+  };
+
 
   const formatCreatedOn = (createdOn: string) => {
     const date = new Date(createdOn);
     return date.toLocaleString();
   };
+
+  const data = [
+   { created_at: "2|12|2024",
+    transID: "tx-1234",
+    sender: "emmanuel",
+    receipient: 'johnny',
+    amount: 500
+
+  }
+  ]
 
   const columns = [
     {
@@ -57,13 +76,13 @@ const TransactionsTable = () => {
       sorter: true,
     },
     {
-      title: "Customer",
-      dataIndex: "customer",
+      title: "Sender",
+      dataIndex: "sender",
       sorter: true,
     },
     {
-      title: "Currency",
-      dataIndex: "currency",
+      title: "Rceipient",
+      dataIndex: "receipient",
       sorter: true,
     },
     {
@@ -73,20 +92,26 @@ const TransactionsTable = () => {
     },
     {
       title: "Actions",
-      render: (record: TransactionsType) => (
-        <span className="flex items-center space-x-4">
-          <button type="button" title="Edit" className="">
-            Edit
+      render: (_: any, record: any) => (
+        <>
+        <Dropdown 
+        overlay={
+          <Menu>
+              <Menu.Item key="1">
+                <button
+                onClick={() => showDrawer(record)}
+                >
+                  View details
+                </button>
+              </Menu.Item>
+            </Menu>
+        }
+        >
+          <button type="button" className="text-base font-semibold">
+            ...
           </button>
-          <button
-            type="button"
-            title="Delete"
-            className=""
-            onClick={() => handleDelete(record.id)}
-          >
-            {deleteLoading ? "Deleting..." : <DeleteIcon />}
-          </button>
-        </span>
+        </Dropdown>
+      </>
       ),
     },
   ];
@@ -109,10 +134,11 @@ const TransactionsTable = () => {
       <div className="relative overflow-x-auto  sm:rounded-lg w-full">
         <Table
           columns={columns}
-          dataSource={transactionData?.data || []}
+          dataSource={/**transactionData?.data || []*/ data}
           loading={isLoading}
         />
       </div>
+      <TransactionDrawer onClose={onClose} open={open} />
     </div>
   );
 };
