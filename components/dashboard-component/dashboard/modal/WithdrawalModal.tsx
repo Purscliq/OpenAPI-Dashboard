@@ -50,7 +50,6 @@ const WithdrawalModal: React.FC<ModalProps> = ({
     } catch (error: any) {
       message.error(`Withdrawal failed: ${error?.data?.message}` );
       console.log(error?.data?.message);
-      console.log("source:",accountId);
     }
     
   };

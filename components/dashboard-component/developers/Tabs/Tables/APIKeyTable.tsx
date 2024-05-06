@@ -1,13 +1,11 @@
-"use client";
-
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { CustomTable as Table } from "@/lib/AntdComponents";
 import DeleteIcon from "@/assets/svg/DeleteIcon";
-import { message } from "antd";
 import {
   useGetApiKeysQuery,
   useDeleteApiKeyMutation,
 } from "@/services/apikeys/index.service";
+import { Button, Tooltip, message } from "antd";
 
 const APIKeyTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
   const { data: apiKeysData, isLoading, refetch } = useGetApiKeysQuery([]);
@@ -20,14 +18,22 @@ const APIKeyTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
 
   const [deleteApiKey] = useDeleteApiKeyMutation();
 
+  const [tooltipVisibility, setTooltipVisibility] = useState<{ [key: string]: boolean }>({});
+
   const handleDelete = async (apiKeyId: string) => {
     try {
       await deleteApiKey(apiKeyId);
       refetch();
     } catch (error) {
       console.error("Error deleting API key:", error);
-      message.error("Failed to delete API key");
     }
+  };
+
+  const toggleTooltip = (apiKeyId: string, visible: boolean) => {
+    setTooltipVisibility(prevState => ({
+      ...prevState,
+      [apiKeyId]: visible
+    }));
   };
 
   const columns = [
@@ -41,7 +47,6 @@ const APIKeyTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
       dataIndex: "service_name",
       sorter: true,
     },
-
     {
       title: "Date Created",
       dataIndex: "created_at",
@@ -59,14 +64,35 @@ const APIKeyTable = ({ shouldRefresh }: { shouldRefresh: boolean }) => {
       title: "Actions",
       render: (record: any) => (
         <span className="flex items-center space-x-4">
-          <button
-            type="button"
+          <div className="flex justify-end items-end mb-3">
+            <Tooltip
+              title="Copied!"
+              trigger="click"
+              visible={tooltipVisibility[record.id] || false}
+              onVisibleChange={(visible) => toggleTooltip(record.id, visible)}
+            >
+              <Button
+                onClick={() => {
+                  navigator.clipboard.writeText(record?.secret_key);
+                  toggleTooltip(record.id, true);
+                  setTimeout(() => {
+                    toggleTooltip(record.id, false);
+                  }, 2000);
+                }}
+                className="text-lg font-semibold !border-none"
+              >
+                Copy API Key
+              </Button>
+            </Tooltip>
+          </div>
+
+          <Button
+            type="text"
             title="Delete"
-            className=""
             onClick={() => handleDelete(record.id)}
           >
             <DeleteIcon />
-          </button>
+          </Button>
         </span>
       ),
     },

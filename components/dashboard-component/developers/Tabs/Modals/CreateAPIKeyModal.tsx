@@ -15,17 +15,13 @@ const CreateAPIKeyModal: React.FC<{ onApiKeyCreated: () => void }> = ({
   const [sourceIP, setSourceIP] = useState("");
   const [createApiKey, { isLoading }] = useCreateApiKeyMutation();
 
-  // const { data: services = [], error } = useGetServicesQuery();
   const {
     data: services = [],
     error,
     isLoading: servicesLoading,
   } = useGetServicesQuery({});
 
-  // Log the content of services array
-  // useEffect(() => {
-  //   console.log("Services:", services);
-  // }, [services]);
+
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -65,7 +61,6 @@ const CreateAPIKeyModal: React.FC<{ onApiKeyCreated: () => void }> = ({
 
       if ("data" in response) {
         if (response.data.status === "success") {
-          // message.success("API key created successfully");
           onApiKeyCreated(); // Call the callback function
           setIsModalOpen(false);
         } else {
