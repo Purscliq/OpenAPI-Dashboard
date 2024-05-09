@@ -88,18 +88,14 @@ const Signup = () => {
             height={100}
             className="absolute inset-0 h-full w-full object-cover opacity-80"
           />
-           <div className=" flex justify-center w-full">
-              <h1 className=" absolute top-10 text-white sm:text-3xl md:text-6xl font-extrabold">PursFI</h1>
-              </div>
+          <div className=" flex justify-center w-full">
+            <h1 className=" absolute top-10 text-white sm:text-3xl md:text-6xl font-extrabold">
+              PursFI
+            </h1>
+          </div>
           <div className="hidden h-full w-full  lg:relative lg:block ">
-            <Image
-              alt="Night"
-              src={Hands}
-              className=" object-cover w-full "
-            />
+            <Image alt="Night" src={Hands} className=" object-cover w-full " />
             <div className="lg:p-12 absolute bottom-20 text-center w-full">
-             
-             
               <h2 className="mt-6 text-2xl font-bold text-center text-white sm:text-3xl md:text-4xl">
                 Partnership for Business Growth
               </h2>
