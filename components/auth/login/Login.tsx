@@ -192,7 +192,7 @@ const Login = () => {
             </div>
 
             {/* footer */}
-            <div className="lg:flex justify-between gap-8 text-[#9E9E9E] space-y-2 lg:space-y-0 ">
+            <div className=" lg:flex justify-between gap-8 text-[#9E9E9E] space-y-2 lg:space-y-0 ">
               {/* lg:mt-40 mt-0 */}
               <p className="text-sm">
                 Copyright 2021 - 2022 PursFI Inc. All rights Reserved

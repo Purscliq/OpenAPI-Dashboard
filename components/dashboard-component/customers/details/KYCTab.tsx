@@ -18,18 +18,32 @@ const KYCTab: React.FC<KYCData> = ({ kycData }) => {
   const [visible1, setVisible1] = useState(false);
 
   const [scaleStep, setScaleStep] = useState(0.5);
+
+  const isPDF = (url: string) => {
+    const supportedExtensions = ['.png', '.jpg', '.jpeg', '.gif']; // Add more image extensions if needed
+    const lowerCaseUrl = url.toLowerCase();
+    return supportedExtensions.some(ext => lowerCaseUrl.endsWith(ext));
+};
+
+
   return (
     <div className="p-4 py-8 border-y grid grid-cols-1 md:grid-cols-3 md:gap-12 gap-6 text-[14px]">
       <div className="p-4 md:max-w-[300px] rounded-lg bg-[#FBFFF5] border border-[#85BC2C] border-dashed flex flex-col gap-2 justify-center items-center">
-        <PDF />
-        <p className="text-[#242F57] font-semibold">Utility Bill.pdf</p>
+      { isPDF(kycData?.idCard) ? <PNG /> :  <PDF />}
+        <p className="text-[#242F57] font-semibold">{ isPDF(kycData?.idCard) ? 'Utility Bill.png' :'Utility Bill.pdf' }</p>
         <span className="flex gap-3 text-[#636E95]">
           <p className="text-[#242F57]">{formatDate(kycData.updatedAt)}</p>|
           <p className="text-[#242F57]">14.1Mb</p>
         </span>
-        <button type="button" className="text-[#1AD48E]" onClick={() => setVisible(true)}>
-          View File
-        </button>
+        {isPDF(kycData.idCard) ? (
+          <button type="button" className="text-[#1AD48E]" onClick={() => setVisible(true)}>
+            View File
+          </button>
+        ) : (
+          <a href={kycData.utilityBill} download className="text-[#1AD48E]">
+            Download File
+          </a>
+        )}
         <Image
           width={200}
           style={{ display: 'none' }}
@@ -46,20 +60,26 @@ const KYCTab: React.FC<KYCData> = ({ kycData }) => {
       </div>
 
       <div className="p-4 md:max-w-[300px] rounded-lg bg-[#FBFFF5] border border-[#85BC2C] border-dashed flex flex-col gap-2 justify-center items-center">
-        <PNG />
-        <p className="text-[#242F57] font-semibold">Drivers License.png</p>
+      { isPDF(kycData?.utilityBill) ? <PNG /> :  <PDF />}
+        
+        <p className="text-[#242F57] font-semibold">{ isPDF(kycData?.utilityBill) ? 'Drivers License.png' : 'Drivers License.pdf'}</p>
         <span className="flex gap-3 text-[#636E95]">
           <p className="text-[#242F57]">{formatDate(kycData.updatedAt)}</p>|
           <p className="text-[#242F57]">14.1Mb</p>
         </span>
-        <button type="button" className="text-[#1AD48E]" onClick={() => setVisible1(true)}>
-          View File
-        </button>
-
+        {isPDF(kycData.utilityBill) ? (
+          <button type="button" className="text-[#1AD48E]" onClick={() => setVisible(true)}>
+            View File
+          </button>
+        ) : (
+          <a href={kycData.utilityBill} download className="text-[#1AD48E]">
+            Download File
+          </a>
+        )}
         <Image
           width={200}
           style={{ display: 'none' }}
-          src={kycData?.idCard}
+          src={kycData?.utilityBill}
           preview={{
             visible: visible1,
             scaleStep,

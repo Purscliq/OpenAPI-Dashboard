@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { message, Modal } from "antd";
 import { CustomSelect as Select } from "@/lib/AntdComponents";
-import { useGetBankListQuery, useInitiateWithdrawalMutation } from "@/services/business/index.service";
+import { useGetAccountNameMutation, useGetBankListQuery, useInitiateWithdrawalMutation } from "@/services/business/index.service";
 import { LoadingOutlined } from "@ant-design/icons";
 interface ModalProps {
   openWithdrawalModal: boolean;
@@ -19,7 +19,7 @@ const WithdrawalModal: React.FC<ModalProps> = ({
 
   const { data: bankList } = useGetBankListQuery({})
   const [initiateWithdrawal, { isLoading, data: response }] = useInitiateWithdrawalMutation()
-  //const [validate, { isLoading: vallidating }] = useValidateAccountMutation()
+  const [validate, { isLoading: vallidating, isError: validatingError }] = useGetAccountNameMutation()
 
   const [formData, setFormData] = useState({
     source_account_id: accountId,
@@ -28,32 +28,37 @@ const WithdrawalModal: React.FC<ModalProps> = ({
     amount: 0,
     narration: ""
   });
-  /** 
-  const [validateData, setValidateData] = useState({
-    bank_code: formData.bank_code,
-    account_number: formData.account_number
-  });
-*/
-  const [transferFrom, setTransferFrom] = useState("Main account");
 
-  /** 
+ 
+  const [transferFrom, setTransferFrom] = useState("Main account");
+  const [accountName, setAccountName] = useState("");
+
   useEffect(() => {
-    if (validateData.bank_code && validateData.account_number) {
-      // Trigger the validate mutation only if all fields in validateData are not empty
-      // Call the validate mutation here
-      validate(validateData)
+    // Check if both bank_code and account_number are available
+    if (formData.bank_code && formData.account_number && formData.account_number.length === 10) {
+      // Trigger the validate mutation
+      validate({
+        bank_code: formData.bank_code,
+        account_number: formData.account_number
+      })
         .unwrap()
-        .then(() => {
-          // Handle success
+        .then((res) => {
+          // Handle successful validation
+          setAccountName(res?.data?.account_name)
           console.log("Validation successful");
+
+          if(res.status === 400){
+            setAccountName(res?.message)
+          }
         })
         .catch((error: any) => {
-          // Handle error
+          // Handle validation failure
+          setAccountName("Error validating name")
           console.error("Validation failed", error);
         });
     }
-  }, [validateData, validate]);
-  */
+  }, [formData.bank_code, formData.account_number, validate]);
+ 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -72,14 +77,8 @@ const WithdrawalModal: React.FC<ModalProps> = ({
         [fieldName]: value,
       }));
     }
-    /** 
-    if (fieldName === 'bank_code' ) {
-      setValidateData((prevValidateData) => ({
-        ...prevValidateData,
-        [fieldName]: value,
-      }));
-    }
-    */
+   
+  
   };
 
   const handleWithdrawal = async (e: React.FormEvent) => {
@@ -188,10 +187,16 @@ const WithdrawalModal: React.FC<ModalProps> = ({
               id="accountNo"
               value={formData.account_number}
               onChange={handleChange}
+              maxLength={10}
               className="w-full rounded-[5px] px-[8px] pr-[16px] h-[50px] text-[14px] border border-[#E9EBEB]"
               required
             />
-            <p className="text-[#515B6F] text-[14px]">Temitope williams</p>
+            <p className={`text-[#515B6F] text-[14px] ${validatingError ? "text-red-600" : "" }`}>
+              {
+                vallidating ? <LoadingOutlined style={{ fontSize: 24 }} spin /> : accountName
+              }
+              
+              </p>
           </span>
           </>
             )}

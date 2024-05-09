@@ -188,6 +188,13 @@ export const businessApi = createApi({
         body,
       }),
     }),
+    getAccountName: builder.mutation({
+      query: (body) => ({
+        url: "/api/v1/business/account/account-name-enquiry",
+        method: "POST",
+        body,
+      }),
+    }),
   }),
 });
 
@@ -220,5 +227,6 @@ export const {
   useDeactivateCustomerMutation,
   useGetBankListQuery,
   useInitiateWithdrawalMutation,
-  useGetSingleCustomerTransactionQuery
+  useGetSingleCustomerTransactionQuery,
+  useGetAccountNameMutation
 } = businessApi;
