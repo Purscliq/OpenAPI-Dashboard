@@ -53,10 +53,10 @@ const TransactionDrawer: React.FC<TransactionDrawerProps> = ({
             <span>{new Date(created_at).toLocaleString()}</span>
           </div>
 
-          <div className="w-full flex justify-between">
+          {/* <div className="w-full flex justify-between">
             <span>Counterparty</span>
             <span>{customer_name}</span>
-          </div>
+          </div> */}
 
           <div className="w-full flex justify-between">
             <span>Bank Name</span>
