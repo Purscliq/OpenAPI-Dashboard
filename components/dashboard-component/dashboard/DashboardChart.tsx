@@ -3,37 +3,37 @@ import { Line, LineConfig } from "@ant-design/plots";
 const data = [
   {
     time: "Sun",
-    value: 10000,
+    value: 0,
     category: "Inflow",
   },
   {
     time: "Mon",
-    value: 5000,
+    value: 0,
     category: "Outflow",
   },
   {
     time: "Tues",
-    value: 15000,
+    value: 0,
     category: "Inflow",
   },
   {
     time: "Wed",
-    value: 20000,
+    value: 0,
     category: "Outflow",
   },
   {
     time: "Thurs",
-    value: 1000,
+    value: 0,
     category: "Inflow",
   },
   {
     time: "Fri",
-    value: 20000,
+    value: 0,
     category: "Outflow",
   },
   {
     time: "Sat",
-    value: 18000,
+    value: 0,
     category: "Inflow",
   },
 ];
