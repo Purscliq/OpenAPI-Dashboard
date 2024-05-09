@@ -79,7 +79,7 @@ const Signup = () => {
 
   return (
     <section className="bg-gray-100">
-      <div className="lg:grid  lg:grid-cols-12">
+      <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
         <section className="relative flex flex-col h-32 items-end bg-gray-900 lg:col-span-4 lg:h-full xl:col-span-4 ">
           <Image
             alt="Night"
@@ -93,9 +93,9 @@ const Signup = () => {
               PursFI
             </h1>
           </div>
-          <div className="hidden h-full  lg:relative lg:block ">
-            <Image alt="Night" src={Hands} className=" object-cover " />
-            <div className="lg:p-12 absolute bottom-20">
+          <div className="hidden h-full w-full  lg:relative lg:block ">
+            <Image alt="Night" src={Hands} className=" object-cover w-full " />
+            <div className="lg:p-12 absolute bottom-20 text-center w-full">
               <h2 className="mt-6 text-2xl font-bold text-center text-white sm:text-3xl md:text-4xl">
                 Partnership for Business Growth
               </h2>
@@ -107,7 +107,7 @@ const Signup = () => {
           </div>
         </section>
 
-        <main className="w-full h-full   px-8 py-6 lg:px-4 lg:py-2  lg:col-span-8 xl:col-span-9">
+        <main className="w-full h-full   px-8 py-6 lg:px-4 lg:py-2  lg:col-span-8 xl:col-span-8">
           <div className="w-full flex flex-col justify-between h-full ">
             <div className="md:flex justify-between gap-8 text-sm">
               <Link href="/" className="hover:underline">
