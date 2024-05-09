@@ -23,6 +23,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 const initailState = {
   first_name: "",
   last_name: "",
+  ext: "",
   email: "",
   phone_number: "",
   password: "",
@@ -53,6 +54,12 @@ const Signup = () => {
     setFormData((prevState) => ({
       ...prevState,
       [e.target?.name]: e.target?.value,
+    }));
+  };
+  const handleExtChange = (value: any) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      ext: value,
     }));
   };
   const handleRegister = () => {
@@ -260,22 +267,21 @@ const Signup = () => {
                       htmlFor="LastName"
                       className=" text-sm font-semibold text-gray-700 flex gap-2"
                     >
-                     Business Name Extension 
-                     <InfoIcon />
+                      Business Name Extension
+                      <InfoIcon />
                     </label>
-
-                    <Input
-                      id="business_name_ext"
-                      name="business_name_ext"
-                      required
-                      value={formData.last_name}
-                      onChange={handleChange}
-                      type="text"
-                      placeholder="Enter your extension name"
-                      className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm h-[46px]"
+                    <Select
+                      id="ext"
+                      defaultValue=""
+                      options={[
+                        { value: "", label: "Select an option" },
+                        { value: "LTD Ventures", label: "LTD Ventures" },
+                        { value: "PLC Ventures", label: "PLC Ventures" },
+                      ]}
+                      onChange={handleExtChange}
+                      className=" !w-full rounded-md  !bg-white !text-gray-700 !h-[46px]"
                     />
                   </div>
-
 
                   <div className="col-span-6 sm:col-span-3 flex flex-col items-start justify-start gap-[0.3rem]">
                     <label

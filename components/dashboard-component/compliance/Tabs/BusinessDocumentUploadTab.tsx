@@ -25,6 +25,7 @@ const BusinessDocumentUploadTab = () => {
     update({
       cac_url: upload_url,
       tin_url: upload_url,
+      moa_url: upload_url,
     })
       .unwrap()
       .then((res) => {
@@ -81,6 +82,7 @@ const BusinessDocumentUploadTab = () => {
                 accept="application/pdf, image/jpeg"
                 action="/api/v1/business/image-upload"
                 disabled={!!business?.data?.cac_url}
+                onChange={(info) => handleUpload(info, " cac_url")}
                 className="flex items-center text-center  gap-[0.3rem]"
               >
                 <p className="ant-upload-text flex gap-4">
@@ -98,12 +100,12 @@ const BusinessDocumentUploadTab = () => {
                 Attach your memorandum and articles of association
               </label>
               <Dragger
-                id="memorandum"
-                name="memorandum"
+                name="moa_url"
                 multiple
                 accept="application/pdf, image/jpeg"
                 action="/api/v1/business/image-upload"
-                onChange={(info) => handleUpload(info, "memorandum")}
+                disabled={!!business?.data?.moa_url}
+                onChange={(info) => handleUpload(info, " moa_url")}
                 className="flex items-center text-center  gap-[0.3rem]"
               >
                 <p className="ant-upload-text flex gap-4">
