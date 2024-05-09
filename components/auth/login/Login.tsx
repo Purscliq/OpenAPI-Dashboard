@@ -9,7 +9,7 @@ import {
 } from "@/lib/AntdComponents";
 import Image from "next/image";
 import GradientBg from "@/assets/png/side-left.png";
-import Hands from "@/assets/png/handshake-img.png";
+import Hands from "@/assets/png/Light-brown.svg";
 import { BiChevronLeft } from "react-icons/bi";
 import InfoIcon from "@/assets/svg/InfoIcon";
 import { BsArrowRight } from "react-icons/bs";
@@ -53,7 +53,7 @@ const Login = () => {
   return (
     <section className="bg-white">
       <div className="lg:grid lg:min-h-screen lg:grid-cols-12">
-        <section className="relative flex h-32 items-end bg-gray-900 lg:col-span-5 lg:h-full xl:col-span-4">
+        <section className="relative flex flex-col h-32 items-end bg-gray-900 lg:col-span-4 lg:h-full xl:col-span-4">
           <Image
             alt="Night"
             src={GradientBg}
@@ -61,14 +61,20 @@ const Login = () => {
             height={100}
             className="absolute inset-0 h-full w-full object-cover opacity-80"
           />
+          <div className=" flex justify-center w-full">
+            <h1 className=" absolute top-10 text-white sm:text-3xl md:text-6xl font-extrabold">
+              PursFI
+            </h1>
+          </div>
 
-          <div className="hidden lg:relative lg:block">
+          <div className="hidden h-full w-full  lg:relative lg:block">
             <Image
               alt="Night"
               src={Hands}
-              className="h-full w-full object-cover"
+              className=" object-cover w-full mt-[-80px]"
             />
-            <div className="lg:p-12">
+         
+            <div className="lg:p-12 mt-[-100px] text-center">
               <h2 className="mt-6 text-2xl font-bold text-center text-white sm:text-3xl md:text-4xl">
                 Partnership for Business Growth
               </h2>
@@ -80,7 +86,7 @@ const Login = () => {
           </div>
         </section>
 
-        <main className="w-full max-h-screen px-8 py-6 lg:px-4 lg:py-2 lg:col-span-7 xl:col-span-8">
+        <main className="w-full max-h-screen px-8 py-6 lg:px-4 lg:py-2 lg:col-span-8 xl:col-span-8">
           <div className="w-full flex flex-col justify-between gap-10 md:h-[calc(100%-.5rem)]">
             {/* header */}
             <div className="md:flex justify-between gap-8">
