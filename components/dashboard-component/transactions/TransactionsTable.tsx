@@ -26,20 +26,24 @@ const TransactionsTable = () => {
     refetch,
   } = useReadAllTransactionsQuery([]);
   const [open, setOpen] = useState(false);
-  const [deleteTransaction, { isLoading: deleteLoading }] =
-    useDeleteTransactionMutation();
+  const [selectedRecord, setSelectedRecord] = useState<any>(null); 
 
-  const handleDelete = async (TransactionId: string) => {
-    try {
-      await deleteTransaction(TransactionId);
-      refetch();
-      message.success("Transaction deleted successfully");
-    } catch (error) {
-      console.error("Error deleting transaction:", error);
-      message.error("Failed to delete transaction");
-    }
-  };
+  
+  // const [deleteTransaction, { isLoading: deleteLoading }] =
+  //   useDeleteTransactionMutation();
+
+  // const handleDelete = async (TransactionId: string) => {
+  //   try {
+  //     await deleteTransaction(TransactionId);
+  //     refetch();
+  //     message.success("Transaction deleted successfully");
+  //   } catch (error) {
+  //     console.error("Error deleting transaction:", error);
+  //     message.error("Failed to delete transaction");
+  //   }
+  // };
   const showDrawer = (record: any) => {
+    setSelectedRecord(record); 
     setOpen(true);
   };
 
@@ -47,21 +51,10 @@ const TransactionsTable = () => {
     setOpen(false);
   };
 
-
   const formatCreatedOn = (createdOn: string) => {
     const date = new Date(createdOn);
     return date.toLocaleString();
   };
-
-  const data = [
-   { created_at: "2|12|2024",
-    transID: "tx-1234",
-    sender: "emmanuel",
-    receipient: 'johnny',
-    amount: 500
-
-  }
-  ]
 
   const columns = [
     {
@@ -72,46 +65,44 @@ const TransactionsTable = () => {
     },
     {
       title: "Transaction Id",
-      dataIndex: "transID",
+      dataIndex: "reference", 
       sorter: true,
     },
     {
-      title: "Sender",
-      dataIndex: "sender",
-      sorter: true,
-    },
-    {
-      title: "Rceipient",
-      dataIndex: "receipient",
-      sorter: true,
-    },
-    {
-      title: "Amount requested",
+      title: "Amount",
       dataIndex: "amount",
+      sorter: true,
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      sorter: true,
+    },
+    {
+      title: "Charge",
+      dataIndex: "charge",
       sorter: true,
     },
     {
       title: "Actions",
       render: (_: any, record: any) => (
         <>
-        <Dropdown 
-        overlay={
-          <Menu>
-              <Menu.Item key="1">
-                <button
-                onClick={() => showDrawer(record)}
-                >
-                  View details
-                </button>
-              </Menu.Item>
-            </Menu>
-        }
-        >
-          <button type="button" className="text-base font-semibold">
-            ...
-          </button>
-        </Dropdown>
-      </>
+          <Dropdown
+            overlay={
+              <Menu>
+                <Menu.Item key="1">
+                  <button onClick={() => showDrawer(record)}>
+                    View details
+                  </button>
+                </Menu.Item>
+              </Menu>
+            }
+          >
+            <button type="button" className="text-base font-semibold">
+              ...
+            </button>
+          </Dropdown>
+        </>
       ),
     },
   ];
@@ -134,11 +125,11 @@ const TransactionsTable = () => {
       <div className="relative overflow-x-auto  sm:rounded-lg w-full">
         <Table
           columns={columns}
-          dataSource={/**transactionData?.data || []*/ data}
+          dataSource={transactionData?.data || []}
           loading={isLoading}
         />
       </div>
-      <TransactionDrawer onClose={onClose} open={open} />
+      <TransactionDrawer onClose={onClose} open={open} data={selectedRecord}/>
     </div>
   );
 };

@@ -1,80 +1,92 @@
-"use client";
+import React from "react";
+import { Drawer } from "antd";
 
-import React, { useState } from "react";
-import {  Drawer } from "antd";
-
-const TransactionDrawer = ({
-  open,
-  onClose,
-}: {
+interface TransactionDrawerProps {
   open: boolean;
   onClose: () => void;
+  data: any; 
+}
 
+const TransactionDrawer: React.FC<TransactionDrawerProps> = ({
+  open,
+  onClose,
+  data,
 }) => {
- 
+  // Extract data from recordData or provide default values
+  const {
+    amount = 0,
+    created_at = "",
+    customer_name = "",
+    bank_name = "",
+    account_number = "",
+    narration = "",
+  } = data || {};
+
   return (
-    <>
-      <Drawer
-        onClose={onClose}
-        open={open}
-        title={null}
-        placement="right"
-        width={500}
-        getContainer={false}
-        closable={true}
-        style={{ position: "absolute", padding: 0 }}
-      >
-        <div className="space-y-8 py-4">
-         <div className=" bg-slate-50 h-[150px] w-full flex flex-col justify-center items-center">
-            <h1 className=" font-bold text-3xl text-[#0AA07B]">+N200,000</h1>
-            <p className=" text-xl">JOHN DAVID DOE</p>
-         </div>
-
-                <div>
-                    <h2 className=" font-semibold text-xl">Transaction Information</h2>
-                </div>
-          <div className="p-4 border rounded-md space-y-6 border-[#FAFAFA]">
-           <div className=" w-full flex justify-between ">
-            <span>Amount</span>
-            <span className=" font-bold">+200,000.00</span>
-           </div>
-
-           <div className=" w-full flex justify-between ">
-           <span>Date</span>
-            <span>24 July,2023 1:38:28 PM</span>
-           </div>
-           
-           <div className=" w-full flex justify-between ">
-           <span>Counterparty</span>
-            <span>john David doe</span>
-           </div>
-
-           <div className=" w-full flex justify-between ">
-           <span>Bank Name</span>
-            <span>First Bank</span>
-           </div>
-
-           <div className=" w-full flex justify-between ">
-           <span>Account Number</span>
-            <span>05596746787</span>
-           </div>
-
-           <div className=" w-full flex justify-between ">
-           <span>Source</span>
-            <span>PursBusiness main Account</span>
-           </div>
-           <hr/>
-
-           <div className=" w-full ">
-            <h4 className=" font-bold text-md">Transaction Memo</h4>
-            <p>inward transfer  from king ans son</p>
-           </div>
-          </div>
-          <button className=" w-full text-center h-[50px] bg-black text-white rounded mb-4 font-semibold">Download Receipt</button>
-          <button className=" w-full text-center h-[50px] bg-white text-black border border-slate-200 rounded font-semibold">Report Transaction</button>
+    <Drawer
+      onClose={onClose}
+      open={open}
+      title={null}
+      placement="right"
+      width={500}
+      getContainer={false}
+      closable={true}
+      style={{ position: "absolute", padding: 0 }}
+    >
+      <div className="space-y-8 py-4">
+        <div className="bg-slate-50 h-[150px] w-full flex flex-col justify-center items-center">
+          <h1 className="font-bold text-3xl text-[#0AA07B]">{`+NGN ${amount}`}</h1>
+          <p className="text-xl">{customer_name}</p>
         </div>
-      </Drawer>
-    </>
+
+        <div>
+          <h2 className="font-semibold text-xl">Transaction Information</h2>
+        </div>
+        <div className="p-4 border rounded-md space-y-6 border-[#FAFAFA]">
+          <div className="w-full flex justify-between">
+            <span>Amount</span>
+            <span className="font-bold">{`+NGN ${amount}`}</span>
+          </div>
+
+          <div className="w-full flex justify-between">
+            <span>Date</span>
+            <span>{new Date(created_at).toLocaleString()}</span>
+          </div>
+
+          <div className="w-full flex justify-between">
+            <span>Counterparty</span>
+            <span>{customer_name}</span>
+          </div>
+
+          <div className="w-full flex justify-between">
+            <span>Bank Name</span>
+            <span>{bank_name}</span>
+          </div>
+
+          <div className="w-full flex justify-between">
+            <span>Account Number</span>
+            <span>{account_number}</span>
+          </div>
+
+          <div className="w-full flex justify-between">
+            <span>Narration</span>
+            <span>{narration}</span>
+          </div>
+          <hr />
+
+          <div className="w-full">
+            <h4 className="font-bold text-md">Transaction Memo</h4>
+            <p>{narration}</p>
+          </div>
+        </div>
+        <button className="w-full text-center h-[50px] bg-black text-white rounded mb-4 font-semibold">
+          Download Receipt
+        </button>
+        <button className="w-full text-center h-[50px] bg-white text-black border border-slate-200 rounded font-semibold">
+          Report Transaction
+        </button>
+      </div>
+    </Drawer>
   );
 };
 
