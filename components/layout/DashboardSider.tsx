@@ -17,7 +17,7 @@ const DashboardSider = () => {
     setActivePath(activeKeys.filter((value) => pathName.includes(value))[0]);
   }, [pathName]);
   const { data, isLoading } = useGetComplainceStatQuery({});
-  const textColor = data?.data?.status === "success" ? "green" : "red";
+  const textColor = data?.data?.status === "Completed" ? "green" : "red";
   return (
     <div className="drawer-side z-10 ">
       <label htmlFor="my-drawer-2" className="drawer-overlay"></label>

@@ -34,7 +34,7 @@ const TransactionDrawer: React.FC<TransactionDrawerProps> = ({
       style={{ position: "absolute", padding: 0 }}
     >
       <div className="space-y-8 py-4">
-        <div className="bg-slate-50 h-[150px] w-full flex flex-col justify-center items-center">
+        <div className="bg-slate-100 h-[150px] w-full flex flex-col justify-center items-center">
           <h1 className="font-bold text-3xl text-[#0AA07B]">{`+NGN ${amount}`}</h1>
           <p className="text-xl">{customer_name}</p>
         </div>
