@@ -100,7 +100,7 @@ const AddCustomer = () => {
     });
     
     // Redirect back to the previous page
-    router.push("customers");
+    router.push("/customers");
     
   }
  
