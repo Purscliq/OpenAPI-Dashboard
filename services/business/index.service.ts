@@ -5,7 +5,7 @@ export const businessApi = createApi({
   reducerPath: "business",
   refetchOnReconnect: true,
   refetchOnMountOrArgChange: true,
-  tagTypes: ["account", "Customer"],
+  tagTypes: ["account", "Customer","Dashboard"],
   baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
     createTransaction: builder.mutation({
@@ -126,6 +126,16 @@ export const businessApi = createApi({
         url: "/api/v1/business/dashboard",
         method: "GET",
       }),
+      providesTags: ["Dashboard"]
+    }),
+    initiateWithdrawal: builder.mutation({
+      query: (body) => ({
+        url: "/api/v1/business/transactions/withdraw",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Dashboard"],
+
     }),
     getComplainceStat: builder.query({
       query: () => ({
@@ -181,13 +191,7 @@ export const businessApi = createApi({
       }),
       invalidatesTags: ["Customer"]
     }),
-    initiateWithdrawal: builder.mutation({
-      query: (body) => ({
-        url: "/api/v1/business/transactions/withdraw",
-        method: "POST",
-        body,
-      }),
-    }),
+    
     getAccountName: builder.mutation({
       query: (body) => ({
         url: "/api/v1/business/account/account-name-enquiry",

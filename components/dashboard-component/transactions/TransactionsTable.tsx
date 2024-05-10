@@ -26,9 +26,8 @@ const TransactionsTable = () => {
     refetch,
   } = useReadAllTransactionsQuery([]);
   const [open, setOpen] = useState(false);
-  const [selectedRecord, setSelectedRecord] = useState<any>(null); 
+  const [selectedRecord, setSelectedRecord] = useState<any>(null);
 
-  
   // const [deleteTransaction, { isLoading: deleteLoading }] =
   //   useDeleteTransactionMutation();
 
@@ -43,7 +42,7 @@ const TransactionsTable = () => {
   //   }
   // };
   const showDrawer = (record: any) => {
-    setSelectedRecord(record); 
+    setSelectedRecord(record);
     setOpen(true);
   };
 
@@ -65,13 +64,25 @@ const TransactionsTable = () => {
     },
     {
       title: "Transaction Id",
-      dataIndex: "reference", 
+      dataIndex: "reference",
       sorter: true,
     },
     {
       title: "Amount",
       dataIndex: "amount",
       sorter: true,
+    },
+    {
+      title: "Transaction Type",
+      dataIndex: "tx_type",
+      sorter: true,
+      render: (txType: string) => {
+        return (
+          <span style={{ color: txType === "credit" ? "green" : "red" }}>
+            {txType}
+          </span>
+        );
+      },
     },
     {
       title: "Status",
@@ -129,7 +140,7 @@ const TransactionsTable = () => {
           loading={isLoading}
         />
       </div>
-      <TransactionDrawer onClose={onClose} open={open} data={selectedRecord}/>
+      <TransactionDrawer onClose={onClose} open={open} data={selectedRecord} />
     </div>
   );
 };
