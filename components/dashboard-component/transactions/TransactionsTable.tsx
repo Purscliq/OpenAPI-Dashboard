@@ -76,13 +76,10 @@ const TransactionsTable = () => {
       title: "Transaction Type",
       dataIndex: "tx_type",
       sorter: true,
-      render: (txType: string) => {
-        return (
+      render: (txType: string) => 
           <span style={{ color: txType === "credit" ? "green" : "red" }}>
             {txType}
           </span>
-        );
-      },
     },
     {
       title: "Status",

@@ -2,112 +2,6 @@ import { useGetDashboardQuery } from "@/services/business/index.service";
 import { Line, LineConfig } from "@ant-design/plots";
 import { SetStateAction, useState } from "react";
 
-const Chart = ({ transactionData, period }: any) => {
-  let data: { time: string; amount: any; type: string }[] = [];
-
-  // if (
-  //   transactionData &&
-  //   transactionData.daily_transactions &&
-  //   transactionData.daily_transactions.length > 0
-  // ) {
-  //   const dailyData = transactionData.daily_transactions[0].months[0].weeks[0];
-
-  //   const daysOfWeek = ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"];
-
-  //   daysOfWeek.forEach((day) => {
-  //     const inflowData = dailyData.inflow.find(
-  //       (entry: { day: string }) => entry.day === day
-  //     );
-  //     const outflowData = dailyData.outflow.find(
-  //       (entry: { day: string }) => entry.day === day
-  //     );
-
-  //     const inflowAmount = inflowData ? inflowData.amount : 0;
-  //     const outflowAmount = outflowData ? outflowData.amount : 0;
-
-  //     // Push the data for the current day
-  //     data.push({ time: day, amount: inflowAmount, type: "Inflow" });
-  //     data.push({ time: day, amount: outflowAmount, type: "Outflow" });
-  //   });
-  // } else {
-  //   const daysOfWeek = ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"];
-  //   daysOfWeek.forEach((day) => {
-  //     data.push({ time: day, amount: 0, type: "Inflow" });
-  //     data.push({ time: day, amount: 0, type: "Outflow" });
-  //   });
-  // }
-
-  if (transactionData) {
-    if (
-      period === "daily" &&
-      transactionData.daily_transactions &&
-      transactionData.daily_transactions.length > 0
-    ) {
-      const dailyData =
-        transactionData.daily_transactions[0].months[0].weeks[0];
-      const daysOfWeek = ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"];
-
-      daysOfWeek.forEach((day) => {
-        const inflowData = dailyData.inflow.find(
-          (entry: { day: string }) => entry.day === day
-        );
-        const outflowData = dailyData.outflow.find(
-          (entry: { day: string }) => entry.day === day
-        );
-
-        const inflowAmount = inflowData ? inflowData.amount : 0;
-        const outflowAmount = outflowData ? outflowData.amount : 0;
-
-        data.push({ time: day, amount: inflowAmount, type: "Inflow" });
-        data.push({ time: day, amount: outflowAmount, type: "Outflow" });
-      });
-    } else if (
-      period === "monthly" &&
-      transactionData.monthly_transactions &&
-      transactionData.monthly_transactions.length > 0
-    ) {
-      const monthlyData = transactionData.monthly_transactions[0].months[0];
-      const monthsOfYear = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ];
-
-      monthsOfYear.forEach((month) => {
-        
-        const inflowAmount = monthlyData.inflow || 0;
-        const outflowAmount = monthlyData.outflow || 0;
-
-        data.push({ time: month, amount: inflowAmount, type: "Inflow" });
-        data.push({ time: month, amount: outflowAmount, type: "Outflow" });
-      });
-    }
-  }
-
-  const config: LineConfig = {
-    data,
-    xField: "time",
-    yField: "amount",
-    seriesField: "type",
-    yAxis: {
-      label: {
-        formatter: (v: string) => `${parseInt(v, 10) / 1000}k`,
-      },
-    },
-  };
-
-  return <Line {...config} />;
-};
-
 const DashboardChart = () => {
   const { data } = useGetDashboardQuery({});
   const transactionData = data?.data?.transaction_charts;
@@ -138,5 +32,82 @@ const DashboardChart = () => {
     </article>
   );
 };
-
 export default DashboardChart;
+const Chart = ({ transactionData, period }: any) => {
+  let data: { time: string; amount: any; type: string }[] = [];
+
+  if (transactionData) {
+    if (
+      period === "daily" &&
+      transactionData.daily_transactions &&
+      transactionData.daily_transactions.length > 0
+    ) {
+      const dailyData =
+        transactionData.daily_transactions[0].months[0].weeks[0];
+      const daysOfWeek = ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"];
+
+      daysOfWeek.forEach((day) => {
+        const inflowData = dailyData.inflow.find(
+          (entry: { day: string }) => entry.day === day
+        );
+        const outflowData = dailyData.outflow.find(
+          (entry: { day: string }) => entry.day === day
+        );
+
+        const inflowAmount = inflowData ? inflowData.amount : 0;
+        const outflowAmount = outflowData ? outflowData.amount : 0;
+
+        data.push({ time: day, amount: inflowAmount, type: "Inflow" });
+        data.push({ time: day, amount: outflowAmount, type: "Outflow" });
+      });
+    } else if (
+      period === "monthly" &&
+      transactionData.monthly_transactions &&
+      transactionData.monthly_transactions.length > 0
+    ) {
+      const monthlyData = transactionData.monthly_transactions[0].months;
+      const monthsOfYear = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+      monthsOfYear.forEach((month) => {
+        const inflowData = monthlyData.find(
+          (entry: { month: string }) => entry.month === month
+        );
+        const outflowData = monthlyData.find(
+          (entry: { month: string }) => entry.month === month
+        );
+
+        const inflowAmount = inflowData ? inflowData.inflow : 0;
+        const outflowAmount = outflowData ? outflowData.outflow : 0;
+
+        data.push({ time: month, amount: inflowAmount, type: "Inflow" });
+        data.push({ time: month, amount: outflowAmount, type: "Outflow" });
+      });
+    }
+  }
+
+  const config: LineConfig = {
+    data,
+    xField: "time",
+    yField: "amount",
+    seriesField: "type",
+    yAxis: {
+      label: {
+        formatter: (v: string) => `${parseInt(v, 10) / 1000}k`,
+      },
+    },
+  };
+
+  return <Line {...config} />;
+};
