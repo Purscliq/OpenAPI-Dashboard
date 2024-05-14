@@ -28,7 +28,7 @@ const WithdrawalModal: React.FC<ModalProps> = ({
     source_account_id: accountId,
     bank_code: "",
     account_number: "",
-    amount: 0,
+    amount: "",
     narration: "",
   });
 
@@ -86,6 +86,13 @@ const WithdrawalModal: React.FC<ModalProps> = ({
         .unwrap()
         .then(() => {
           message.success("Withdrawal successful");
+          setFormData({
+            source_account_id: accountId,
+            bank_code: "",
+            account_number: "",
+            amount: "",
+            narration: "",
+          });
         });
     } catch (error: any) {
       message.error(`Withdrawal failed: ${error?.data?.message}`);
@@ -171,6 +178,7 @@ const WithdrawalModal: React.FC<ModalProps> = ({
               id="amount"
               value={formData.amount}
               onChange={handleChange}
+              placeholder="0.00"
               className="w-full rounded-[5px] px-[8px] pr-[16px] h-[50px] text-[14px] border border-[#E9EBEB]"
               required
             />
