@@ -42,30 +42,22 @@ const Chart = ({ transactionData, period }: any) => {
       transactionData.daily_transactions &&
       transactionData.daily_transactions.length > 0
     ) {
-      const dailyData =
-        transactionData.daily_transactions[0].months[0].weeks[0];
-      const daysOfWeek = ["Mon", "Tues", "Wed", "Thurs", "Fri", "Sat", "Sun"];
+      const dailyData = transactionData.daily_transactions[0].days;
 
-      daysOfWeek.forEach((day) => {
-        const inflowData = dailyData.inflow.find(
-          (entry: { day: string }) => entry.day === day
-        );
-        const outflowData = dailyData.outflow.find(
-          (entry: { day: string }) => entry.day === day
-        );
+      dailyData.forEach((day: any) => {
+        const { day: dayOfWeek, inflow, outflow } = day;
+        const inflowAmount = inflow ? inflow : 0;
+        const outflowAmount = outflow ? outflow : 0;
 
-        const inflowAmount = inflowData ? inflowData.amount : 0;
-        const outflowAmount = outflowData ? outflowData.amount : 0;
-
-        data.push({ time: day, amount: inflowAmount, type: "Inflow" });
-        data.push({ time: day, amount: outflowAmount, type: "Outflow" });
+        data.push({ time: dayOfWeek, amount: inflowAmount, type: "Inflow" });
+        data.push({ time: dayOfWeek, amount: outflowAmount, type: "Outflow" });
       });
     } else if (
       period === "monthly" &&
       transactionData.monthly_transactions &&
       transactionData.monthly_transactions.length > 0
     ) {
-      const monthlyData = transactionData.monthly_transactions[0].months;
+      const monthlyData = transactionData.monthly_transactions;
       const monthsOfYear = [
         "Jan",
         "Feb",
