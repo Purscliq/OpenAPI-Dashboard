@@ -12,7 +12,6 @@ const TransactionDrawer: React.FC<TransactionDrawerProps> = ({
   onClose,
   data,
 }) => {
-  // Extract data from recordData or provide default values
   const {
     amount = 0,
     created_at = "",
@@ -20,8 +19,23 @@ const TransactionDrawer: React.FC<TransactionDrawerProps> = ({
     bank_name = "",
     account_number = "",
     narration = "",
+    tx_type = "",
   } = data || {};
-
+  const renderAmount = () => {
+    if (tx_type === "credit") {
+      return (
+        <h1 className="font-bold text-3xl text-green-500">+NGN {amount}</h1>
+      );
+    } else if (tx_type === "debit") {
+      return (
+        <h1 className="font-bold text-3xl text-red-500">-NGN {amount}</h1>
+      );
+    } else {
+      return (
+        <h1 className="font-bold text-3xl">NGN {amount}</h1>
+      );
+    }
+  };
   return (
     <Drawer
       onClose={onClose}
@@ -34,8 +48,8 @@ const TransactionDrawer: React.FC<TransactionDrawerProps> = ({
       style={{ position: "absolute", padding: 0 }}
     >
       <div className="space-y-8 py-4">
-        <div className="bg-slate-50 h-[150px] w-full flex flex-col justify-center items-center">
-          <h1 className="font-bold text-3xl text-[#0AA07B]">{`+NGN ${amount}`}</h1>
+        <div className="bg-slate-100 h-[150px] w-full flex flex-col justify-center items-center">
+        {renderAmount()}
           <p className="text-xl">{customer_name}</p>
         </div>
 
@@ -45,7 +59,7 @@ const TransactionDrawer: React.FC<TransactionDrawerProps> = ({
         <div className="p-4 border rounded-md space-y-6 border-[#FAFAFA]">
           <div className="w-full flex justify-between">
             <span>Amount</span>
-            <span className="font-bold">{`+NGN ${amount}`}</span>
+            <span className="font-bold">{`NGN ${amount}`}</span>
           </div>
 
           <div className="w-full flex justify-between">
@@ -60,7 +74,7 @@ const TransactionDrawer: React.FC<TransactionDrawerProps> = ({
 
           <div className="w-full flex justify-between">
             <span>Bank Name</span>
-            <span>{bank_name}</span>
+            <span>{bank_name || "N/A"}</span>
           </div>
 
           <div className="w-full flex justify-between">

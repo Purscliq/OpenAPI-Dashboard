@@ -296,20 +296,7 @@ const Dashbord = () => {
                 </p>
               </article>
             </div>
-            <article className="border border-gray-200 p-4 rounded-[20px]  flex flex-col space-y-4 bg-white">
-              <div className="flex  justify-between items-center p-2">
-                <p className="text-[20px] font-bold">Transaction Analytics</p>
-                <select
-                  className="select text-[#3A3F51]  w-fit h-[2em] !border !border-gray-300 !min-h-[1rem] rounded-[6px]"
-                  title="Period"
-                >
-                  <option selected>Weekly </option>
-                  <option>Monthly</option>
-                  <option>Yearly</option>
-                </select>
-              </div>
-              <DashboardChart />
-            </article>
+            <DashboardChart />
           </section>
           <section className="w-full space-y-5">
             <div className="flex flex-col gap-4 bg-white border-gray-200 rounded-[20px]">
@@ -340,30 +327,30 @@ const Dashbord = () => {
                   </Tooltip>
                 </div>
                 <div className="bg-gray-50 p-1">
-                <span className="flex justify-between items-center">
-                  <p className="text-gray-500 ">Bank Name</p>
-                  <p className="text-black font-semibold text-md">
-                    {data?.data?.main_account?.details?.bank_name}{" "}
-                  </p>
-                </span>
-                <span className="flex justify-between items-center">
-                  <p className="text-gray-500 ">Account Name</p>
-                  <p className="text-black font-semibold text-md">
-                    {data?.data?.main_account?.details?.account_name}{" "}
-                  </p>
-                </span>
-                <span className="flex justify-between items-center">
-                  <p className="text-gray-500 ">Account Number</p>
-                  <p className="text-black font-semibold text-md">
-                    {data?.data?.main_account?.details?.account_number}
-                  </p>
-                </span>
-                <span className="flex justify-between items-center">
-                  <p className="text-gray-500 ">Account Alias</p>
-                  <p className="text-black font-semibold text-md">
-                    {data?.data?.main_account?.details?.account_type}
-                  </p>
-                </span>
+                  <span className="flex justify-between items-center">
+                    <p className="text-gray-500 ">Bank Name</p>
+                    <p className="text-black font-semibold text-md">
+                      {data?.data?.main_account?.details?.bank_name}{" "}
+                    </p>
+                  </span>
+                  <span className="flex justify-between items-center">
+                    <p className="text-gray-500 ">Account Name</p>
+                    <p className="text-black font-semibold text-md">
+                      {data?.data?.main_account?.details?.account_name}{" "}
+                    </p>
+                  </span>
+                  <span className="flex justify-between items-center">
+                    <p className="text-gray-500 ">Account Number</p>
+                    <p className="text-black font-semibold text-md">
+                      {data?.data?.main_account?.details?.account_number}
+                    </p>
+                  </span>
+                  <span className="flex justify-between items-center">
+                    <p className="text-gray-500 ">Account Alias</p>
+                    <p className="text-black font-semibold text-md">
+                      {data?.data?.main_account?.details?.account_type}
+                    </p>
+                  </span>
                 </div>
               </article>
               <div className="flex justify-end items-center space-x-2 p-2">
@@ -558,10 +545,10 @@ const Dashbord = () => {
           <ApiChart data={data?.data?.api_calls} />{" "}
         </article>
       </div>
-      <WithdrawalModal 
-       openWithdrawalModal={withdraw}
-       close={() => setWithdraw(false)}
-       accountId={data?.data?.main_account?.details?.id}
+      <WithdrawalModal
+        openWithdrawalModal={withdraw}
+        close={() => setWithdraw(false)}
+        accountId={data?.data?.main_account?.details?.id}
       />
     </>
   );

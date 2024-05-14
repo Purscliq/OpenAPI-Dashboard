@@ -1,63 +1,72 @@
 import React, { useEffect, useState } from "react";
 import { message, Modal } from "antd";
 import { CustomSelect as Select } from "@/lib/AntdComponents";
-import { useGetAccountNameMutation, useGetBankListQuery, useInitiateWithdrawalMutation } from "@/services/business/index.service";
+import {
+  useGetAccountNameMutation,
+  useGetBankListQuery,
+  useInitiateWithdrawalMutation,
+} from "@/services/business/index.service";
 import { LoadingOutlined } from "@ant-design/icons";
 interface ModalProps {
   openWithdrawalModal: boolean;
   close: () => void;
-  accountId: number
+  accountId: number;
 }
 
 const WithdrawalModal: React.FC<ModalProps> = ({
   openWithdrawalModal,
   close,
-  accountId
+  accountId,
 }) => {
-
-  const { data: bankList } = useGetBankListQuery({})
-  const [initiateWithdrawal, { isLoading, data: response}] = useInitiateWithdrawalMutation()
-  const [validate, { isLoading: vallidating, isError: validatingError }] = useGetAccountNameMutation()
+  const { data: bankList } = useGetBankListQuery({});
+  const [initiateWithdrawal, { isLoading, data: response }] =
+    useInitiateWithdrawalMutation();
+  const [validate, { isLoading: vallidating, isError: validatingError }] =
+    useGetAccountNameMutation();
 
   const [formData, setFormData] = useState({
     source_account_id: accountId,
     bank_code: "",
     account_number: "",
-    amount: 0,
-    narration: ""
+    amount: "",
+    narration: "",
   });
 
   const [accountName, setAccountName] = useState("");
 
   useEffect(() => {
     // Check if both bank_code and account_number are available
-    if (formData.bank_code && formData.account_number && formData.account_number.length === 10) {
-      // Trigger the validate mutation
+    if (
+      formData.bank_code &&
+      formData.account_number &&
+      formData.account_number.length === 10
+    ) {
       validate({
         bank_code: formData.bank_code,
-        account_number: formData.account_number
+        account_number: formData.account_number,
       })
         .unwrap()
         .then((res) => {
-          // Handle successful validation
-          setAccountName(res?.data?.account_name)
+          setAccountName(res?.data?.account_name);
           console.log("Validation successful");
 
-          if(res.status === 400){
-            setAccountName(res?.message)
+          if (res.status === 400) {
+            setAccountName(res?.message);
           }
         })
         .catch((error: any) => {
           // Handle validation failure
-          setAccountName("Error validating name")
+          setAccountName("Error validating name");
           console.error("Validation failed", error);
         });
     }
   }, [formData.bank_code, formData.account_number, validate]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
-     const newValue = name === 'amount' ? parseFloat(value) : value;
+    const newValue = name === "amount" ? parseFloat(value) : value;
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: newValue,
@@ -73,17 +82,23 @@ const WithdrawalModal: React.FC<ModalProps> = ({
   const handleWithdrawal = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await initiateWithdrawal(formData).unwrap().then(() => {
-        message.success("Withdrawal successful");
-      });
+      await initiateWithdrawal(formData)
+        .unwrap()
+        .then(() => {
+          message.success("Withdrawal successful");
+          setFormData({
+            source_account_id: accountId,
+            bank_code: "",
+            account_number: "",
+            amount: "",
+            narration: "",
+          });
+        });
     } catch (error: any) {
-      message.error(`Withdrawal failed: ${error?.data?.message}` );
+      message.error(`Withdrawal failed: ${error?.data?.message}`);
       console.log(error?.data?.message);
     }
-    
   };
-  
-
 
   return (
     <Modal
@@ -103,7 +118,6 @@ const WithdrawalModal: React.FC<ModalProps> = ({
         </span>
 
         <form className="space-y-4" onSubmit={handleWithdrawal}>
-         
           <span className="flex flex-col gap-1">
             <label
               htmlFor="bank"
@@ -139,12 +153,17 @@ const WithdrawalModal: React.FC<ModalProps> = ({
               className="w-full rounded-[5px] px-[8px] pr-[16px] h-[50px] text-[14px] border border-[#E9EBEB]"
               required
             />
-             <p className={`text-[#515B6F] text-[14px] ${validatingError ? "text-red-600" : "" }`}>
-              {
-                vallidating ? <LoadingOutlined style={{ fontSize: 24 }} spin /> : accountName
-              }
-              
-              </p>
+            <p
+              className={`text-[#515B6F] text-[14px] ${
+                validatingError ? "text-red-600" : ""
+              }`}
+            >
+              {vallidating ? (
+                <LoadingOutlined style={{ fontSize: 24 }} spin />
+              ) : (
+                accountName
+              )}
+            </p>
           </span>
           <span className="flex flex-col gap-1">
             <label
@@ -159,6 +178,7 @@ const WithdrawalModal: React.FC<ModalProps> = ({
               id="amount"
               value={formData.amount}
               onChange={handleChange}
+              placeholder="0.00"
               className="w-full rounded-[5px] px-[8px] pr-[16px] h-[50px] text-[14px] border border-[#E9EBEB]"
               required
             />
@@ -185,11 +205,11 @@ const WithdrawalModal: React.FC<ModalProps> = ({
               type="submit"
               className="bg-[#010101] text-white px-[24px] py-[12px] rounded-[5px]"
             >
-             { isLoading ? 
-             <LoadingOutlined style={{ fontSize: 24 }} spin />
-             :
-             "Withdraw"
-             }
+              {isLoading ? (
+                <LoadingOutlined style={{ fontSize: 24 }} spin />
+              ) : (
+                "Withdraw"
+              )}
             </button>
           </span>
         </form>
