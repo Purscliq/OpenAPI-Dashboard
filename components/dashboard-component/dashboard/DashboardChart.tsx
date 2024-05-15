@@ -1,6 +1,5 @@
 import { useGetDashboardQuery } from "@/services/business/index.service";
 import { Line, LineConfig } from "@ant-design/plots";
-import { message } from "antd";
 import { SetStateAction, useState } from "react";
 
 const DashboardChart = () => {
@@ -89,13 +88,13 @@ const Chart = ({ transactionData, period }: any) => {
       });
     }
   }
-  console.log("Color Data:", data); // to check the type in the data structure
-
+  data = data.filter((entry) => entry.type !== "");
+  const seriesField = data.length > 0 ? "type" : "";
   const config: LineConfig = {
     data,
     xField: "time",
     yField: "amount",
-    //seriesField: "type",
+    seriesField,
     yAxis: {
       label: {
         formatter: (v: string) => `${parseInt(v, 10) / 1000}k`,
