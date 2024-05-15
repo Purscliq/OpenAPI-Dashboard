@@ -116,7 +116,8 @@ const AccountTable = () => {
         openWithdrawalModal={openWithdrawalModal}
         close={() => setOpenWithdrawalModal(false)}
         accountData={subaccounts?.data || []}
-        accountId={data?.data?.main_account?.details?.id}
+        mainAccountNum={data?.data?.main_account?.details?.account_number}
+        mainBankCode={data?.data?.main_account?.details?.bank_code}
       />
     </div>
   );
