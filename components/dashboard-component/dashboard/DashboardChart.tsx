@@ -88,7 +88,7 @@ const Chart = ({ transactionData, period }: any) => {
       });
     }
   }
-  data = data.filter((entry) => entry.type !== "");
+  // data = data.filter((entry) => entry.type !== "");
   const seriesField = data.length > 0 ? "type" : "";
   const config: LineConfig = {
     data,
