@@ -6,13 +6,11 @@ import React, {
 } from "react";
 import {
   CustomInput as Input,
-  CustomDatePicker as DatePicker,
 } from "@/lib/AntdComponents";
 import { Select } from "antd";
 import type { UploadFile, UploadProps } from "antd";
 import { message, Upload } from "antd";
 import AttachIcon from "@/assets/svg/AttachIcon";
-import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import Image from "next/image";
 import { useFetchCountryQuery } from "@/services/country/index.service";
@@ -24,7 +22,6 @@ import {
 } from "@/services/business/index.service";
 import { LoadingOutlined } from "@ant-design/icons";
 import { UploadChangeParam } from "antd/es/upload";
-import { useRouter } from "next/navigation";
 
 const { Dragger } = Upload;
 
@@ -51,14 +48,16 @@ const data = {
 };
 
 const DirectorDetailsTab = () => {
-  const router = useRouter();
-
   const gender = [
     { label: "Male", value: "Male" },
     { label: "Female", value: "Female" },
   ];
   const { data: country } = useFetchCountryQuery({});
-  const { data: director, refetch } = useGetDirectorQuery({});
+  const {
+    data: director,
+    refetch,
+    isLoading: isGettingDirector,
+  } = useGetDirectorQuery({});
   const [update, { isLoading }] = useUpdateDirectorMutation();
   const [verifyBvn, { isLoading: isVerifying }] = useVerifyBvnMutation();
   const [formData, setFormData] = useState(data);
@@ -99,7 +98,6 @@ const DirectorDetailsTab = () => {
             phone_number: validatedData.phone,
             gender: validatedData.gender,
             dob: validatedData.birthdate,
-
           }));
           message.success("BVN validated successfully");
         })
@@ -208,112 +206,115 @@ const DirectorDetailsTab = () => {
         </div>
 
         <div className="p-2 col-span-5 md:mr-10 lg:mr-20">
-          <form onSubmit={handleSubmit} className="flex flex-col gap-[1rem]">
-            <div className="flex flex-col gap-[0.1rem]">
-              <label className="block text-gray-700 text-sm font-semibold mb-2">
-                BVN
-              </label>
-              <span className="relative">
-                <Input
-                  max={11}
-                  min={11}
-                  name="bvn"
-                  required
-                  onChange={handleChange}
-                  value={formData.bvn}
-                  placeholder="BVN"
-                  disabled={!!director?.data?.bvn}
-                />
-                {isVerifying && (
-                  <div
-                    // className="absolute top-[50%] right-[8px] -translate-y-[50%]"
-                    style={{
-                      position: "absolute",
-                      top: "50%",
-                      right: "8px",
-                      transform: "translateY(-50%)",
-                    }}
-                  >
-                    <LoadingOutlined
-                      style={{ fontSize: 22, color: "#1890ff" }}
-                    />
-                  </div>
-                )}
-              </span>
-            </div>
-            <div className="flex items-center justify-between gap-[1rem]">
-              <span className="w-full">
+          {isGettingDirector ? (
+            <LoadingOutlined />
+          ) : (
+            <form onSubmit={handleSubmit} className="flex flex-col gap-[1rem]">
+              <div className="flex flex-col gap-[0.1rem]">
                 <label className="block text-gray-700 text-sm font-semibold mb-2">
-                  Legal First name
+                  BVN
+                </label>
+                <span className="relative">
+                  <Input
+                    max={11}
+                    min={11}
+                    name="bvn"
+                    required
+                    onChange={handleChange}
+                    value={formData.bvn}
+                    placeholder="BVN"
+                    disabled={!!director?.data?.bvn}
+                  />
+                  {isVerifying && (
+                    <div
+                      // className="absolute top-[50%] right-[8px] -translate-y-[50%]"
+                      style={{
+                        position: "absolute",
+                        top: "50%",
+                        right: "8px",
+                        transform: "translateY(-50%)",
+                      }}
+                    >
+                      <LoadingOutlined
+                        style={{ fontSize: 22, color: "#1890ff" }}
+                      />
+                    </div>
+                  )}
+                </span>
+              </div>
+              <div className="flex items-center justify-between gap-[1rem]">
+                <span className="w-full">
+                  <label className="block text-gray-700 text-sm font-semibold mb-2">
+                    Legal First name
+                  </label>
+                  <Input
+                    value={formData.legal_first_name}
+                    onChange={handleChange}
+                    name="legal_first_name"
+                    required
+                    placeholder="First Name"
+                    disabled={!!director?.data?.legal_first_name}
+                    className="!w-full"
+                  />
+                </span>
+                <span className="w-full">
+                  <label className="block text-gray-700 text-sm font-semibold mb-2">
+                    Legal Last name
+                  </label>
+                  <Input
+                    value={formData.legal_last_name}
+                    onChange={handleChange}
+                    name="legal_last_name"
+                    required
+                    placeholder="Last Name"
+                    disabled={!!director?.data?.legal_last_name}
+                    className="!w-full"
+                  />
+                </span>
+              </div>
+              <div className="flex flex-col gap-[0.1rem]">
+                <label className="block text-gray-700 text-sm font-semibold mb-2">
+                  Phone Number
                 </label>
                 <Input
-                  value={formData.legal_first_name}
-                  onChange={handleChange}
-                  name="legal_first_name"
-                  required
-                  placeholder="First Name"
-                  disabled={!!director?.data?.legal_first_name}
-                  className="!w-full"
-                />
-              </span>
-              <span className="w-full">
-                <label className="block text-gray-700 text-sm font-semibold mb-2">
-                  Legal Last name
-                </label>
-                <Input
-                  value={formData.legal_last_name}
+                  type="number"
+                  value={formData.phone_number}
                   onChange={handleChange}
                   name="legal_last_name"
                   required
                   placeholder="Last Name"
-                  disabled={!!director?.data?.legal_last_name}
+                  disabled={!!director?.data?.phone_number}
                   className="!w-full"
                 />
-              </span>
-            </div>
-            <div className="flex flex-col gap-[0.1rem]">
-              <label className="block text-gray-700 text-sm font-semibold mb-2">
-                Phone Number
-              </label>
-              <Input
-                type="number"
-                value={formData.phone_number}
-                onChange={handleChange}
-                name="legal_last_name"
-                required
-                placeholder="Last Name"
-                disabled={!!director?.data?.phone_number}
-                className="!w-full"
-              />
-            </div>
-            <div className="flex flex-col gap-[0.1rem]">
-              <label className="block text-gray-700 text-sm font-semibold mb-2">
-                Gender
-              </label>
-              <Select
-                onChange={(value) =>
-                  setFormData((prev) => ({ ...prev, gender: value }))
-                }
-                value={formData.gender}
-                options={gender}
-                disabled={!!director?.data?.gender}
-              />
-            </div>
-            <div className="flex flex-col gap-[0.1rem]">
-              <label className="block text-gray-700 text-sm font-semibold mb-2">
-                Date of Birth
-              </label>
-              <Input
-                value={formData.dob}
-                onChange={handleChange}
-                name="dob"
-                required
-                placeholder="date of birth"
-                disabled={!!director?.data?.dob}
-                className="!w-full"
-              />
+              </div>
+              <div className="flex flex-col gap-[0.1rem]">
+                <label className="block text-gray-700 text-sm font-semibold mb-2">
+                  Gender
+                </label>
+                <Select
+                  onChange={(value) =>
+                    setFormData((prev) => ({ ...prev, gender: value }))
+                  }
+                  value={formData.gender}
+                  options={gender}
+                  disabled={!!director?.data?.gender}
+                />
+              </div>
+              <div className="flex flex-col gap-[0.1rem]">
+                <label className="block text-gray-700 text-sm font-semibold mb-2">
+                  Date of Birth
+                </label>
+                <Input
+                  value={formData.dob}
+                  onChange={handleChange}
+                  name="dob"
+                  required
+                  placeholder="date of birth"
+                  disabled={!!director?.data?.dob}
+                  className="!w-full"
+                />
 
-              {/* <DatePicker
+                {/* <DatePicker
                 onChange={(value, date) =>
                   setFormData((prev) => ({
                     ...prev,
@@ -323,142 +324,143 @@ const DirectorDetailsTab = () => {
                 required
                 disabled={!!director?.data?.dob}
               /> */}
-            </div>
-
-            <div className="flex flex-col gap-[0.1rem]">
-              <label className="block text-gray-700 text-sm font-semibold mb-2">
-                Nationality
-              </label>
-              <Select
-                showSearch
-                placeholder="Select a country"
-                value={formData.nationality}
-                optionFilterProp="value"
-                onChange={handleCountryChange}
-                style={{ width: "100%" }}
-                options={country}
-                disabled={!!director?.data?.nationality}
-                defaultValue={"Nigeria"}
-                suffixIcon={
-                  <Image
-                    src={selectedCountry}
-                    alt="flag"
-                    width={40}
-                    height={45}
-                    className="border"
-                  />
-                }
-              />
-            </div>
-            <div className="flex flex-col gap-[0.1rem]">
-              <label className="block text-gray-700 text-sm font-semibold mb-2">
-                Residential Address
-              </label>
-              <Input
-                value={formData.address}
-                name="address"
-                onChange={handleChange}
-                disabled={!!director?.data?.address}
-                required
-                placeholder="2,oseni close..."
-              />
-            </div>
-
-            <div className="flex flex-col gap-[0.3rem]">
-              <label
-                htmlFor="IDCard"
-                className="block text-sm font-semibold text-gray-700"
-              >
-                ID Card (Govt Issued)
-              </label>
-
-              <Dragger
-                {...props}
-                id="IDCard"
-                name="id_card_url"
-                multiple
-                accept="application/pdf, image/jpeg"
-                action="/api/v1/business/image-upload"
-                onChange={(info) => handleUpload(info, "id_card_url")}
-                disabled={!!director?.data?.id_card_url}
-                className="flex items-center text-center  gap-[0.3rem]"
-              >
-                <p className="ant-upload-text flex gap-4">
-                  <AttachIcon />
-                  Attach Document
-                </p>
-              </Dragger>
-            </div>
-
-            <div className="flex flex-col gap-[0.3rem]">
-              <label
-                htmlFor="signature"
-                className="block text-sm font-semibold text-gray-700"
-              >
-                Signature
-              </label>
-              <Dragger
-                {...props}
-                id="signature"
-                name="signature_url"
-                multiple
-                disabled={!!director?.data?.signature_url}
-                accept="application/pdf, image/jpeg"
-                action="/api/v1/business/image-upload"
-                onChange={(info) => handleUpload(info, "signature_url")}
-                className="flex items-center text-center  gap-[0.3rem]"
-              >
-                <p className="ant-upload-text flex gap-4">
-                  <AttachIcon />
-                  Attach Document
-                </p>
-              </Dragger>
-            </div>
-
-            <div className="flex flex-col gap-[0.3rem]">
-              <label
-                htmlFor="ProofOfAddress"
-                className="block text-sm font-semibold text-gray-700"
-              >
-                Proof of address
-              </label>
-              <Dragger
-                {...props}
-                id="ProofOfAddress"
-                name="proof_of_add_url"
-                multiple
-                accept="application/pdf, image/jpeg"
-                action="/api/v1/business/image-upload"
-                onChange={(info) => handleUpload(info, "proof_of_add_url")}
-                disabled={!!director?.data?.proof_of_add_url}
-                className="flex items-center text-center gap-[0.3rem]"
-              >
-                <p className="ant-upload-text flex gap-4">
-                  <AttachIcon />
-                  Attach Document
-                </p>
-              </Dragger>
-            </div>
-
-            <div className="">
-              <div className="flex justify-between gap-4 mt-8">
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full bg-black text-center text-md rounded-md px-4 py-2 font-medium text-white focus:outline-none"
-                >
-                  {isLoading ? "Saving..." : "Save"}
-                </button>
-                <button
-                  type="button"
-                  onClick={handleCancel}
-                  className="w-full text-center text-md rounded-md px-4 py-2 font-medium text-black focus:outline-none"
-                >
-                  Cancel
-                </button>
               </div>
-            </div>
-          </form>
+
+              <div className="flex flex-col gap-[0.1rem]">
+                <label className="block text-gray-700 text-sm font-semibold mb-2">
+                  Nationality
+                </label>
+                <Select
+                  showSearch
+                  placeholder="Select a country"
+                  value={formData.nationality}
+                  optionFilterProp="value"
+                  onChange={handleCountryChange}
+                  style={{ width: "100%" }}
+                  options={country}
+                  disabled={!!director?.data?.nationality}
+                  defaultValue={"Nigeria"}
+                  suffixIcon={
+                    <Image
+                      src={selectedCountry}
+                      alt="flag"
+                      width={40}
+                      height={45}
+                      className="border"
+                    />
+                  }
+                />
+              </div>
+              <div className="flex flex-col gap-[0.1rem]">
+                <label className="block text-gray-700 text-sm font-semibold mb-2">
+                  Residential Address
+                </label>
+                <Input
+                  value={formData.address}
+                  name="address"
+                  onChange={handleChange}
+                  disabled={!!director?.data?.address}
+                  required
+                  placeholder="2,oseni close..."
+                />
+              </div>
+
+              <div className="flex flex-col gap-[0.3rem]">
+                <label
+                  htmlFor="IDCard"
+                  className="block text-sm font-semibold text-gray-700"
+                >
+                  ID Card (Govt Issued)
+                </label>
+
+                <Dragger
+                  {...props}
+                  id="IDCard"
+                  name="id_card_url"
+                  multiple
+                  accept="application/pdf, image/jpeg"
+                  action="/api/v1/business/image-upload"
+                  onChange={(info) => handleUpload(info, "id_card_url")}
+                  disabled={!!director?.data?.id_card_url}
+                  className="flex items-center text-center  gap-[0.3rem]"
+                >
+                  <p className="ant-upload-text flex gap-4">
+                    <AttachIcon />
+                    Attach Document
+                  </p>
+                </Dragger>
+              </div>
+
+              <div className="flex flex-col gap-[0.3rem]">
+                <label
+                  htmlFor="signature"
+                  className="block text-sm font-semibold text-gray-700"
+                >
+                  Signature
+                </label>
+                <Dragger
+                  {...props}
+                  id="signature"
+                  name="signature_url"
+                  multiple
+                  disabled={!!director?.data?.signature_url}
+                  accept="application/pdf, image/jpeg"
+                  action="/api/v1/business/image-upload"
+                  onChange={(info) => handleUpload(info, "signature_url")}
+                  className="flex items-center text-center  gap-[0.3rem]"
+                >
+                  <p className="ant-upload-text flex gap-4">
+                    <AttachIcon />
+                    Attach Document
+                  </p>
+                </Dragger>
+              </div>
+
+              <div className="flex flex-col gap-[0.3rem]">
+                <label
+                  htmlFor="ProofOfAddress"
+                  className="block text-sm font-semibold text-gray-700"
+                >
+                  Proof of address
+                </label>
+                <Dragger
+                  {...props}
+                  id="ProofOfAddress"
+                  name="proof_of_add_url"
+                  multiple
+                  accept="application/pdf, image/jpeg"
+                  action="/api/v1/business/image-upload"
+                  onChange={(info) => handleUpload(info, "proof_of_add_url")}
+                  disabled={!!director?.data?.proof_of_add_url}
+                  className="flex items-center text-center gap-[0.3rem]"
+                >
+                  <p className="ant-upload-text flex gap-4">
+                    <AttachIcon />
+                    Attach Document
+                  </p>
+                </Dragger>
+              </div>
+
+              <div className="">
+                <div className="flex justify-between gap-4 mt-8">
+                  <button
+                    type="submit"
+                    disabled={isLoading}
+                    className="w-full bg-black text-center text-md rounded-md px-4 py-2 font-medium text-white focus:outline-none"
+                  >
+                    {isLoading ? "Saving..." : "Save"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleCancel}
+                    className="w-full text-center text-md rounded-md px-4 py-2 font-medium text-black focus:outline-none"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </form>
+          )}
         </div>
       </div>
     </section>

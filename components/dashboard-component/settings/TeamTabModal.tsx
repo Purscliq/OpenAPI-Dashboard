@@ -37,64 +37,24 @@ const TeamTabModal: React.FC<{ onTeamMemberAdded: () => void }> = ({
     developer: 3, //  3 for developer
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // const roleId = role;
-    // Convert role name to role ID
     const roleId = roleToId[role];
     if (roleId === undefined) {
       message.error("Invalid role selected.");
       return;
     }
 
-    try {
-      // Include the additional required fields
-      const response = await inviteUser({
-        email,
-        role_id: roleId,
+    inviteUser({ email, role_id: roleId })
+      .unwrap()
+      .then(() => {
+        onTeamMemberAdded();
+        handleOk();
+      })
+      .catch((error) => {
+        message.error(error.data.message || "Failed to send invitation");
       });
-
-      if ("data" in response) {
-        if (response.data.status === "success") {
-          message.success("Invitation sent successfully");
-          onTeamMemberAdded(); // Call the callback function
-          handleOk();
-        } else {
-          message.error(
-            response.data.error?.message || "Failed to send invitation"
-          );
-        }
-      } else {
-        message.error("email already exist.");
-      }
-    } catch (error) {
-      console.error("Error sending invitation:", error);
-      message.error("Failed to send invitation");
-    }
   };
-
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await inviteUser({ email, role });
-
-  //     if ("data" in response) {
-  //       if (response.data.status === "success") {
-  //         message.success("Invitation sent successfully");
-  //         handleOk();
-  //       } else {
-  //         message.error(
-  //           response.data.error.message || "Failed to send invitation"
-  //         );
-  //       }
-  //     } else {
-  //       message.error("An error occurred. Please try again later.");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error sending invitation:", error);
-  //     message.error("Failed to send invitation");
-  //   }
-  // };
 
   return (
     <>
@@ -137,6 +97,23 @@ const TeamTabModal: React.FC<{ onTeamMemberAdded: () => void }> = ({
                 placeholder="john@doe.mail"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full px-3 py-2 resize-none appearance-none bg-transparent outline-none border focus:border-black shadow-sm rounded-lg"
+              />
+            </div>
+            <div className="space-y-1">
+              <label
+                htmlFor="name"
+                className="text-[#25324B] text-base font-semibold"
+              >
+               Name
+              </label>
+              <Input
+                id="name"
+                type="text"
+                placeholder="temitope osi"
+                // value={name}
+                // onChange={(e) => setEmail(e.target.value)}
                 required
                 className="w-full px-3 py-2 resize-none appearance-none bg-transparent outline-none border focus:border-black shadow-sm rounded-lg"
               />

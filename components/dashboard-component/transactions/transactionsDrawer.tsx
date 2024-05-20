@@ -4,7 +4,7 @@ import { Drawer } from "antd";
 interface TransactionDrawerProps {
   open: boolean;
   onClose: () => void;
-  data: any; 
+  data: any;
 }
 
 const TransactionDrawer: React.FC<TransactionDrawerProps> = ({
@@ -27,15 +27,12 @@ const TransactionDrawer: React.FC<TransactionDrawerProps> = ({
         <h1 className="font-bold text-3xl text-green-500">+NGN {amount}</h1>
       );
     } else if (tx_type === "debit") {
-      return (
-        <h1 className="font-bold text-3xl text-red-500">-NGN {amount}</h1>
-      );
+      return <h1 className="font-bold text-3xl text-red-500">-NGN {amount}</h1>;
     } else {
-      return (
-        <h1 className="font-bold text-3xl">NGN {amount}</h1>
-      );
+      return <h1 className="font-bold text-3xl">NGN {amount}</h1>;
     }
   };
+
   return (
     <Drawer
       onClose={onClose}
@@ -47,9 +44,9 @@ const TransactionDrawer: React.FC<TransactionDrawerProps> = ({
       closable={true}
       style={{ position: "absolute", padding: 0 }}
     >
-      <div className="space-y-8 py-4">
+      <div id="receipt" className="space-y-8 py-4">
         <div className="bg-slate-100 h-[150px] w-full flex flex-col justify-center items-center">
-        {renderAmount()}
+          {renderAmount()}
           <p className="text-xl">{customer_name}</p>
         </div>
 
@@ -66,11 +63,6 @@ const TransactionDrawer: React.FC<TransactionDrawerProps> = ({
             <span>Date</span>
             <span>{new Date(created_at).toLocaleString()}</span>
           </div>
-
-          {/* <div className="w-full flex justify-between">
-            <span>Counterparty</span>
-            <span>{customer_name}</span>
-          </div> */}
 
           <div className="w-full flex justify-between">
             <span>Bank Name</span>
@@ -93,7 +85,10 @@ const TransactionDrawer: React.FC<TransactionDrawerProps> = ({
             <p>{narration}</p>
           </div>
         </div>
-        <button className="w-full text-center h-[50px] bg-black text-white rounded mb-4 font-semibold">
+        <button
+          onClick={() => window.print()}
+          className="w-full text-center h-[50px] bg-black text-white rounded mb-4 font-semibold"
+        >
           Download Receipt
         </button>
         <button className="w-full text-center h-[50px] bg-white text-black border border-slate-200 rounded font-semibold">
