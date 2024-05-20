@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { ChangeEventHandler, useState } from "react";
 import {
   CustomInput as Input,
   CustomSelect as Select,
@@ -13,9 +13,13 @@ const TeamTabModal: React.FC<{ onTeamMemberAdded: () => void }> = ({
   onTeamMemberAdded,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
-
+  const [formData, setFormData] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    role_id: "",
+  });
   const [inviteUser, { isLoading }] = useInviteUserMutation();
 
   const showModal = () => {
@@ -30,6 +34,12 @@ const TeamTabModal: React.FC<{ onTeamMemberAdded: () => void }> = ({
     setIsModalOpen(false);
   };
 
+  const handleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      [e.target?.name]: e.target?.value,
+    }));
+  };
   // const roleToId = {
   const roleToId: { [key: string]: number } = {
     biller: 1, // 1 for biller
@@ -45,7 +55,7 @@ const TeamTabModal: React.FC<{ onTeamMemberAdded: () => void }> = ({
       return;
     }
 
-    inviteUser({ email, role_id: roleId })
+    inviteUser({ ...formData, role_id: roleId })
       .unwrap()
       .then(() => {
         onTeamMemberAdded();
@@ -94,28 +104,51 @@ const TeamTabModal: React.FC<{ onTeamMemberAdded: () => void }> = ({
               <Input
                 id="email"
                 type="email"
+                name="email"
                 placeholder="john@doe.mail"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={formData.email}
+                onChange={handleChange}
                 required
                 className="w-full px-3 py-2 resize-none appearance-none bg-transparent outline-none border focus:border-black shadow-sm rounded-lg"
               />
             </div>
-            <div className="space-y-1">
+            <div className="col-span-6 sm:col-span-3 flex flex-col items-start justify-start gap-[0.3rem]">
               <label
-                htmlFor="name"
-                className="text-[#25324B] text-base font-semibold"
+                htmlFor="FirstName"
+                className="block text-sm font-semibold text-gray-700"
               >
-               Name
+                First Name
               </label>
+
               <Input
-                id="name"
-                type="text"
-                placeholder="temitope osi"
-                // value={name}
-                // onChange={(e) => setEmail(e.target.value)}
+                id="firstName"
                 required
-                className="w-full px-3 py-2 resize-none appearance-none bg-transparent outline-none border focus:border-black shadow-sm rounded-lg"
+                value={formData.first_name}
+                onChange={handleChange}
+                name="first_name"
+                type="text"
+                placeholder="Enter your first name"
+                className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm h-[46px]"
+              />
+            </div>
+
+            <div className="col-span-6 sm:col-span-3 flex flex-col items-start justify-start gap-[0.3rem]">
+              <label
+                htmlFor="LastName"
+                className="block text-sm font-semibold text-gray-700"
+              >
+                Last Name
+              </label>
+
+              <Input
+                id="LastName"
+                name="last_name"
+                required
+                value={formData.last_name}
+                onChange={handleChange}
+                type="text"
+                placeholder="Enter your last name"
+                className="p-2 border w-full rounded-md  bg-white text-sm text-gray-700 shadow-sm h-[46px]"
               />
             </div>
             <div className="space-y-1">
