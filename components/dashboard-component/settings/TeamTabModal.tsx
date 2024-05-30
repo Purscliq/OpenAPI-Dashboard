@@ -43,8 +43,7 @@ const TeamTabModal: React.FC<{ onTeamMemberAdded: () => void }> = ({
   // const roleToId = {
   const roleToId: { [key: string]: number } = {
     biller: 1, // 1 for biller
-    owner: 2, //  2 for owner
-    developer: 3, //  3 for developer
+    developer: 2, //  3 for developer
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -166,7 +165,6 @@ const TeamTabModal: React.FC<{ onTeamMemberAdded: () => void }> = ({
                 options={[
                   { value: "", label: "Select a role" },
                   { value: "biller", label: "Biller" },
-                  { value: "owner", label: "Owner" },
                   { value: "developer", label: "Developer" },
                 ]}
                 className="p-2 border w-full rounded-md bg-white text-sm text-gray-700 shadow-none"

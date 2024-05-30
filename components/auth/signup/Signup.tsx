@@ -271,8 +271,9 @@ const Signup = () => {
                       defaultValue=""
                       options={[
                         { value: "", label: "Select an option" },
-                        { value: "LTD Ventures", label: "LTD Ventures" },
-                        { value: "PLC Ventures", label: "PLC Ventures" },
+                        { value: "LTD", label: "LTD" },
+                        { value: "PLC", label: "PLC" },
+                        { value: "Ventures", label: "Ventures" },
                       ]}
                       onChange={handleExtChange}
                       className=" !w-full rounded-md  !bg-white !text-gray-700 !h-[46px]"
